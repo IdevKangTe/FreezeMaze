@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+            var dx = [-1,1,0,0]; // 상하좌우
+            var dy = [0,0,-1,1];        
+
+            
+            // Player의 위치에서부터 역으로 추적하여, 최단거리로 이동한 좌표들을 shortestPath 배열에 추가합니다.
+   
+            
+            var map = [ // -1 벽 player:2, monster:3, 0갈 수 있는 공간
+                [-1,-1,-1,-1,-1,-1,-1,-1], 
+                [-1,-1,0,0,0,-1,0,-1],
+                [-1,0,0,-1,3,0,0,-1],
+                [-1,-1,0,0,0,-1,-1,-1],
+                [-1,-1,0,-1,0,0,0,-1],
+                [-1,-1,0,-1,0,-1,0,-1],
+                [-1,0,2,0,0,0,0,-1],
+                [-1,-1,-1,-1,-1,-1,-1,-1]
+            ];
+            var Player = [6,2]; // player 2
+            var Monster = [2,4]; // monster 3
+            // 경로를 저장할 배열 '방향, [좌표]'   
+
+            var vis = [...map];
+            vis[Player[0]][Player[1]] = 0; 
+            vis[Monster[0]][Monster[1]] = 'M';  
+            // var shortest = [...vis];
+            // 몬스터에서 플레이어까지의 최단거리            
+            var count = 1;
+            var queue = [[Monster[0], Monster[1]]];
+            
+            const N = 8;
+            var direction = new Array(N).fill(new Array(N).fill(-1));
+
+        
+            while(queue.length !==0){                
+                var now = queue.shift()    
+                var now_x = now[0];
+                var now_y = now[1];
+                if(now_x == Player[0] && now_y == Player[1]){                                          
+                    break;    
+                } 
+                for(var i=0; i<4; i++){  // 상하좌우                    
+                    var d;
+                    if(i==0) d = 'U';
+                    else if(i==1) d = 'D';
+                    else if(i==2) d = 'L';
+                    else d = 'R';
+
+                    var nx = now_x + dx[i];
+                    var ny = now_y + dy[i];
+                    if (vis[nx][ny]== 0 ){ 
+                        if(vis[now_x][now_y] == 'M'){                           
+                           vis[nx][ny] = 1;
+                           direction[nx][ny] = [1, d];                        
+                        }
+                        else{
+                           vis[nx][ny] = vis[now_x][now_y]+1;
+                           direction[nx][ny] = [vis[nx][ny], d];                        
+                        }                     
+                        queue.push([nx, ny]);
+                    }                    
+                }                
+            }
+            console.log(vis);
+            console.log(direction);
+ 
+
+
+    </script>
+</body>
+</html>
