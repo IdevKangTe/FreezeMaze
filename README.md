@@ -1,1 +1,1 @@
-# HorrorGamePJ
+# FreezeMaze
