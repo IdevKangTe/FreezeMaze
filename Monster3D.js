@@ -242,118 +242,103 @@ function chase(){
 
         // 추적 좌표 reverse
         chaseD.reverse();
-    let cnt = 0;    
-    for(var i in chaseD){
-        if(!isNear()){
-            if(chaseD[i][2]==='L') nextGo = 1;
-            else if(chaseD[i][2]==='R') nextGo = 0;
-            else if(chaseD[i][2]==='U') nextGo = 3;
-            else nextGo = 2;
-            return false;            
-        }             
-        else{
-            console.log("chase로 쫓아가기"+(cnt));
-            monster.material = madMaterial();
-            oneStepMove[chaseD[i][0],chaseD[i][1],chaseD[i][2]];
+
+        let idx = 0;
+        while(true){
+            console.log("isMove", isMove==false);
+            if(!isNear() || idx == (chaseD.length-1)){
+
+                if(chaseD[idx][2]==='L') nextGo = 1;
+                else if(chaseD[idx][2]==='R') nextGo = 0;
+                else if(chaseD[idx][2]==='U') nextGo = 3;
+                else nextGo = 2;
+                break;            
+            }  
+
+            if(isMove == true){
+                // monster.material = madMaterial();
+                console.log("이동중")
+                console.log(targetLocation.x, targetLocation.z);
+                idx++;
+            }
+            else{
+                console.log("이동 필요");
+                targetLocation.x = chaseD[idx][1];
+                targetLocation.z = chaseD[idx][0];
+                console.log(targetLocation.x, targetLocation.z);
+            }
         }
-    }
-    // 여기 살려...
-        // console.log("쫓아가기");
-        // monster.material = madMaterial();
-        // oneStepMove(chaseD[0][0], chaseD[0][1], chaseD[0][2]);
-        // if(chaseD[0][2]==='L') nextGo = 1;
-        // else if(chaseD[0][2]==='R') nextGo = 0;
-        // else if(chaseD[0][2]==='U') nextGo = 3;
-        // else nextGo = 2;
-        // if(!isNear()) return false;
-        
-
-
-
-
-
-
     }       
-
-
-
-
 
 function isNear(){
     var MonsterDiff = monster.position.distanceTo(cameraPosition);
     console.log(MonsterDiff);
-    if(MonsterDiff<48 && MonsterDiff>40){
+    if(MonsterDiff>30){
         return true;
     } else {
-        monster.material = normalMaterial();
+        // monster.material = normalMaterial();
         console.log("사정거리 내에 있지 않습니다.");
         return false;
     }
 }
 
 function randomMove(){
-    let collisionDirections = monsterCollison(); // 충돌인 곳이 true가 담겨있음
-    let count = 0;
-    let notCollision = [];
-
-    for(var i=0; i<4; i++){
-        if (collisionDirections[i] == true){
-            count++;
-        } 
-        else{
-            notCollision.push(i);
+    console.log("isMovingtest");
+    if(isMove==true){
+        console.log("isMovingtest");
+        return;
+    }
+    else{
+        let collisionDirections = monsterCollison(); // 충돌인 곳이 true가 담겨있음
+        let count = 0;
+        let notCollision = [];
+    
+        for(var i=0; i<4; i++){
+            if (collisionDirections[i] == true){
+                count++;
+            } 
+            else{
+                notCollision.push(i);
+            }
         }
-    }
-
-    switch(notCollision.length){// 충돌이 안난곳의 갯수
-        case 3: // 3곳중에 랜덤으로 간다
-            nextGo = notCollision[Math.floor(Math.random()*3)];
-            break;
-        case 2: // 2곳중에 랜덤으로 간다.
-            nextGo = notCollision[Math.floor(Math.random()*2)];
-            break; 
-        case 1: // 무조건 뚫린곳으로 간다.
-            nextGo = notCollision[0];
-            break;
-    }
-    var nextZ = monster.position.z + direc[nextGo].z;
-    var nextX = monster.position.x + direc[nextGo].x;
-    if (nextGo == 0) var nextD = 'L';
-    else if(nextGo == 1) var nextD = 'R';
-    else if(nextGo == 2) var nextD = 'U';
-    else var nextD = 'D';
     
-
-    oneStepMove(nextZ, nextX, nextD);
+        switch(notCollision.length){// 충돌이 안난곳의 갯수
+            case 3: // 3곳중에 랜덤으로 간다
+                nextGo = notCollision[Math.floor(Math.random()*3)];
+                break;
+            case 2: // 2곳중에 랜덤으로 간다.
+                nextGo = notCollision[Math.floor(Math.random()*2)];
+                break; 
+            case 1: // 무조건 뚫린곳으로 간다.
+                nextGo = notCollision[0];
+                break;
+        }
+        var nextZ = monster.position.z + direc[nextGo].z;
+        var nextX = monster.position.x + direc[nextGo].x;
+        if (nextGo == 0) var nextD = 'L';
+        else if(nextGo == 1) var nextD = 'R';
+        else if(nextGo == 2) var nextD = 'U';
+        else var nextD = 'D';
     
-}
-
-
-function oneStepMove(nextZ, nextX, nextD){
-    monster.position.x = nextX;
-    monster.position.z = nextZ;
+        targetLocation.x = nextX;
+        targetLocation.z = nextZ;
+        console.log(targetLocation.x, targetLocation.z);
+        
+        return;
+    }
+    
 }
 
 function moving() {
-//     if(isNear()){
-//         // console.log("사정 거리 내에 있습니다.");
-//         if(!chase()){
-//             randomMove();
-//         }
-//     }
-//     else{
-//         randomMove();
-//   }
     if(isNear()){
-        if(!chase()){
-            randomMove();
-        }
+        monster.material = madMaterial();
+        chase();
     }
     else{
+        console.log("test");
+        monster.material = normalMaterial();
         randomMove();
-        return;
     }
-
 }
 
 
@@ -395,6 +380,8 @@ function moveSomething(e) {
 
 var prevTime = 0;
 var MonsterMoveTime = 0;
+var targetLocation = monster.position;
+var isMove = false;
 
 // 에니메이션 효과를 자동으로 주기 위한 보조 기능입니다.
 
@@ -405,30 +392,27 @@ var animate = function () {
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
 
-    
-    // MonsterDiff = sphere.position.distanceTo(cameraPosition);
-    
-    
-    
     // 랜더링을 수행합니다.
-    const mosterHighest = 2;
-    const mosterShortest = 0;
+    // const mosterHighest = 2;
+    // const mosterShortest = 0;
 
-    if(monster.y<mosterHighest){
-        monster.y += 0.2;
-    }
-    else if(monster.y>=mosterShortest){
-        monster.y -= 0.2;
-    }
-    
-    
-    var targetLocation = monster.position.clone().round();
-    if((now-MonsterMoveTime)/1000>0.8){
-        moving();  
-        MonsterMoveTime = now;
-    }
+    // if(monster.y<mosterHighest){
+    //     monster.y += 0.2;
+    // }
+    // else if(monster.y>=mosterShortest){
+    //     monster.y -= 0.2;
+    // }
+    moving();
     var newPosition = monster.position.clone().lerp(targetLocation, 0.3); 
     monster.position.copy(newPosition);
+    
+    if(Math.abs(targetLocation.distanceTo(monster.position)<0.05)){ // target까지 왔을 때
+        isMove = false;
+    }
+    else{
+        isMove = true;    
+    }
+    
     
     renderer.render( scene, camera );
     requestAnimationFrame(animate);
