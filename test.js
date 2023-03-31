@@ -123,6 +123,7 @@ let collison = false;
 let run = false;
 let notStartMusic = true;
 let isLookDown = false;
+let isFrontDirection = false;
 
 const monsterBGM = initMonsterBGM(listner);
 monster.add(monsterBGM);
@@ -171,6 +172,8 @@ function moveSomething(e) {
     } else if (e.keyCode == 32) {
       // 스페이스바
       lookDown();
+    } else if (e.keyCode == 40) {
+      lookUp();
     }
   }
 }
@@ -181,17 +184,27 @@ function lookDown() {
     Math.round(cameraDirection.x) == 0
   ) {
     downRotation += Math.PI / 2;
+    isFrontDirection = true;
   } else if (
     Math.round(cameraDirection.z) == -1 &&
     Math.round(cameraDirection.x) == 0
   ) {
     downRotation -= Math.PI / 2;
+    isFrontDirection = false;
   }
   isLookDown = true;
   console.log('lookdown');
   targetLocationY = 0.3;
 
   return downRotation;
+}
+
+function lookUp() {
+  if (isFrontDirection) {
+    downRotation -= Math.PI / 2;
+  } else {
+    downRotation += Math.PI / 2;
+  }
 }
 
 function stopRunning(e) {
@@ -245,6 +258,7 @@ let animate = function () {
       .lerp(targetLocation, smoothFactor);
     // 현재 위치와 목표 위치를 보간하여 새로운 위치 계산
     camera.position.copy(newPosition);
+    console.log(newPosition);
   }
 
   // 카메라가 아직 돌고 있는지 확인
@@ -255,6 +269,7 @@ let animate = function () {
   }
 
   // 카메라가 아직 움직이고 있는지 확인
+  // console.log(Math.abs(targetLocation.distanceTo(camera.position)));
   if (Math.abs(targetLocation.distanceTo(camera.position)) > 0.07) {
     isMoving = true;
   } else {
@@ -323,7 +338,7 @@ let animate = function () {
 
   var itemDiff = item1.position.distanceTo(cameraPosition);
   itemSound.setVolume(
-    1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.7 ? 0.7 : 1 / itemDiff
+    1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
   );
   // 아이템 플레이어의 거리를 계산해 아이템BGM의 볼륨을 조정
 
