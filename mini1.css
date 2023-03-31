@@ -1,0 +1,165 @@
+* {
+    margin: 0 auto;
+    padding: 0;
+}
+
+body {
+    background-color: #1f1f1f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#jsCanvas {
+    position: relative;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background: url('./전선배경.jpg') no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#box1 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 22%;
+    left: 38.8%;
+}
+
+#red1 {
+    width: 40px;
+    position: absolute;
+    top: 22%;
+    left: 38.8%;
+    z-index: 1;
+}
+
+#box2 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 38%;
+    left: 38.7%;
+}
+
+#yellow1 {
+    width: 40px;
+    position: absolute;
+    top: 38%;
+    left: 38.7%;
+    z-index: 1;
+}
+
+
+#box3 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 57%;
+    left: 38.7%;
+}
+
+#blue1 {
+    width: 40px;
+    position: absolute;
+    top: 57%;
+    left: 38.7%;
+    z-index: 1;
+}
+
+
+#box4 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 73%;
+    left: 38.7%;
+}
+
+#green1 {
+    width: 40px;
+    position: absolute;
+    top: 73%;
+    left: 38.7%;
+    z-index: 1;
+}
+/* -----------------------왼쪽---------------------- */
+
+
+
+
+
+#box5 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 22%;
+    right: 38.8%;
+}
+
+#yellow2 {
+    width: 40px;
+    position: absolute;
+    top: 22%;
+    right: 38.8%;
+    z-index: 1;
+}
+
+#box6 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 39%;
+    right: 38.8%;
+}
+
+#green2 {
+    width: 40px;
+    position: absolute;
+    top: 39%;
+    right: 38.8%;
+    z-index: 1;
+}
+
+
+
+#box7 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 57%;
+    right: 38.8%;
+}
+
+#red2 {
+    width: 40px;
+    position: absolute;
+    top: 57%;
+    right: 38.8%;
+    z-index: 1;
+}
+
+
+#box8 {
+    width: 53px;
+    height: 75px;
+    background: transparent;
+    position: absolute;
+    top: 73%;
+    right: 38.8%;
+}
+
+#blue2 {
+    width: 40px;
+    position: absolute;
+    top: 73%;
+    right: 38.8%;
+    z-index: 1;
+}
