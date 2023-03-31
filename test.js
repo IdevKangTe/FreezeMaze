@@ -86,21 +86,6 @@ camera.position.set(1, 1, 48);
 const monster = MONSTER.initMonster();
 scene.add(monster);
 
-// monsterLight.target.position.set(monster.position.copy());
-// const monsterLight = MONSTER.initMonsterLight();
-// scene.add(monsterLight);
-// scene.add(monsterLight.target);
-
-// monsterLight.rotation.x += 90;
-// monsterLight.castShadow = true;
-
-// monsterLight.position.copy(monster.position);
-// monsterLight.target.position.x += 1;
-// monsterLight.position.y += 2;
-// var spotLighthelper = new THREE.SpotLightHelper(monsterLight);
-// scene.add(spotLighthelper);
-
-// monster.rotation.y -= Math.PI / 2;
 monster.position.set(48, 2, 2);
 
 function isCollison() {
@@ -129,14 +114,15 @@ var targetLocation = camera.position;
 var rotationSpeed = 10; // 회전 속도
 var smoothFactor = 0.2; // 이동 보간 계수
 var stamina = 100;
+let targetLocationY = camera.position.y;
+let locationDiffY = 0;
 
 var isRotating = false;
 var isMoving = false;
 let collison = false;
 let run = false;
-let outOfStamina = false;
 let notStartMusic = true;
-let isDownDirectionX = true;
+let isLookDown = false;
 
 const monsterBGM = initMonsterBGM(listner);
 monster.add(monsterBGM);
@@ -148,12 +134,14 @@ function moveSomething(e) {
     heartbeat.play();
     notStartMusic = false;
   }
+
   if (isRotating || isMoving) {
     return;
   } else {
     if (!footstep.isPlaying) {
       footstep.play();
     }
+
     if (e.keyCode == 17) {
       // 달리기
       rotationSpeed = 20;
@@ -164,15 +152,10 @@ function moveSomething(e) {
 
     if (e.keyCode == 37) {
       // 왼쪽 회전
-      // console.log(
-      //   Math.round(cameraDirection.x),
-      //   Math.round(cameraDirection.y),
-      //   Math.round(cameraDirection.z)
-      // );
       isRotating = true;
       targetRotationY += Math.PI / 2;
     } else if (e.keyCode == 38) {
-      //걷기
+      // 걷기
       collison = isCollison();
 
       if (!collison) {
@@ -185,74 +168,30 @@ function moveSomething(e) {
     } else if (e.keyCode == 39) {
       // 오른쪽 회전
       targetRotationY -= Math.PI / 2;
-      // camera.rotation.y -= Math.PI / 2;
-      // console.log(targetRotationY);
     } else if (e.keyCode == 32) {
       // 스페이스바
-      // camera.rotation.order = 'YXZ'; // 회전 순서 변경
-      // camera.rotation.y = Math.PI; // y축 회전
-      // camera.rotation.z = -Math.PI / 2; // x축 회전
-      // lookDown();
-      // camera.rotation.x -= Math.PI / 2;
-      // targetRotationY -= Math.PI / 2;
-      // camera.rotation.x -= Math.PI / 2;
-      // camera.rotation.y += Math.PI / 2;
-      // console.log(camera.rotation);
-      // console.log(cameraDirection);
-      // ({ downRotation, isDownDirectionX } = lookDown());
-      // console.log(cameraDirection);
+      lookDown();
     }
   }
 }
 
 function lookDown() {
-  // 바닥 방향을 나타내는 벡터를 설정합니다.
-  // const downDirection = new THREE.Vector3(0, 1, 0).add(cameraDirection);
-
-  // camera.lookAt(downDirection);
-  // // 바닥 방향 벡터와 카메라 방향 벡터의 각도를 계산합니다.
-  // const angle = downDirection.angleTo(cameraDirection);
-  // console.log(angle);
-
-  // // 카메라가 바닥을 보도록 회전값을 설정합니다.
-  // const downRotation = angle + Math.PI / 2;
-  // console.log(downRotation);
-
-  // 카메라의 z 축 회전값을 설정합니다.
-  // camera.rotation.z = 0;
-
-  // lookDown() 함수를 호출하여 카메라 회전값을 적용합니다.
-  // console.log(downRotation);
-  // // downRotation = camera.rotation.x;
   if (
-    Math.round(cameraDirection.x) == 1 &&
-    Math.round(cameraDirection.z) == 0
+    Math.round(cameraDirection.z) == 1 &&
+    Math.round(cameraDirection.x) == 0
   ) {
-    isDownDirectionX = false;
-    downRotation -= Math.PI / 2;
-  } else if (
-    Math.round(cameraDirection.x) == -1 &&
-    Math.round(cameraDirection.z) == 0
-  ) {
-    isDownDirectionX = false;
-    downRotation -= Math.PI / 2;
-  } else if (
-    Math.round(cameraDirection.x) == 0 &&
-    Math.round(cameraDirection.z) == -1
-  ) {
-    downRotation = camera.rotation.z;
-    isDownDirectionX = true;
     downRotation += Math.PI / 2;
   } else if (
-    Math.round(cameraDirection.x) == 0 &&
-    Math.round(cameraDirection.z) == 1
+    Math.round(cameraDirection.z) == -1 &&
+    Math.round(cameraDirection.x) == 0
   ) {
-    downRotation = camera.rotation.z;
-    isDownDirectionX = true;
-    downRotation += Math.PI / 2;
+    downRotation -= Math.PI / 2;
   }
-  console.log(isDownDirectionX);
-  return { downRotation, isDownDirectionX };
+  isLookDown = true;
+  console.log('lookdown');
+  targetLocationY = 0.3;
+
+  return downRotation;
 }
 
 function stopRunning(e) {
@@ -269,47 +208,61 @@ document.getElementById('key1').style.opacity = 1;
 // 초기화 부분 끝
 // ==========================
 
-var prevTime = 0;
-var staminaTime = 0;
+let prevTime = 0;
 
 // 에니메이션 효과를 자동으로 주기 위한 보조 기능입니다.
-var animate = function () {
+let animate = function () {
   // 프레임 처리
-  var now = performance.now();
+  let now = performance.now();
 
   deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
   prevTime = now;
+  // 프레임 시간 계산
 
-  // 현재 회전 각도와 목표 회전 각도 사이의 차이를 계산합니다.
-  var rotationDiff = targetRotationY - camera.rotation.y;
+  // moveSomething 함수 등에서 사용할 cameraDirection, cameraPosition 변수 업데이트
+  camera.getWorldDirection(cameraDirection);
+  cameraPosition.copy(camera.position);
 
-  // 회전 각도를 서서히 변화시킵니다.
+  let rotationDiff = targetRotationY - camera.rotation.y;
   camera.rotation.y += rotationDiff * rotationSpeed * deltaTime;
+  // 카메라 y축 회전 구현
 
-  // if (isDownDirectionX) {
-  //   let downRotationDiff = downRotation - camera.rotation.x;
-  //   camera.rotation.x += downRotationDiff * rotationSpeed * deltaTime;
-  // } else {
-  //   let downRotationDiff = camera.rotation.x - downRotation;
-  //   camera.rotation.x -= downRotationDiff * rotationSpeed * deltaTime;
-  // }
+  let downRotationDiff = downRotation - camera.rotation.x;
+  camera.rotation.x += downRotationDiff * rotationSpeed * deltaTime;
+  // 카메라 z축 회전 구현
 
-  //   let rotationDiffX = downRotation - camera.rotation.x;
-  //   camera.rotation.x += rotationDiffX * rotationSpeed * deltaTime;
-  // }
-  // camera.position.y = camera.position.y < 0.5 ? 0.5 : camera.position.y - 0.1;
+  if (camera.rotation.x - downRotation < 0.05 && isLookDown) {
+    // z축 회전이 끝났을 때 카메라의 y축이 가까워지기 시작
+    locationDiffY = Math.abs(camera.position.y - targetLocationY);
+    camera.position.y -= locationDiffY * deltaTime * 0.5;
+    if (locationDiffY < 0.2) {
+      isLookDown = false; // 원하는 높이만큼 낮아졌을 때 y축 감소 멈춤
+    }
+  } else {
+    // 카메라 이동시 부드러운 이동을 하도록 하는 함수
+    var newPosition = camera.position
+      .clone()
+      .lerp(targetLocation, smoothFactor);
+    // 현재 위치와 목표 위치를 보간하여 새로운 위치 계산
+    camera.position.copy(newPosition);
+  }
 
+  // 카메라가 아직 돌고 있는지 확인
   if (Math.abs(targetRotationY - camera.rotation.y) > 0.05) {
     isRotating = true;
   } else {
     isRotating = false;
   }
 
-  // moveSomething 함수 등에서 사용할 cameraDirection, cameraPosition 변수 업데이트
-  camera.getWorldDirection(cameraDirection);
-  cameraPosition.copy(camera.position);
+  // 카메라가 아직 움직이고 있는지 확인
+  if (Math.abs(targetLocation.distanceTo(camera.position)) > 0.07) {
+    isMoving = true;
+  } else {
+    isMoving = false;
+  }
 
   bulbLight.rotation.y += 0.05;
+  // 아이템 알림 전구 회전
 
   var cameraDirPos = cameraPosition.add(cameraDirection);
   spotLight.position.set(
@@ -323,35 +276,25 @@ var animate = function () {
     cameraDirPos.z
   );
   spotLight.lookAt(cameraDirection);
+  // 플레이어의 손전등 방향 및 위치 설정
 
-  // monsterLight.position.set(
-  //   monster.position.x,
-  //   monster.position.y + 2,
-  //   monster.position.z
-  // );
-  // // monsterLight.lookAt(monsterLight.target);
-  // // monsterLight.target.rotation.y += 0.1;
-  // monsterLight.target.position.set(monster.position.copy());
-  // monsterLight.target.position.x += 1;
-
-  var newPosition = camera.position.clone().lerp(targetLocation, smoothFactor); // 현재 위치와 목표 위치를 보간하여 새로운 위치 계산
-  camera.position.copy(newPosition);
-  // console.log(newPosition.sub(camera.position));
-
-  if (Math.abs(targetLocation.distanceTo(camera.position)) > 0.07) {
-    isMoving = true;
-  } else {
-    isMoving = false;
-  }
+  document.getElementById('progress').value = stamina;
+  // 스태미나의 값에 맞춰서 progress 바 변화
 
   if (run) {
+    // 달리는 중일 때
     stamina = stamina < 0 ? 0 : stamina - 0.3;
+    // 스태미나 감소
     footstep.setVolume(1);
     footstep.setPlaybackRate(2);
+    // 발걸음 소리 조정
   } else {
+    // 달리지 않고 있을 때
     stamina = stamina > 100 ? 100 : stamina + 0.3;
+    // 스태미나 증가
     footstep.setVolume(0.3);
     footstep.setPlaybackRate(1.2);
+    // 발걸음 소리 조정
   }
 
   if (
@@ -359,27 +302,30 @@ var animate = function () {
       Math.abs(targetRotationY - camera.rotation.y) <
     0.01
   ) {
+    // 플레이어가 움직이지도 돌지도 않을 경우
     footstep.pause();
-  }
-
-  document.getElementById('progress').value = stamina;
+  } // 발걸음 소리 중지
 
   if (stamina <= 0) {
-    outOfStamina = true;
-    staminaTime = now;
+    // 스태미나를 전부 썼을 때
     rotationSpeed = 10; // 회전 속도
     smoothFactor = 0.2; // 이동 보간 계수
     run = false;
     if (!breath.isPlaying) {
-      breath.play();
+      // 숨소리가 재생중이 아니었다면
+      breath.play(); // 숨소리 재생
     }
   }
 
   var MonsterDiff = monster.position.distanceTo(cameraPosition);
   monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
+  // 몬스터와 플레이어의 거리를 계산해 몬스터BGM의 볼륨을 조정
 
   var itemDiff = item1.position.distanceTo(cameraPosition);
-  itemSound.setVolume(1 / itemDiff < 0.1 ? 0 : 1 / itemDiff);
+  itemSound.setVolume(
+    1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.7 ? 0.7 : 1 / itemDiff
+  );
+  // 아이템 플레이어의 거리를 계산해 아이템BGM의 볼륨을 조정
 
   // setTimeout(moveMonster, 3000);
 
