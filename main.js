@@ -1,6 +1,6 @@
 import * as THREE from "three";
-// import load from './map.js';
-import load from 'map';
+import load from './map.js';
+// import Map from './map copy.js';
 // import { mini1 } from './miniGames/mini1';
 
 /**
@@ -26,7 +26,7 @@ function main() {
 	// 카메라 ( 카메라 수직 시야 각도, 가로세로 종횡비율, 시야거리 시작지점, 시야거리 끝지점
 	const camera = new THREE.PerspectiveCamera(
 		75,
-		(window.innerWidth) / window.innerHeight,
+		window.innerWidth / window.innerHeight,
 		0.01,
 		25
 	);
@@ -37,9 +37,20 @@ function main() {
 		antialias: true,
 		preserveDrawingBuffer: true,
 	});
+	//캔버스 사이즈 지정하는 함수
 	renderer.setSize(window.innerWidth, window.innerHeight);
+	window.onresize = resize.bind(this);
+	function resize() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 
-	document.body.appendChild(renderer.domElement);
+		camera.aspect = canvas.width / canvas.height;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(canvas.width,canvas.height );
+	};
+
+	// document.body.appendChild(renderer.domElement);
 
 	scene.fog = new THREE.Fog(0x000000, 0, 30);
 
@@ -57,8 +68,11 @@ function main() {
 	camera.getWorldDirection(cameraDirection);
 	cameraPosition.copy(camera.position);
 
+
 	// map
 	({scene, map3D} = load(scene));
+
+
 
 	// item (miniGame)
 	let lightDiff;
@@ -104,7 +118,6 @@ function main() {
 		return false;
 	}
 
-	let deltaTime = 0;
 	let targetRotationY = camera.rotation.y; // 목표 회전 각도
 	let targetLocation = camera.position;
 	const deltaSpeed = 70; // 카메라 이동 속도
@@ -116,9 +129,6 @@ function main() {
 
 
 	// movement
-
-
-
 	let isWalk = false;
 	let spacePressed = false;
 
@@ -140,7 +150,7 @@ function main() {
 				targetRotationY += Math.PI / 2;
 			}
 			else if (e.code === "ArrowUp") {
-				walk(e);
+				walk();
 				isWalk = true;
 			}
 			else if (e.code === "ArrowRight") {
@@ -160,7 +170,7 @@ function main() {
 	};
 
 
-	function walk(e) {
+	function walk() {
 		// up key pressed
 		collison = isCollison();
 		// playGame(e);
@@ -175,13 +185,9 @@ function main() {
 			const positionAmount = positionDiff.multiplyScalar(smoothFactor);
 			camera.position.add(positionAmount);
 		}
-
-		if (spacePressed) {
-			// walk(e);
-		}
 	}
 
-
+	// 게임 실행
 	function playGame(e) {
 		// 기본 동작 취소
 		// 아이템 사정거리 +- 1 안으로 들어왔을 때 space 누르면 동작
@@ -194,7 +200,7 @@ function main() {
 		}
 	}
 
-
+	// 미니 게임 띄우기
 	function miniGame() {
 		const mini = document.querySelector('#mini');
 		mini.style.display = 'flex';
@@ -212,14 +218,14 @@ function main() {
 
 
 
-	let prevTime = 0;
+	let prevTime = Date.now();
 
 	// 에니메이션 효과를 자동으로 주기 위한 보조 기능입니다.
 	const animate = function () {
 		// 프레임 처리
-		const now = performance.now();
+		const now = Date.now();
 
-		deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
+		const deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
 		prevTime = now;
 
 		// 현재 회전 각도와 목표 회전 각도 사이의 차이를 계산합니다.
