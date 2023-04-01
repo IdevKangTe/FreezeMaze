@@ -25,7 +25,7 @@ function main() {
 
 	// 카메라 ( 카메라 수직 시야 각도, 가로세로 종횡비율, 시야거리 시작지점, 시야거리 끝지점
 	const camera = new THREE.PerspectiveCamera(
-		90,
+		75,
 		(window.innerWidth) / window.innerHeight,
 		0.01,
 		25
@@ -56,13 +56,6 @@ function main() {
 	const cameraPosition = new THREE.Vector3();
 	camera.getWorldDirection(cameraDirection);
 	cameraPosition.copy(camera.position);
-
-	const floor = new THREE.Mesh(
-		new THREE.PlaneGeometry(2000, 2000, 100, 100),
-		new THREE.MeshStandardMaterial({ color: 0xffffff })
-	);
-	floor.rotateX(-Math.PI / 2);
-	scene.add(floor);
 
 	// map
 	({scene, map3D} = load(scene));
