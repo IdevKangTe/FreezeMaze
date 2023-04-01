@@ -144,7 +144,7 @@ function main() {
 			playGame(e);
 			spacePressed = true;
 		}
-		if (["ArrowLeft", "ArrowUp", "Space", "ArrowDown", "ArrowRight", "ControlLeft"].includes(e.code)) {
+		if (["ArrowLeft", "ArrowUp", "ArrowRight"].includes(e.code)) {
 			if (e.code === "ArrowLeft") {
 				isRotating = true;
 				targetRotationY += Math.PI / 2;
@@ -193,8 +193,9 @@ function main() {
 		// 아이템 사정거리 +- 1 안으로 들어왔을 때 space 누르면 동작
 		if (item1.position.x - 1 < camera.position.x && camera.position.x < item1.position.x + 1 &&
 			item1.position.z - 1 < camera.position.z && camera.position.z < item1.position.z + 1) {
-			alert('space');
+				// space 누르세요 튜토리얼 뜨는 로직
 			if (e.code === "Space") {
+
 				miniGame();
 			}
 		}
