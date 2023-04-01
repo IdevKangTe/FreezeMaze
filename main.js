@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import load from './map.js';
+import load from "map";
 // import Map from './map copy.js';
 // import { mini1 } from './miniGames/mini1';
 
@@ -28,7 +28,7 @@ function main() {
 		75,
 		window.innerWidth / window.innerHeight,
 		0.01,
-		25
+		1000
 	);
 
 	// 렌더러 정의 및 크기 지정, 문서에 추가하기
@@ -37,6 +37,7 @@ function main() {
 		antialias: true,
 		preserveDrawingBuffer: true,
 	});
+
 	//캔버스 사이즈 지정하는 함수
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	window.onresize = resize.bind(this);
@@ -67,8 +68,7 @@ function main() {
 	const cameraPosition = new THREE.Vector3();
 	camera.getWorldDirection(cameraDirection);
 	cameraPosition.copy(camera.position);
-
-
+	
 	// map
 	({scene, map3D} = load(scene));
 
@@ -118,6 +118,7 @@ function main() {
 		return false;
 	}
 
+	let deltaTime = 0;
 	let targetRotationY = camera.rotation.y; // 목표 회전 각도
 	let targetLocation = camera.position;
 	const deltaSpeed = 70; // 카메라 이동 속도
@@ -203,8 +204,8 @@ function main() {
 
 	// 미니 게임 띄우기
 	function miniGame() {
-		const mini = document.querySelector('#mini');
-		mini.style.display = 'flex';
+		const mini2 = document.querySelector('#mini2');
+		mini2.style.display = 'flex';
 	}
 
 
@@ -226,7 +227,7 @@ function main() {
 		// 프레임 처리
 		const now = Date.now();
 
-		const deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
+		deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
 		prevTime = now;
 
 		// 현재 회전 각도와 목표 회전 각도 사이의 차이를 계산합니다.
