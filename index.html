@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <script type="importmap">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEZE MAZE</title>
+    <link rel="stylesheet" href="./css/total.css" type="text/css">
+    <link rel="stylesheet" href="./css/in-outro.css" type="text/css">
+    <link rel="stylesheet" href="./css/main.css" type="text/css">
+    <link rel="stylesheet" href="./css/mini1.css" type="text/css">
+    <link rel="stylesheet" href="./css/mini2.css" type="text/css">
+    <link rel="stylesheet" href="./css/mini3.css" type="text/css">
+    <link rel="stylesheet" href="./css/util.css" type="text/css">
+    <script type="importmap">
             {
                 "imports": {
                     "three": "./node_modules/three/build/three.module.js",
@@ -15,15 +21,63 @@
                 }
             }
         </script>
-        <script src="main.js" type="module" defer="defer"></script>
-    </head>
+    <script src="main.js" type="module" defer="defer"></script>
+</head>
 
-    <body>
-        <div id="app1-container"></div>
-        <canvas id="game1" width="300" height="150"></canvas>
-        <div id="mini">
-            <!--미니게임 코드-->
+<body>
+    <div id="in-outro-container">
+        <canvas id="in-outro"></canvas>
+    </div>
+
+    <div id="main-container">
+        <canvas id="main" width="300" height="150"></canvas>
+        <div id="util">
+            <progress id="progress" max="100" min="0" value="70"></progress>
+            <div id="util-keys">
+                <img src="img/key2.png" id="key1" />
+                <img src="img/key2.png" id="key2" />
+                <img src="img/key2.png" id="key3" />
+            </div>
         </div>
-    </body>
+    </div>
+
+    <div id="mini1-container">
+        <canvas id="mini1"></canvas>
+    </div>
+
+    <div id="mini2-container">
+        <canvas id="mini2"></canvas>
+        <div class="boxes">
+            <img src="./mini-2-red-start.png" id="red1">
+            <button id="box1" class="leftBox" value="1"></button>
+
+            <img src="./mini-2-yellow-start.png" id="yellow1">
+            <button id="box2" class="leftBox" value="2"></button>
+
+            <img src="./mini-2-blue-start.png" id="blue1">
+            <button id="box3" class="leftBox" value="3"></button>
+
+            <img src="./mini-2-green-start.png" id="green1">
+            <button id="box4" class="leftBox" value="4"></button>
+
+            <img src="./mini-2-yellow-end.png" id="yellow2">
+            <button id="box5" class="rightBox" value="2"></button>
+
+            <img src="./mini-2-green-end.png" id="green2">
+            <button id="box6" class="rightBox" value="4"></button>
+
+            <img src="./mini-2-red-end.png" id="red2">
+            <button id="box7" class="rightBox" value="1"></button>
+
+            <img src="./mini-2-blue-end.png" id="blue2">
+            <button id="box8" class="rightBox" value="3"></button>
+        </div>
+    </div>
+
+    <div id="mini3-container">
+        <canvas id="mini3"></canvas>
+    </div>
+
+</body>
 
 </html>

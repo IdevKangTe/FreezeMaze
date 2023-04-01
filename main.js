@@ -15,7 +15,7 @@ import load from './map.js';
 
 
 function main() {
-	const canvas = document.querySelector('#game1');
+	const canvas = document.querySelector('#main');
 	// ==========================
 	// 초기화 부분 시작 ( 이 부분은 문서에서 한번만 수행되면 됩니다 )
 	// ==========================

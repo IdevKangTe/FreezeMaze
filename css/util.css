@@ -1,0 +1,32 @@
+#util {
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+}
+
+#progress {
+    appearance: none;
+}
+
+#progress::-webkit-progress-bar {
+    background: #c2c2c22f;
+    border-radius: 2px;
+    box-shadow: inset 3px 3px 10px #66666669;
+}
+
+#progress::-webkit-progress-value {
+    background-color: #084400a1;
+    border-radius: 2px;
+}
+
+#util-keys {
+    margin-left: 25px;
+    margin-top: 10px;
+    height: 20px;
+    display: flex;
+}
+
+#util-keys>img {
+    margin-right: 20px;
+    opacity: 30%;
+}
