@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 // import { map } from './map.js';
 import load from './map.js';
-// import Monster from './monster.js';
-// import Item from './item.js';
+import Item from './item.js';
 import Sound from './sound.js';
 import Player from './player.js';
 import Monster from './monster.js';
@@ -12,7 +11,7 @@ import Monster from './monster.js';
 // ==========================
 // 3차원 세계
 let scene = new THREE.Scene();
-let camera, cameraLight, monster, map2D;
+let camera, cameraLight, monster, map2D, item, itemLight;
 
 // 렌더러 정의 및 크기 지정, 문서에 추가하기
 var renderer = new THREE.WebGLRenderer({
@@ -46,19 +45,9 @@ const enemy = new Monster();
 ({ scene, monster } = enemy.load(scene));
 monster = sound.loadMonsterSound(monster);
 
-// const bulbLight = initItemLight();
-
-// bulbLight.position.set(12, 4, 48);
-// bulbLight.rotation.z = Math.PI;
-// bulbLight.castShadow = true;
-// scene.add(bulbLight);
-
-// let item1 = initItem();
-
-// item1.position.set(12, -0.47, 48);
-// scene.add(item1);
-// let itemSound = initItemNotification(listner);
-// item1.add(itemSound);
+const mini = new Item();
+({scene, item, itemLight} = mini.load(scene));
+item = sound.loadItemSound(item);
 
 window.addEventListener('keydown', moveSomething, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
 window.addEventListener('keyup', stopRunning, false);
@@ -72,11 +61,16 @@ let stamina = 100;
 let targetLocationY = camera.position.y;
 let locationDiffY = 0;
 
+let monsterTarget = monster.position.clone();
+let monstertargetY = 0;
+
 let isRotating = false;
 let isMoving = false;
+let monsterIsMoving = false;
 let collison = false;
 let run = false;
 let notStartMusic = true;
+
 
 // const monsterBGM = initMonsterBGM(listner);
 // monster.add(monsterBGM);
@@ -95,15 +89,13 @@ function moveSomething(e) {
     }
 
     if (e.ctrlKey) {
-      // 달리기
       player.run();
+      run = true;
     }
     if (e.keyCode == 37) {
-      // 왼쪽 회전
       isRotating = true;
       targetRotationY += Math.PI / 2;
     } else if (e.keyCode == 38) {
-      // 걷기
       collison = player.isCollison(cube);
 
       if (!collison) {
@@ -114,10 +106,8 @@ function moveSomething(e) {
           .add(cameraDirection.clone().round());
       }
     } else if (e.keyCode == 39) {
-      // 오른쪽 회전
       targetRotationY -= Math.PI / 2;
     } else if (e.keyCode == 32) {
-      // 스페이스바
       targetLocationY = 0.3;
       downRotation = player.lookDownCheck(cameraDirection, downRotation);
     } else if (e.keyCode == 40) {
@@ -127,11 +117,8 @@ function moveSomething(e) {
 }
 
 function stopRunning(e) {
-  if (e.keyCode == 17) {
-    rotationSpeed = 10; // 회전 속도
-    smoothFactor = 0.2; // 이동 보간 계수
-    run = false;
-  }
+  player.stopRun(e);
+  run = false;
 }
 
 document.getElementById('key1').style.opacity = 1;
@@ -176,65 +163,36 @@ let animate = function () {
     }
   }
 
-  // bulbLight.rotation.y += 0.05;
+  itemLight.rotation.y += 0.05;
   // 아이템 알림 전구 회전
 
   enemy.enemyLight();
-  monsterPosition.copy(monster.position);
 
-  if (targetY >= 0.02) {
-    targetY = -targetY;
+  if (monstertargetY >= 0.02) {
+    monstertargetY = -monstertargetY;
   } else {
-    targetY += 0.01 * deltaTime * 4;
+    monstertargetY += 0.01 * deltaTime * 4;
   }
 
-  if (
-    Math.abs(targetLocation.x - monsterPosition.x) +
-      Math.abs(targetLocation.z - monsterPosition.z) >
-    0.03
-  ) {
-    // 몬스터가 이동 중인 경우
-    isMove = true;
-  } else {
+  monsterIsMoving = enemy.movingCheck(monsterTarget);
+
+  if (!monsterIsMoving) {
     // 몬스터가 이동을 완료한 경우
-    monster.position.x = targetLocation.x;
-    monster.position.z = targetLocation.z;
-    isMove = false;
+    monster.position.x = monsterTarget.x;
+    monster.position.z = monsterTarget.z;
+    monsterTarget = enemy.moving(cube, camera, vis, monsterTarget);
   }
-
-  if (!isMove) {
-    targetLocation = moving(targetLocation);
-  }
-
-  let distance = targetLocation.clone().sub(monsterPosition);
-
-  let distanceMoved = distance.clone().multiplyScalar(deltaTime * monsterSpeed);
-
-  let monsterNewPosition = new THREE.Vector3(
-    distanceMoved.x,
-    monsterTargetLocationY,
-    distanceMoved.z
-  );
-
-  monster.position.copy(monsterPosition.clone().add(monsterNewPosition));
+  monster.position.copy(monster.position.clone().add(enemy.move(deltaTime, monsterTarget, monstertargetY)));
 
   document.getElementById('progress').value = stamina;
   // 스태미나의 값에 맞춰서 progress 바 변화
 
   if (run) {
-    // 달리는 중일 때
     stamina = stamina < 0 ? 0 : stamina - 0.3;
-    // 스태미나 감소
-    // footstep.setVolume(1);
-    // footstep.setPlaybackRate(2);
-    // 발걸음 소리 조정
+    sound.run();
   } else {
-    // 달리지 않고 있을 때
     stamina = stamina > 100 ? 100 : stamina + 0.3;
-    // 스태미나 증가
-    // footstep.setVolume(0.3);
-    // footstep.setPlaybackRate(1.2);
-    // 발걸음 소리 조정
+    sound.notRun();
   }
 
   if (
@@ -242,29 +200,24 @@ let animate = function () {
       Math.abs(targetRotationY - camera.rotation.y) <
     0.01
   ) {
-    // 플레이어가 움직이지도 돌지도 않을 경우
-    // footstep.pause();
-  } // 발걸음 소리 중지
+    sound.footstep.pause();
+  }
 
-  // if (stamina <= 0) {
-  //   // 스태미나를 전부 썼을 때
-  //   rotationSpeed = 10; // 회전 속도
-  //   smoothFactor = 0.2; // 이동 보간 계수
-  //   run = false;
-  //   // if (!breath.isPlaying) {
-  //   //   // 숨소리가 재생중이 아니었다면
-  //   //   breath.play(); // 숨소리 재생
-  //   // }
-  // }
+  if (stamina <= 0) {
+    // 스태미나를 전부 썼을 때
+    player.stopRun();
+    run = false;
+    
+  }
 
-  // var MonsterDiff = monster.position.distanceTo(cameraPosition);
-  // monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
-  // // 몬스터와 플레이어의 거리를 계산해 몬스터BGM의 볼륨을 조정
+  var MonsterDiff = monster.position.distanceTo(cameraPosition);
+  sound.monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
+  // 몬스터와 플레이어의 거리를 계산해 몬스터BGM의 볼륨을 조정
 
-  // var itemDiff = item1.position.distanceTo(cameraPosition);
-  // itemSound.setVolume(
-  //   1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
-  // );
+  var itemDiff = item.position.distanceTo(cameraPosition);
+  sound.itemNotification.setVolume(
+    1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
+  );
   // 아이템 플레이어의 거리를 계산해 아이템BGM의 볼륨을 조정
 
   // 랜더링을 수행합니다.

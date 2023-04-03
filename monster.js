@@ -7,8 +7,6 @@ export default class Monster {
   direc;
   monsterMesh;
   monsterSpeed;
-  target;
-  targetY;
 
   isMad;
 
@@ -31,7 +29,6 @@ export default class Monster {
     this.monsterLight.position.y += 2;
     this.monsterLight.target.position.set(this.monster.position);
     this.nextGo = 0;
-    this.target = this.monster.position;
     this.direc = [
       new THREE.Vector3(-1, 0, 0), //왼
       new THREE.Vector3(1, 0, 0), // 오
@@ -39,7 +36,6 @@ export default class Monster {
       new THREE.Vector3(0, 0, 1), // 아래
     ];
     this.monsterSpeed = 4;
-    this.targetY = 0;
 
     this.isMad = false;
   } // initMonster
@@ -253,7 +249,7 @@ export default class Monster {
     }
   }
 
-  chase(camera, vis) {
+  chase(camera, vis, target) {
     this.isMove = true;
     let dz = [-1, 1, 0, 0]; // 상하좌우 z축 변화
     let dx = [0, 0, -1, 1];
@@ -383,14 +379,13 @@ export default class Monster {
         this.nextGo = 2; // 3
         break;
     }
-    this.target.x = chaseD[1][1];
-    this.target.z = chaseD[1][0];
+    target.x = chaseD[1][1];
+    target.z = chaseD[1][0];
 
-    return this.target;
+    return target;
   }
 
-  randomMove(cube) {
-    this.isMove = true;
+  randomMove(cube,target) {
     let collisionDirections = this.monsterCollison(cube); // 충돌인 곳이 true가 담겨있음
     let notCollision = [];
 
@@ -419,11 +414,13 @@ export default class Monster {
     if (nextX >= 49) nextX = 48;
     if (nextZ >= 49) nextZ = 48;
 
-    this.target.x = nextX;
-    this.target.z = nextZ;
+    target.x = nextX;
+    target.z = nextZ;
+
+    return target;
   }
 
-  moving(cube, camera, vis) {
+  moving(cube, camera, vis, target) {
     if (this.isNear(camera)) {
       // 가까울경우
       if (!this.isMad) {
@@ -432,7 +429,7 @@ export default class Monster {
         this.isMad = true;
         this.monsterSpeed = 5;
       }
-      this.chase(camera, vis);
+      target = this.chase(camera, vis,target);
     } else {
       // 가깝지 않을 경우
       if (this.isMad) {
@@ -441,9 +438,9 @@ export default class Monster {
         this.isMad = false;
         this.monsterSpeed = 4;
       }
-      this.randomMove(cube);
+      target = this.randomMove(cube,target);
     }
-    return this.target;
+    return target;
   }
 
   enemyLight() {
@@ -455,16 +452,14 @@ export default class Monster {
     this.monsterLight.target.position.copy(this.monster.position);
   }
 
-  isMoving(monster) {
+  movingCheck(target) {
     if (
-      Math.abs(this.target.x - monster.position.x) +
-        Math.abs(this.target.z - monster.position.z) >
+      Math.abs(target.x - this.monster.position.x) +
+        Math.abs(target.z - this.monster.position.z) >
       0.03
     ) {
-      this.isMove = true;
       return true;
     } else {
-      this.isMove = false;
       return false;
     }
   }

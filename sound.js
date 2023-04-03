@@ -88,9 +88,30 @@ export default class Sound {
     return monster;
   }
 
+  loadItemSound(item){
+    item.add(this.itemNotification);
+    return item;
+  }
+
   musicPlay() {
     this.monsterBGM.play(); // 오디오를 재생합니다.
     this.itemNotification.play();
     this.heartbeat.play();
+  }
+
+  run(){
+    this.footstep.setVolume(1);
+    this.footstep.setPlaybackRate(2);
+  }
+
+  notRun(){
+    this.footstep.setVolume(0.3);
+    this.footstep.setPlaybackRate(1.2);
+  }
+
+  staminaout(){
+    if (!this.breath.isPlaying) {
+      this.breath.play(); // 숨소리 재생
+    }
   }
 }

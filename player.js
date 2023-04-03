@@ -138,6 +138,12 @@ export default class Player {
   run() {
     this.rotationSpeed = 20;
     this.smoothFactor = 0.5;
-    this.isRun = true;
+  }
+
+  stopRun(e){
+    if (e.keyCode == 17) {
+      this.rotationSpeed = 10; // 회전 속도
+      this.smoothFactor = 0.2; // 이동 보간 계수
+    }
   }
 }
