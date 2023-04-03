@@ -82,7 +82,7 @@ function isCollison() {
     let Raycaster = new THREE.Raycaster(camera.position, Direction, 0, 0.8);
     let Intersects = [];
 
-    for (var i in cube) {
+    for (let i in cube) {
         Intersects.push(Raycaster.intersectObject(cube[i]));
         if (Intersects[i].length > 0) {
             return true;
@@ -98,7 +98,7 @@ function monsterCollison() {
     }
     let collsionDirection = [false, false, false, false]; // 왼오위아래 중에  충돌 있는지 검사
     for (let i = 0; i < 4; i++) {
-        let raycaster = new THREE.Raycaster(monster.position, direc[i], 0, 0.7); // 원래 0.3
+        let raycaster = new THREE.Raycaster(monster.position, direc[i], 0, 0.7); 
         let intersect = Array();
 
         for (let j in cube) {
@@ -128,12 +128,10 @@ function chase(targetLocation) {
         .position
         .clone()
         .round();
-
     let monsterRound = monster
         .position
         .clone()
         .round();
-
 
     let playerZ = cameraRound.z;
     let playerX = cameraRound.x;
@@ -152,30 +150,34 @@ function chase(targetLocation) {
     vis[playerZ][playerX] = 0; // 몬스터 -> 사람 까지의 방문 여부를 표기하기 위해서 사람 좌표 0으로 셋팅
     vis[monsterZ][monsterX] = 1; 
 
-    const queue = [[monsterZ, monsterX]]; // 큐에 몬스터 좌표 넣어줌
+    let queue = [[monsterZ, monsterX]]; // 큐에 몬스터 좌표 넣어줌
+    let direction = JSON.parse(JSON.stringify(vis));
 
-    // const direction = new Array(50).fill(new Array(50).fill('z'));  해당 위치로 이동하는데 누른 상하좌우 표시
-    const direction = JSON.parse(JSON.stringify(vis));
     while (queue.length > 0) { // 큐가 빌 때까지 while문 돌린다.
         let [nowZ, nowX] = queue.shift(); // 큐의 맨 앞에값 꺼냄
         if (nowZ == playerZ && nowX == playerX) { // 탐색하는 좌표가 플레이어의 좌표라면 while문 탈출
             break;
         }
         // 상하좌우
-        for (var i = 0; i < 4; i++) { // for문으로 상하좌우 탐색
+        for (let i = 0; i < 4; i++) { // for문으로 상하좌우 탐색
+            let d = '';
             let nz = nowZ + dz[i]; // 다음으로 이동할 곳의 x좌표
             let nx = nowX + dx[i]; // 다음으로 이동할 곳의 y좌표
-            if (i === 0) { // 상
-                var d = 'U';
-            } else if (i === 1) { // 하
-                var d = 'D';
-            } else if (i === 2) { // 좌
-                var d = 'L';
-            } else {
-                var d = 'R'; // 우
+            switch(i){
+                case 0:
+                    d = 'U';
+                    break;
+                case 1:
+                    d = 'D';
+                    break;
+                case 2:
+                    d = 'L';
+                    break;
+                case 3:
+                    d = 'R';
+                    break;
             }
-
-            if (nz < 0 || nz >= 50 || nx < 0 || nx >= 50)
+            if (nz < 0 || nz > 50 || nx < 0 || nx > 50)
                 continue; // 범위를 벗어나는 경우
             if (vis[nz][nx] === 1) 
                 continue; // 벽이면 continue
@@ -193,27 +195,35 @@ function chase(targetLocation) {
     let chaseCount = 0;
 
     while (true) {
-        const preDirection = direction[chaseD[chaseCount][0]][chaseD[chaseCount][1]]; // 현재좌표가 상하좌우 중 어디서 왔는지 표기
-        const preZ = chaseD[chaseCount][0]; // 마지막으로 추적하고 있는 곳의 x좌표
-        const preX = chaseD[chaseCount][1]; // 마지막으로 추적하고 있는 곳의 x좌표
+        let preDirection = direction[chaseD[chaseCount][0]][chaseD[chaseCount][1]]; // 현재좌표가 상하좌우 중 어디서 왔는지 표기
+        let preZ = chaseD[chaseCount][0]; // 마지막으로 추적하고 있는 곳의 x좌표
+        let preX = chaseD[chaseCount][1]; // 마지막으로 추적하고 있는 곳의 x좌표
 
-        if (preZ === monsterZ && preX === monsterX) { // 추적하는 곳이 몬스터 좌표면 while문 탈출
+        if (preZ == monsterZ && preX == monsterX) { // 추적하는 곳이 몬스터 좌표면 while문 탈출
             break;
         }
         // 왼오위아래 상하좌우
-        if (preDirection === 'U') { // 위면 아래쪽 좌표를 가져옴
-            var nextDirection = 1;
-            var monsterDirection = 'D';
-        } else if (preDirection === 'D') { // 아래면 위쪽 좌표 가져옴
-            var nextDirection = 0;
-            var monsterDirection = 'U';
-        } else if (preDirection === 'L') { // 왼쪽이면 오른 좌표 가져옴
-            var nextDirection = 3;
-            var monsterDirection = 'R';
-        } else {
-            var nextDirection = 2; //우측이면 왼쪽 좌표
-            var monsterDirection = 'L';
+        let nextDirection;
+        let monsterDirection = '';
+        switch(preDirection){
+            case 'U':
+                nextDirection = 1;
+                monsterDirection = 'D';
+                break;
+            case 'D':
+                nextDirection = 0;
+                monsterDirection = 'U';
+                break;
+            case 'L':
+                nextDirection = 3;
+                monsterDirection = 'R';
+                break;
+            case 'R':
+                nextDirection = 2;
+                monsterDirection = 'L';
+                break;
         }
+
         chaseD.push([
             preZ + dz[nextDirection],
             preX + dx[nextDirection],
@@ -245,7 +255,6 @@ function chase(targetLocation) {
         }
     targetLocation.x = chaseD[1][1];
     targetLocation.z = chaseD[1][0];
-    console.log(targetLocation.x,targetLocation.z);
     return targetLocation;
 
 }
@@ -301,24 +310,9 @@ function randomMove(targetLocation) {
     if(nextX>=49) nextX = 48;
     if(nextZ>=49) nextZ = 48;
 
-    // if (nextGo == 0) 
-    //     var nextD = 'L';
-    // else if (nextGo == 1) 
-    //     var nextD = 'R';
-    // else if (nextGo == 2) 
-    //     var nextD = 'U';
-    // else 
-    //     var nextD = 'D';
-
-
-
-    
-    // targetLocation.set(nextX, 2, nextZ);
     targetLocation.x = nextX;
     targetLocation.z = nextZ;
     return targetLocation;
-    
-
 }
 
 function moving(targetLocation) {
@@ -420,7 +414,7 @@ let monsterPosition = monster
     .position
     .clone();
 let monsterTargetLocationY = 0;
-var isMove = false;
+let isMove = false;
 let monsterSpeed = 4;
 
 var targetRotationY = camera.rotation.y; // 목표 회전 각도
@@ -428,7 +422,6 @@ let downRotation = camera.rotation.x;
 var cameraTargetLocation = camera.position;
 var rotationSpeed = 10; // 회전 속도
 var smoothFactor = 0.2; // 이동 보간 계수
-// var stamina = 100;
 let targetLocationY = camera.position.y;
 let locationDiffY = 0;
 let nextGo;
@@ -437,7 +430,6 @@ var isRotating = false;
 var isMoving = false;
 let collison = false;
 let run = false;
-let notStartMusic = true;
 let isLookDown = false;
 let isFrontDirection = false;
 let isMad = false;
