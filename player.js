@@ -140,10 +140,8 @@ export default class Player {
     this.smoothFactor = 0.5;
   }
 
-  stopRun(e){
-    if (e.keyCode == 17) {
-      this.rotationSpeed = 10; // 회전 속도
-      this.smoothFactor = 0.2; // 이동 보간 계수
-    }
+  stopRun() {
+    this.rotationSpeed = 10; // 회전 속도
+    this.smoothFactor = 0.2; // 이동 보간 계수
   }
 }

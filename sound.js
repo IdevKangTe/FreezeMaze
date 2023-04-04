@@ -6,6 +6,9 @@ export default class Sound {
   heartbeat;
 
   monsterBGM;
+  suspense;
+  monsterScream;
+
   itemNotification;
 
   constructor(player) {
@@ -14,6 +17,8 @@ export default class Sound {
     this.heartbeat = this.initHeartbeat(player.listner);
     this.monsterBGM = this.initMonsterBGM(player.listner);
     this.itemNotification = this.initItemNotification(player.listner);
+    this.suspense = this.initSuspense(player.listner);
+    this.monsterScream = this.initMonsterScream(player.listner);
   }
 
   initFootstep(listner) {
@@ -61,6 +66,32 @@ export default class Sound {
     return audio;
   }
 
+  initSuspense(listner) {
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load('sound/game/suspense_hard.wav', function (buffer) {
+      audio.setBuffer(buffer);
+      audio.setLoop(true); // 오디오를 루프(loop)시킵니다.
+      audio.setVolume(1.5); // 오디오 볼륨을 조절합니다.
+      audio.setRefDistance(0.5);
+      audio.setDistanceModel('linear');
+    });
+    return audio;
+  }
+
+  initMonsterScream(listner) {
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/monster/monster_chase-start.wav',
+      function (buffer) {
+        audio.setBuffer(buffer);
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
   initItemNotification(listner) {
     const audio = new THREE.PositionalAudio(listner);
     this.audioLoader.load(
@@ -80,15 +111,17 @@ export default class Sound {
     camera.add(this.footstep);
     camera.add(this.breath);
     camera.add(this.heartbeat);
+    camera.add(this.suspense);
     return camera;
   }
 
   loadMonsterSound(monster) {
     monster.add(this.monsterBGM);
+    monster.add(this.monsterScream);
     return monster;
   }
 
-  loadItemSound(item){
+  loadItemSound(item) {
     item.add(this.itemNotification);
     return item;
   }
@@ -99,19 +132,42 @@ export default class Sound {
     this.heartbeat.play();
   }
 
-  run(){
+  run() {
     this.footstep.setVolume(1);
     this.footstep.setPlaybackRate(2);
   }
 
-  notRun(){
+  notRun() {
     this.footstep.setVolume(0.3);
     this.footstep.setPlaybackRate(1.2);
   }
 
-  staminaout(){
+  chase() {
+    this.suspense.play();
+    this.monsterScream.play();
+    this.heartbeat.setVolume(1.5);
+    this.heartbeat.setPlaybackRate(1.5);
+  }
+
+  notChase() {
+    this.suspense.pause();
+    this.heartbeat.setVolume(1);
+    this.heartbeat.setPlaybackRate(1.5);
+  }
+
+  staminaout() {
     if (!this.breath.isPlaying) {
       this.breath.play(); // 숨소리 재생
     }
+  }
+
+  pause() {
+    this.footstep.pause();
+    this.breath.pause();
+    this.heartbeat.pause();
+    this.monsterBGM.pause();
+    this.itemNotification.pause();
+    this.suspense.pause();
+    this.monsterScream.pause();
   }
 }
