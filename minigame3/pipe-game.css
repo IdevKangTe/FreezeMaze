@@ -24,10 +24,11 @@ body {
     grid-gap: 0.1rem;
     padding: 0.1rem;
     position: absolute;
-    top: 15%;
+    top: 12.5%;
     
     /* width: 350px; */
     width: 400px;
+    
     overflow: hidden;
     /* 콘텐츠를 안쪽 여백 상자에 맞추기 위해 잘라냅니다. */
     
@@ -37,10 +38,11 @@ body {
     grid-gap: 0.1rem;
     padding: 0.1rem;
     position: absolute;
-    top: 15%;
+    top: 10%;
     
     /* width: 350px; */
     width: 400px;
+
     overflow: hidden;
     /* 콘텐츠를 안쪽 여백 상자에 맞추기 위해 잘라냅니다. */
     
@@ -85,21 +87,21 @@ body {
 
 
 #greenlight{
-    left : 705px;
+    left : 810px;
     width: 100px;
     height: 100px;
     position: absolute; z-index: 300;
 }
 
 #lightoff {
-    left : 705px;
+    left : 810px;
     width: 105px;
     height: 100px;
     position: absolute; z-index: 300;
 }
 
 #redlight{
-    left : 705px;
+    left : 810px;
     width: 100px;
     height: 100px;
     position: absolute; z-index: 300;

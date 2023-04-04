@@ -1,4 +1,8 @@
-const canvas = document.getElementById('mini3');
+// const canvas = document.getElementById('mini3');
+
+
+const canvas = document.createElement('canvas');
+document.body.append(canvas);
 const ctx = canvas.getContext("2d");
 
 // let window_width = window.innerWidth;
@@ -33,6 +37,22 @@ let doTutorial = false;
 
 const speed = 5;
 let rhythmgame;
+
+
+function downsound() {
+    const down = new Audio("./conveyor-Stop.mp3");
+    down.play(); 
+}//키다운 소리
+
+function correctsound() {
+    const correct = new Audio("./conveyor-Correct2.mp3");
+    correct.play();
+}//맞았을때 소리
+
+function wrongsound() {
+    const wrong = new Audio("./mini3-incorrect.mp3");
+    wrong.play();
+}//틀렸을때 소리
 
 
 function animateKey() {
@@ -163,16 +183,20 @@ window.addEventListener("keydown", e => {
     console.log(key);
     
     if (key==" ") {
+        downsound();   
         console.log(currentPos1);
        cancelAnimationFrame(rhythmgame);
         
-       if (95 < currentPos1 && currentPos1 < 123) {
+       if (95 < currentPos1 && currentPos1 < 123) { //맞았을때
+               correctsound();
                correctPipe = true;
                console.log('clear');
                lightOn(greenlight);
+               const bgm = document.getElementById("bgm"); // id 속성값이 "bgm"인 오디오 요소 가져오기
+               bgm.pause(); // 해당 오디오 일시 중지(pause)   
        } else {
-           if(doTutorial==true) {
-               
+           if(doTutorial==true) { //틀렸을때
+               wrongsound();
                lightOn(redlight);
                setTimeout(function(){
                run();
@@ -183,6 +207,7 @@ window.addEventListener("keydown", e => {
     
     
     }
+
 
     
 })
