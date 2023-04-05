@@ -11,6 +11,8 @@ export default class Sound {
 
   itemNotification;
 
+  isBGMPlaying;
+
   constructor(player) {
     this.footstep = this.initFootstep(player.listner);
     this.breath = this.initBreath(player.listner);
@@ -19,6 +21,8 @@ export default class Sound {
     this.itemNotification = this.initItemNotification(player.listner);
     this.suspense = this.initSuspense(player.listner);
     this.monsterScream = this.initMonsterScream(player.listner);
+
+    this.isBGMPlaying = false;
   }
 
   initFootstep(listner) {
@@ -127,9 +131,13 @@ export default class Sound {
   }
 
   musicPlay() {
+    if (this.isBGMPlaying) {
+      return;
+    }
     this.monsterBGM.play(); // 오디오를 재생합니다.
     this.itemNotification.play();
     this.heartbeat.play();
+    this.isBGMPlaying = true;
   }
 
   run() {
