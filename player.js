@@ -59,7 +59,7 @@ export default class Player {
     scene.add(this.camera);
     scene.add(this.spotLight);
     scene.add(this.spotLight.target);
-    return { scene, camera: this.camera, cameraLight: this.spotLight };
+    return { scene, camera: this.camera };
   }
 
   light() {
@@ -106,15 +106,6 @@ export default class Player {
     return false;
   }
 
-  staminaCheck() {
-    if (this.stamina <= 0) {
-      return true;
-    }
-    if (this.stamina > 15) {
-      return false;
-    }
-  }
-
   collisonCheck(cube) {
     let Direction = new THREE.Vector3(0, 0, -1);
     this.camera.localToWorld(Direction);
@@ -146,7 +137,6 @@ export default class Player {
     this.isDownRotating = this.downRotatingCheck();
     this.isMoving = this.movingCheck();
     this.isRunning = this.runningCheck();
-    this.isOutOfStamina = this.staminaCheck();
 
     this.light();
 
@@ -160,8 +150,16 @@ export default class Player {
       this.camera.position.copy(this.moveToTarget());
     }
 
+    if (this.stamina <= 0) {
+      this.stopRun();
+    }
+
+    // if (this.stamina >= 90) {
+    //   this.isOutOfStamina = false;
+    // }
+
     if (this.isRunning) {
-      this.stamina = this.stamina < 0 ? 0 : this.stamina - 0.4;
+      this.stamina = this.stamina < 0 ? 0 : this.stamina - 0.45;
     } else {
       this.stamina = this.stamina > 100 ? 100 : this.stamina + 0.3;
     }
@@ -176,10 +174,8 @@ export default class Player {
     if (this.isSideRotating || this.isMoving) {
       return;
     } else {
-      if (e.ctrlKey) {
+      if (e.keyCode == 17) {
         this.run();
-      } else {
-        this.stopRun();
       }
       switch (e.keyCode) {
         case 37:
@@ -241,6 +237,12 @@ export default class Player {
       this.downRotationTarget -= Math.PI / 2;
     } else {
       this.downRotationTarget += Math.PI / 2;
+    }
+  }
+
+  ctrlUp(e) {
+    if (e.keyCode == 17) {
+      this.stopRun();
     }
   }
 

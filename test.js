@@ -11,7 +11,7 @@ import Monster from './monster.js';
 // ==========================
 // 3차원 세계
 let scene = new THREE.Scene();
-let camera, cameraLight, monster, map2D, item, itemLight;
+let camera, monster, map2D, item;
 
 let main = document.createElement('canvas');
 let renderer = new THREE.WebGLRenderer({
@@ -30,7 +30,7 @@ const light = new THREE.AmbientLight(0xffffff, 0.1);
 scene.add(light);
 
 const player = new Player();
-({ scene, camera, cameraLight } = player.load(scene));
+({ scene, camera } = player.load(scene));
 
 const sound = new Sound(player);
 camera = sound.loadPlayerSound(camera);
@@ -38,39 +38,26 @@ camera = sound.loadPlayerSound(camera);
 let cube = [];
 ({ scene, map3D: cube, map2D } = load(scene));
 
-const vis = JSON.parse(JSON.stringify(map2D));
-
 const enemy = new Monster();
 ({ scene, monster } = enemy.load(scene));
 monster = sound.loadMonsterSound(monster);
 
 const mini = new Item();
-({ scene, item, itemLight } = mini.load(scene));
+({ scene, item } = mini.load(scene));
 item = sound.loadItemSound(item);
 
-main.addEventListener('keydown', moveSomething, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
-// main.addEventListener('keyup', stopRunning, false);
+main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
+main.addEventListener('keyup', onKeyUp, false);
 
 let deltaTime = 0;
-// let nextGo = 0;
 
-// let monsterTarget = monster.position.clone();
-// let monstertargetY = 0;
-// let monsterPosition = monster.position.clone();
-// let monsterSpeed = 4;
-
-// let monsterIsMoving = false;
-// let isMad = false;
-
-// const monsterBGM = initMonsterBGM(listner);
-// monster.add(monsterBGM);
-
-function moveSomething(e) {
+function onKeyDown(e) {
   sound.musicPlay();
   player.move(e);
-  if (!sound.footstep.isPlaying) {
-    sound.footstep.play();
-  }
+}
+
+function onKeyUp(e) {
+  player.ctrlUp(e);
 }
 
 document.getElementById('key1').style.opacity = 1;
@@ -81,33 +68,23 @@ document.getElementById('key1').style.opacity = 1;
 
 let prevTime = 0;
 
-// 에니메이션 효과를 자동으로 주기 위한 보조 기능입니다.
 let animate = function () {
   // 프레임 처리
   let now = performance.now();
 
   deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
   prevTime = now;
-  // 프레임 시간 계산
 
   player.update(deltaTime, cube);
   document.getElementById('progress').value = player.stamina;
 
-  itemLight.rotation.y += 0.05;
-  // 아이템 알림 전구 회전
+  mini.update();
 
-  // enemy.enemyLight();
-
-  // var itemDiff = item.position.distanceTo(cameraPosition);
-  // sound.itemNotification.setVolume(
-  //   1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
-  // );
-  // 아이템 플레이어의 거리를 계산해 아이템BGM의 볼륨을 조정
+  sound.update(player, monster, mini);
 
   // 랜더링을 수행합니다.
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 };
 
-// animate()함수를 최초에 한번은 수행해주어야 합니다.
 animate();

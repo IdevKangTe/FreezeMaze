@@ -169,6 +169,30 @@ export default class Sound {
     }
   }
 
+  footstepSoundPlay() {
+    if (!this.footstep.isPlaying) {
+      this.footstep.play();
+    }
+  }
+
+  update(player, monster, mini) {
+    if (player.isMoving || player.isRotating) {
+      this.footstepSoundPlay();
+    } else {
+      this.footstep.pause();
+    }
+    if (player.isRunning) {
+      this.run();
+    } else {
+      this.notRun();
+    }
+
+    let itemDiff = mini.item.position.distanceTo(player.camera.position);
+    this.itemNotification.setVolume(
+      1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
+    );
+  }
+
   pause() {
     this.footstep.pause();
     this.breath.pause();

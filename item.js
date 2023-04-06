@@ -17,7 +17,7 @@ export default class Item {
     scene.add(this.item);
     scene.add(this.light);
 
-    return { scene, item: this.item, itemLight: this.light };
+    return { scene, item: this.item };
   }
 
   initItem() {
@@ -107,5 +107,14 @@ export default class Item {
     });
     bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
     return bulbLight;
+  }
+
+  itemPositionChange(x, z) {
+    this.item.position.set(x, -0.47, z);
+    this.light.position.set(x, 4, z);
+  }
+
+  update() {
+    this.light.rotation.y += 0.05;
   }
 }
