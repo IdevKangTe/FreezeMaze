@@ -11,7 +11,7 @@ import Monster from './monster.js';
 // ==========================
 // 3차원 세계
 let scene = new THREE.Scene();
-let camera, monster, map2D, item;
+let camera, monster, mini, map2D;
 
 let main = document.createElement('canvas');
 let renderer = new THREE.WebGLRenderer({
@@ -42,9 +42,9 @@ const enemy = new Monster();
 ({ scene, monster } = enemy.load(scene));
 monster = sound.loadMonsterSound(monster);
 
-const mini = new Item();
-({ scene, item } = mini.load(scene));
-item = sound.loadItemSound(item);
+const item = new Item();
+({ scene, mini } = item.load(scene));
+mini = sound.loadItemSound(mini);
 
 main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
 main.addEventListener('keyup', onKeyUp, false);
@@ -54,6 +54,7 @@ let deltaTime = 0;
 function onKeyDown(e) {
   sound.musicPlay();
   player.move(e);
+  // scene = mini.changeDoor(scene);
 }
 
 function onKeyUp(e) {
@@ -78,9 +79,9 @@ let animate = function () {
   player.update(deltaTime, cube);
   document.getElementById('progress').value = player.stamina;
 
-  mini.update();
+  item.update();
 
-  sound.update(player, monster, mini);
+  sound.update(player, monster, item);
 
   // 랜더링을 수행합니다.
   renderer.render(scene, camera);
