@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outro</title>
-    <link href="intro.css" type="text/css" rel="stylesheet">
+    <title>Inoutro</title>
+    <link href="inout.css" type="text/css" rel="stylesheet">
     <!-- <script type="importmap">
         {
           "imports": {
@@ -13,17 +13,20 @@
           }
         }
       </script> -->
-    <script type="module" src="outro10.js" defer="defer"></script>
+    <script type="module" src="inOutroCanvas.js" defer="defer"></script>
     <style >
-
+      .d-none{
+        display: none;
+      }
     </style>
 </head>
 <body style="margin : 0;padding : 0;">
-<div id="intro">
-    <canvas id="canvasIntro"></canvas>  
+<div id="in-outro-container">
+    <!-- <canvas id="in-outro"></canvas>   -->
+    <img class="d-none" id="background" src="logo-bg.jpg">
     <div id="logoBox">
-    <img id="logo" src="freemaze-n.png" >
-    <img id="logoze" src="logoze.png" style="display:none">
+        <img class="logoBox d-none" id="logo" src="freemaze-n.png" >
+        <img class="logoBox d-none" id="logoze" src="logoze.png">
     </div>
 </div>
 </body>

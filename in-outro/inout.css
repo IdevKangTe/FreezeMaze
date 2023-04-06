@@ -1,14 +1,10 @@
-.intro{
+.in-outro-container{
     background-color: #01070A;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#logoBox{
-        position: absolute;
-    }
-
-#canvas{
-    display: flex;
+.logoBox{
+    position: absolute;
 }
