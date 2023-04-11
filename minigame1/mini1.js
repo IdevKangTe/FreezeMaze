@@ -1,3 +1,6 @@
+import Background from "./background.js";
+import Key from "./key.js";
+import Tile from "./tile.js";
 /**@type {HTMLCanvasElement} */
 
 let canvas = document.getElementById("mini1");
@@ -8,6 +11,24 @@ let window_height = window.innerHeight;
 
 canvas.width = window_width;
 canvas.height = window_height;
+
+let background = new Background();
+background.draw(ctx);
+
+let tile = new Tile();
+tile.draw(ctx);
+
+let key = new Key();
+key.draw(ctx);
+
+// const keyImgs = document.getElementsByClassName("keys");
+// const keyImgArr = Array.from(keyImgs);
+// console.log("keys", keyImgArr);
+
+
+
+
+/*
 
 // 타일을 맞춘 걸 count하여 도합 4가 되었을 때 finish를 콘솔에 출력
 let isDKeyCorrect = false; 
@@ -27,12 +48,14 @@ const xRange = 260;
 const xRangeBox = window_width/2-200;
 const yRange = 90;
 const yRangeBox = 475;
-
+//랜덤
 let xpos = {x1:(Math.floor(Math.random()*xRange))+xRangeBox,x2:(Math.floor(Math.random()*xRange))+xRangeBox,x3:(Math.floor(Math.random()*xRange))+xRangeBox,x4:(Math.floor(Math.random()*xRange))+xRangeBox,x5:(Math.floor(Math.random()*xRange))+xRangeBox,x6:(Math.floor(Math.random()*xRange))+xRangeBox,x7:(Math.floor(Math.random()*xRange))+xRangeBox,x8:(Math.floor(Math.random()*xRange))+xRangeBox,x9:(Math.floor(Math.random()*xRange))+xRangeBox,x10:(Math.floor(Math.random()*xRange))+xRangeBox,x11:(Math.floor(Math.random()*xRange))+xRangeBox};
 let ypos = {y1:(Math.floor(Math.random()*yRange))+yRangeBox,y2:(Math.floor(Math.random()*yRange))+yRangeBox,y3:(Math.floor(Math.random()*yRange))+yRangeBox,y4:(Math.floor(Math.random()*yRange))+yRangeBox,y5:(Math.floor(Math.random()*yRange))+yRangeBox,y6:(Math.floor(Math.random()*yRange))+yRangeBox,y7:(Math.floor(Math.random()*yRange))+yRangeBox,y8:(Math.floor(Math.random()*yRange))+yRangeBox,y9:(Math.floor(Math.random()*yRange))+yRangeBox,y10:(Math.floor(Math.random()*yRange))+yRangeBox,y11:(Math.floor(Math.random()*yRange))+yRangeBox};
 
 const bgImg = new Image();
 bgImg.src="bgimg.jpg";
+
+
 
 
 const image1 = new Image();
@@ -57,6 +80,7 @@ const image10 = new Image();
 image10.src = "10.png";
 const image11 = new Image();
 image11.src = "11.png";
+
 const fixedImage = new Image();
 fixedImage.src = "fixed-image.png";
 const fixedImage2 = new Image();
@@ -100,6 +124,9 @@ const fixedImage3Y = 270;
 const fixedImage4X = 756;
 const fixedImage4Y = 268;
 
+
+// let image1 = new Key(1);
+// image1.load(imageX, imageY);
 
 // 배경 이미지 로드
 bgImg.addEventListener('load', function () {
@@ -174,6 +201,7 @@ function isMouseInShape(x, y, shape) {
   let shapeBottom = shape.y + shape.height;
   return (x > shapeLeft && x < shapeRight && y > shapeTop && y < shapeBottom);
 }
+
 function mouseDown(event) {
   event.preventDefault();
   startX = parseInt(event.clientX);
@@ -620,3 +648,6 @@ function mouseUp(event) {
   canvas.addEventListener('mousemove', mouseMove);
   canvas.addEventListener('mouseup', mouseUp);
   canvas.addEventListener('mouseout', mouseOut);
+
+
+  */
