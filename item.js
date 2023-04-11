@@ -110,7 +110,7 @@ export default class Item {
       metalnessMap: metalTexture,
     });
 
-    let mini = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1, 0.3), miniMaterial);
+    let mini = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1, 0.7), miniMaterial);
 
     return mini;
   }
@@ -330,4 +330,5 @@ export default class Item {
   update() {
     this.miniLight.rotation.y += 0.05;
   }
+
 }

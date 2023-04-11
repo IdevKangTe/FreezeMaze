@@ -35,12 +35,13 @@ export default class Player {
     this.camera.position.set(1, 1, 48);
     this.spotLight.rotation.x += 45;
     this.spotLight.castShadow = true;
-    this.rotationSpeed = 10;
+    this.rotationSpeed = 13;
     this.smoothFactor = 0.2;
 
     this.frontMoveTarget = this.camera.position.clone();
     this.sideRotationTarget = this.camera.rotation.y;
     this.downRotationTarget = this.camera.rotation.x;
+    this.downLocationTarget = this.camera.position.y;
     this.cameraDirection = new THREE.Vector3();
     this.cameraDirPos = this.camera.position.clone().add(this.cameraDirection);
     this.stamina = 100;
@@ -84,7 +85,7 @@ export default class Player {
   }
 
   downRotatingCheck() {
-    if (Math.abs(this.camera.rotation.x - this.downRotationTarget) > 0.05) {
+    if (Math.abs(this.camera.rotation.x - this.downRotationTarget) > 0.005) {
       return true;
     }
     return false;
@@ -140,29 +141,32 @@ export default class Player {
 
     this.light();
 
-    if (this.isSideRotating) {
-      this.camera.rotation.y += this.sideRotate(deltaTime);
-    }
+    this.camera.rotation.y += this.sideRotate(deltaTime);
+
     if (this.isDownRotating) {
       this.camera.rotation.x += this.downRotate(deltaTime);
+    } else {
+      this.camera.rotation.x = this.downRotationTarget;
     }
-    if (this.isMoving) {
+
+    if(this.isLookDown && !this.isDownRotating){
+      this.downLocation(deltaTime);
+    } else {
       this.camera.position.copy(this.moveToTarget());
+
     }
 
     if (this.stamina <= 0) {
       this.stopRun();
     }
 
-    // if (this.stamina >= 90) {
-    //   this.isOutOfStamina = false;
-    // }
-
     if (this.isRunning) {
       this.stamina = this.stamina < 0 ? 0 : this.stamina - 0.45;
     } else {
       this.stamina = this.stamina > 100 ? 100 : this.stamina + 0.3;
     }
+
+    console.log(this.camera.rotation);
   }
 
   sideRotate(deltaTime) {
@@ -196,9 +200,7 @@ export default class Player {
           this.getDownRotateTarget();
           break;
         case 40:
-          // this.downRotation = this.lookUp(this.downRotation);
-          // this.targetLocationY = 0.3;
-          // this.downRotation = player.lookDownCheck(this.cameraDirection, this.downRotation);
+          this.lookUp();
           break;
       }
     }
@@ -212,24 +214,35 @@ export default class Player {
   }
 
   getDownRotateTarget() {
+    this.isLookDown = true;
     if (
       Math.round(this.cameraDirection.z) == 1 &&
       Math.round(this.cameraDirection.x) == 0
     ) {
       this.downRotationTarget += Math.PI / 2;
       this.isFrontDirection = true;
+      this.downLocationTarget = 0.3;
     } else if (
       Math.round(this.cameraDirection.z) == -1 &&
       Math.round(this.cameraDirection.x) == 0
     ) {
       this.downRotationTarget -= Math.PI / 2;
       this.isFrontDirection = false;
+      this.downLocationTarget = 0.3;
     }
   }
 
   downRotate(deltaTime) {
     let downRotationDiff = this.downRotationTarget - this.camera.rotation.x;
     return downRotationDiff * this.rotationSpeed * deltaTime;
+  }
+
+  downLocation(deltaTime){
+    let locationDiffY = Math.abs(this.camera.position.y - this.downLocationTarget);
+      this.camera.position.y -= locationDiffY * deltaTime * 0.5;
+      if (locationDiffY < 0.2) {
+        this.isLookDown = false;
+      }
   }
 
   lookUp() {
@@ -255,4 +268,5 @@ export default class Player {
     this.rotationSpeed = 10; // 회전 속도
     this.smoothFactor = 0.2; // 이동 보간 계수
   }
+
 }

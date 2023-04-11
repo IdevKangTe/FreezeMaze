@@ -175,7 +175,10 @@ export default class Sound {
     }
   }
 
-  update(player, monster, mini) {
+  update(player, monster, item) {
+    // let camera = new THREE.Vector3();
+    // let item = new TH
+    
     if (player.isMoving || player.isRotating) {
       this.footstepSoundPlay();
     } else {
@@ -187,7 +190,7 @@ export default class Sound {
       this.notRun();
     }
 
-    let itemDiff = mini.item.position.distanceTo(player.camera.position);
+    let itemDiff = item.mini.position.distanceTo(player.camera.position);
     this.itemNotification.setVolume(
       1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
     );

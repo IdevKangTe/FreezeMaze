@@ -11,7 +11,7 @@ import Monster from './monster.js';
 // ==========================
 // 3차원 세계
 let scene = new THREE.Scene();
-let camera, monster, mini, map2D;
+let camera, monster, mini, map2D, cameraPosition, itemPosition;
 
 let main = document.createElement('canvas');
 let renderer = new THREE.WebGLRenderer({
