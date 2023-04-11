@@ -4,13 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="progress-bar.css" rel="stylesheet" type="text/css" />
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
+    <title>FREEZE MAZE</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <link href="css/total.css" rel="stylesheet" type="text/css" />
+    <link href="css/progress-bar.css" rel="stylesheet" type="text/css" />
     <script type="importmap">
       {
         "imports": {
@@ -18,10 +15,9 @@
         }
       }
     </script>
-    <script src="test.js" type="module" defer="defer"></script>
+    <script src="main.js" type="module" defer="defer"></script>
   </head>
   <body>
-    <!-- <script src="https://threejs.org/build/three.min.js"></script> -->
     <div id="info">
       <progress id="progress" max="100" min="0" value="70"></progress>
       <div id="keys">
@@ -30,6 +26,9 @@
         <img src="img/key2.png" id="clear3" />
       </div>
     </div>
-    <div></div>
+    <div id="mini2-container">
+      <img src="img/mini2/bg.jpg" id="mini2bg">
+      <img src="img/mini2/mini-2-bg.jpg" id="mini2-bg" class="mini2">
+  </div>
   </body>
 </html>

@@ -22,6 +22,7 @@ export default class Player {
   isCollison;
   isOutOfStamina;
   isMiniPosition;
+  isPauseCheck;
 
   constructor() {
     this.camera = new THREE.PerspectiveCamera(
@@ -56,6 +57,7 @@ export default class Player {
     this.isRunning = false;
     this.isOutOfStamina = false;
     this.isMiniPosition = false;
+    this.isPauseCheck = null;
   }
 
   load(scene) {
@@ -158,7 +160,7 @@ export default class Player {
 
     if(this.isLookDown && !this.isDownRotating){
       this.downLocation(deltaTime);
-      console.log(this.isDownRotating);
+      // console.log(this.isDownRotating);
     } else {
       this.camera.position.copy(this.moveToTarget());
     }
@@ -208,9 +210,6 @@ export default class Player {
             this.getDownRotateTarget();
           }
           break;
-        case 40:
-          this.lookUp();
-          break;
       }
     }
   }
@@ -250,15 +249,19 @@ export default class Player {
     let locationDiffY = Math.abs(this.camera.position.y - this.downLocationTarget);
       this.camera.position.y -= locationDiffY * deltaTime * 0.5;
       if (locationDiffY < 0.2) {
-        this.isLookDown = false;
+        this.isPauseCheck();
         this.lookUp();
+        this.isLookDown = false;
       }
   }
 
   lookUp() {
+    console.log('lookup');
     if (this.isFrontDirection) {
+      console.log('frontDirection');
       this.downRotationTarget -= Math.PI / 2;
     } else {
+      console.log('notfrontdirection')
       this.downRotationTarget += Math.PI / 2;
     }
   }
@@ -277,6 +280,10 @@ export default class Player {
   stopRun() {
     this.rotationSpeed = 10; // 회전 속도
     this.smoothFactor = 0.2; // 이동 보간 계수
+  }
+
+  isPauseCheck(callback) {
+    this.isPauseCheck = callback;
   }
 
 }

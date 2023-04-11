@@ -29,7 +29,7 @@ export default class Monster {
       1
     );
 
-    this.monster.position.set(27, 2, 28);
+    this.monster.position.set(27, 2.5, 28);
     this.monsterLight.position.set(this.monster.position);
     this.monsterLight.rotation.y += Math.PI / 2;
     this.monsterLight.position.y += 2;
@@ -232,7 +232,7 @@ export default class Monster {
 
   update(camera, deltaTime, cube){
     this.enemyLight();
-    this.hover(deltaTime)
+    this.hover(deltaTime);
 
     // this.isMoving = this.movingCheck(this.xzTarget);
     this.isMoving = this.movingCheck();
@@ -484,6 +484,7 @@ export default class Monster {
         this.monsterSpeed = 4;
       }
       console.log("random");
+      console.log(this.monster.position);
       this.xzTarget = this.randomMove(cube);
     }
     return this.xzTarget;
