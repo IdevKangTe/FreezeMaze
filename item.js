@@ -21,7 +21,7 @@ export default class Item {
     this.door.position.set(46.625, 1.5, 8);
     this.doorWall.position.set(46.988, 1.5, 8);
     this.doorLigth = this.initDoorLight();
-    this.doorLigth.position.set(1, 1.5, 42.015);
+    this.doorLigth.position.set(48, 1.5, 0);
   }
 
   load(scene) {

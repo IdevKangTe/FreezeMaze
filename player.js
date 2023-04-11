@@ -21,6 +21,7 @@ export default class Player {
   isLookDown;
   isCollison;
   isOutOfStamina;
+  isMiniPosition;
 
   constructor() {
     this.camera = new THREE.PerspectiveCamera(
@@ -54,6 +55,7 @@ export default class Player {
     this.isMoving = false;
     this.isRunning = false;
     this.isOutOfStamina = false;
+    this.isMiniPosition = false;
   }
 
   load(scene) {
@@ -128,7 +130,11 @@ export default class Player {
     return false;
   }
 
-  update(deltaTime, cube) {
+  miniPositionCheck(mini) {
+    return Math.abs(mini.position.x - this.camera.position.x) + Math.abs(mini.position.z - this.camera.position.z) <=0.3;
+  }
+
+  update(deltaTime, cube, mini) {
     this.cameraPosition = this.camera.position.clone();
     this.camera.getWorldDirection(this.cameraDirection);
     this.cameraDirPos = this.cameraPosition.add(this.cameraDirection.clone());
@@ -138,6 +144,7 @@ export default class Player {
     this.isDownRotating = this.downRotatingCheck();
     this.isMoving = this.movingCheck();
     this.isRunning = this.runningCheck();
+    this.isMiniPosition = this.miniPositionCheck(mini);
 
     this.light();
 
@@ -151,9 +158,9 @@ export default class Player {
 
     if(this.isLookDown && !this.isDownRotating){
       this.downLocation(deltaTime);
+      console.log(this.isDownRotating);
     } else {
       this.camera.position.copy(this.moveToTarget());
-
     }
 
     if (this.stamina <= 0) {
@@ -166,7 +173,6 @@ export default class Player {
       this.stamina = this.stamina > 100 ? 100 : this.stamina + 0.3;
     }
 
-    console.log(this.camera.rotation);
   }
 
   sideRotate(deltaTime) {
@@ -197,7 +203,10 @@ export default class Player {
           this.sideRotationTarget -= Math.PI / 2;
           break;
         case 32:
-          this.getDownRotateTarget();
+          console.log()
+          if(this.isMiniPosition){
+            this.getDownRotateTarget();
+          }
           break;
         case 40:
           this.lookUp();
@@ -242,6 +251,7 @@ export default class Player {
       this.camera.position.y -= locationDiffY * deltaTime * 0.5;
       if (locationDiffY < 0.2) {
         this.isLookDown = false;
+        this.lookUp();
       }
   }
 

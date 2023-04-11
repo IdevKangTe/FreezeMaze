@@ -10,8 +10,10 @@ export default class Sound {
   monsterScream;
 
   itemNotification;
+  escapeOpen;
 
   isBGMPlaying;
+  suspensePause;
 
   constructor(player) {
     this.footstep = this.initFootstep(player.listner);
@@ -21,8 +23,10 @@ export default class Sound {
     this.itemNotification = this.initItemNotification(player.listner);
     this.suspense = this.initSuspense(player.listner);
     this.monsterScream = this.initMonsterScream(player.listner);
+    this.escapeOpen = this.initEscapeOpen(player.listner);
 
     this.isBGMPlaying = false;
+    this.suspensePause = false;
   }
 
   initFootstep(listner) {
@@ -96,6 +100,7 @@ export default class Sound {
     return audio;
   }
 
+
   initItemNotification(listner) {
     const audio = new THREE.PositionalAudio(listner);
     this.audioLoader.load(
@@ -103,6 +108,20 @@ export default class Sound {
       function (buffer) {
         audio.setBuffer(buffer);
         audio.setLoop(true); // 오디오를 루프(loop)시킵니다.
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
+  initEscapeOpen(listner) {
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/game/escapedoor_open.wav',
+      function (buffer) {
+        audio.setBuffer(buffer);
         audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
         audio.setRefDistance(0.5);
         audio.setDistanceModel('linear');
@@ -134,10 +153,13 @@ export default class Sound {
     if (this.isBGMPlaying) {
       return;
     }
-    this.monsterBGM.play(); // 오디오를 재생합니다.
+    this.monsterBGM.play();
     this.itemNotification.play();
     this.heartbeat.play();
     this.isBGMPlaying = true;
+    if(this.suspensePause){
+      this.suspense.play();
+    }
   }
 
   run() {
@@ -175,6 +197,10 @@ export default class Sound {
     }
   }
 
+  escapeOpenPlay(){
+    this.escapeOpen.play();
+  }
+
   update(player, monster, item) {
     // let camera = new THREE.Vector3();
     // let item = new TH
@@ -194,6 +220,9 @@ export default class Sound {
     this.itemNotification.setVolume(
       1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
     );
+
+    let MonsterDiff = monster.position.distanceTo(player.camera.position);
+    this.monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
   }
 
   pause() {
@@ -202,7 +231,11 @@ export default class Sound {
     this.heartbeat.pause();
     this.monsterBGM.pause();
     this.itemNotification.pause();
-    this.suspense.pause();
     this.monsterScream.pause();
+    if(this.suspense.isPlaying){
+      this.suspense.pause();
+      this.suspensePause = true;
+    }
+    this.isBGMPlaying = false;
   }
 }

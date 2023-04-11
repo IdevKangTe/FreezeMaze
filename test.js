@@ -11,7 +11,7 @@ import Monster from './monster.js';
 // ==========================
 // 3차원 세계
 let scene = new THREE.Scene();
-let camera, monster, mini, map2D, cameraPosition, itemPosition;
+let camera, monster, mini;
 
 let main = document.createElement('canvas');
 let renderer = new THREE.WebGLRenderer({
@@ -36,7 +36,7 @@ const sound = new Sound(player);
 camera = sound.loadPlayerSound(camera);
 
 let cube = [];
-({ scene, map3D: cube, map2D } = load(scene));
+({ scene, map3D: cube} = load(scene));
 
 const enemy = new Monster();
 ({ scene, monster } = enemy.load(scene));
@@ -49,8 +49,6 @@ mini = sound.loadItemSound(mini);
 main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
 main.addEventListener('keyup', onKeyUp, false);
 
-let deltaTime = 0;
-
 function onKeyDown(e) {
   sound.musicPlay();
   player.move(e);
@@ -61,12 +59,25 @@ function onKeyUp(e) {
   player.ctrlUp(e);
 }
 
-document.getElementById('key1').style.opacity = 1;
+let miniClear = [false,false,false];
+
+function miniClearUpdate(miniClear){
+  if(miniClear[0]){
+    document.getElementById('clear1').style.opacity = 1;
+  }
+  if(miniClear[1]){
+    document.getElementById('clear2').style.opacity = 1;
+  }
+  if(miniClear[2]){
+    document.getElementById('clear3').style.opacity = 1;
+  }
+}
 
 // ==========================
 // 초기화 부분 끝
 // ==========================
 
+let deltaTime = 0;
 let prevTime = 0;
 
 let animate = function () {
@@ -76,10 +87,16 @@ let animate = function () {
   deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
   prevTime = now;
 
-  player.update(deltaTime, cube);
+  player.update(deltaTime, cube, mini);
   document.getElementById('progress').value = player.stamina;
 
+  miniClearUpdate(miniClear);
+
   item.update();
+
+  if(!player.isLookDown){
+    enemy.update(camera, deltaTime, cube);
+  }
 
   sound.update(player, monster, item);
 

@@ -5,6 +5,8 @@
  */
 import * as THREE from 'three';
 
+export {map2D};
+
 // export default map;
 
 let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
@@ -211,5 +213,5 @@ export default function load(scene) {
   map.add(floors, walls);
   scene.add(map);
 
-  return { scene, map3D, map2D };
+  return { scene, map3D};
 }
