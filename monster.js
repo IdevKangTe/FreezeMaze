@@ -484,7 +484,7 @@ export default class Monster {
         this.monsterSpeed = 4;
       }
       console.log("random");
-      console.log(this.monster.position);
+      // console.log(this.monster.position);
       this.xzTarget = this.randomMove(cube);
     }
     return this.xzTarget;
@@ -531,6 +531,7 @@ export default class Monster {
     if (this.yTarget >= 0.02) {
       this.yTarget = -this.yTarget;
     } else {
+      deltaTime = deltaTime > 0.1 ? 0.05 : deltaTime;
       this.yTarget += 0.01 * deltaTime * 4;
     }
   }

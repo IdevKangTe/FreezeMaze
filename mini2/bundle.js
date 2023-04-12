@@ -24,7 +24,7 @@ export default class Bundle {
 	#rightBlue;
 
 	constructor() {
-		this.#w = window.innerWidth/2;
+		this.#w = 800;
 		this.#h = window.innerHeight;
 		this.#x = (window.innerWidth - this.#w) / 2;
 

@@ -7,6 +7,14 @@ import * as THREE from 'three';
 
 export {map2D};
 
+class Map{
+
+  constructor() {
+
+  }
+
+}
+
 // export default map;
 
 let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1

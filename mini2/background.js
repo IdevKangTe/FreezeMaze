@@ -11,7 +11,7 @@ export default class Background {
 
 	constructor() {
 		this.#img = document.getElementById("mini2-bg");
-		this.#dw = window.innerWidth/2;
+		this.#dw = 800;
 		this.#dh = window.innerHeight;
 		this.#dx = (window.innerWidth - this.#dw)/2;
 		this.#dy = 0;

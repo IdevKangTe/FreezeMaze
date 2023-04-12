@@ -15,17 +15,19 @@ function main() {
   let scene = new THREE.Scene();
   let camera, monster, mini;
 
-  let main = document.createElement('canvas');
+  const main = document.createElement('canvas');
   let renderer = new THREE.WebGLRenderer({
     canvas: main,
     antialias: true,
     preserveDrawingBuffer: true,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  document.body.insertBefore(renderer.domElement, document.body.firstChild);
   main.tabIndex = 0;
   main.focus();
   main.style.position = "relative";
+  main.style.zIndex = 0;
+
 
   scene.fog = new THREE.Fog(0x000000, 0, 30);
 
@@ -87,6 +89,9 @@ function main() {
   let deltaTime = 0;
   let prevTime = 0;
 
+
+  const progress = document.getElementById('progress');
+
   let animate = function () {
     // 프레임 처리
     let now = performance.now();
@@ -94,8 +99,9 @@ function main() {
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
 
+    
     player.update(deltaTime, cube, mini);
-    document.getElementById('progress').value = player.stamina;
+    progress.value = player.stamina;
 
     miniClearUpdate(miniClear);
 

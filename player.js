@@ -205,7 +205,6 @@ export default class Player {
           this.sideRotationTarget -= Math.PI / 2;
           break;
         case 32:
-          console.log()
           if(this.isMiniPosition){
             this.getDownRotateTarget();
           }
