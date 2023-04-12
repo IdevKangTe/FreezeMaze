@@ -24,32 +24,39 @@ export default
     #janglingAudio;
     #CorrectAudio;
     #wrongAudio;
+    #isPaintFirst
 
     #answerPosition
     #currentClick;
+    #isClear;
+    #quizAnswers;
 
     constructor() {
         this.#obj = document.createElement("canvas");
-        this.#ctx = this.#obj.getContext("2d");
-        this.#obj.width = window.innerWidth/3;
-        this.#obj.height = window.innerHeight;
-        this.#obj.tabIndex = 0;
         document.body.append(this.#obj);
-        this.#obj.focus();
+        this.#ctx = this.#obj.getContext("2d");
+        this.#obj.width = window.innerWidth;
+        this.#obj.height = window.innerHeight;
         // this.#obj.onclick = this.clickHandler.bind(this);
         this.#obj.onmousedown = this.mouseDown.bind(this);
         this.#obj.onmousemove = this.mouseMove.bind(this);
         this.#obj.onmouseout = this.mouseOut.bind(this);
         this.#obj.onmouseup = this.mouseUp.bind(this);
 
+        this.#isPaintFirst = false;
+
+        this.#obj.tabIndex = 0;
+        this.#obj.focus();
         this.#tid = null;
 
         this.#background = new Background();
         this.#tile = new Tile();
         this.#keys = [];
-        for(let i=0; i<11; i++) {
+        this.#quizAnswers = [false, false, false, false];
+
+        for(let i=0; i<11; i++){
             let imageNumber = i+1;
-            this.#keys.push(new Key(`document.getElementById("${imageNumber}")`,imageNumber));
+            this.#keys.push(new Key(`document.getElementById("${imageNumber}")`, imageNumber));
         }
 
         // 마우스를 처음 클릭(이미지 내)한 x, y 지점
@@ -58,32 +65,40 @@ export default
         // 마우스 드래그 하더라도 같이 움직이는 마우스의 x, y 지점
         this.#mouseX = 0;
         this.#mouseY = 0;
-
         // 클릭한 이미지 숫자(1~11) 저장
-        this.#currentClick = null;
+        this.#currentClick = -99;
 
         this.#bgmAudio = new Music();
         this.#janglingAudio = new Music("mini2_key_jangle.wav", 0.2);
         this.#CorrectAudio = new Music("mini2_key_turning01.wav", 0.8);
         this.#wrongAudio = new Music("mini2_key_putdown.wav");
 
+        // this.#isClear = null;
     }
 
 
     update(e) {
-        this.#key.update(ctx);
+        let ctx = this.#ctx;
+        
+        this.#background.update(ctx);
+        for(let key of this.#keys) {
+            key.update(ctx);
+        }
+        this.#tile.update(ctx)
+
+        this.quizCheck();
+
     }
 
     run() {
 
         this.paint();
 
-        // console.log(this.#key.isDragging);
+        this.#tid = setInterval(()=>{    
+            this.update();
+        },50);
 
-        // this.#tid = setInterval(()=>{    
-        //     this.update();
-        // },17);
-
+        
     }
 
 
@@ -92,12 +107,15 @@ export default
         let background = this.#background;
         let tile = this.#tile;
         background.draw(ctx);
-        
-        for (let key of this.#keys) {
-            key.draw(ctx);
+
+        for(let key of this.#keys){
+            key.draw(ctx);            
         }
-        
+
         tile.draw(ctx);
+
+
+
     }
 
     mouseDown(e) {
@@ -107,15 +125,13 @@ export default
 
         for(let key of this.#keys){
             if(key.mouseOnImageCheck(this.#startX, this.#startY)){
-                this.#currentClick = this.#keys.indexOf(key)+1;
-                console.log(this.#currentClick);
+                this.#currentClick = key.keyId;
+                this.#janglingAudio.playMusic();
                 break;
-                
             }
+            
         }
-        
-
-
+        console.log(this.#tile.isDiaCorrect);
     }
 
     mouseMove(e) {
@@ -123,89 +139,115 @@ export default
         this.#mouseX = parseInt(e.clientX);
         this.#mouseY = parseInt(e.clientY);
 
-        //dragging쪽에 콜백 함수를 적용할 수 있을까?
-
-        if (this.#key.isDragging) {
-            this.#bgmAudio.playBgmMusic();
-
-            // let dx = this.#mouseX - this.#startX;
-            // let dy = this.#mouseY - this.#startY;
-            // this.#startX = this.#mouseX;
-            // this.#startY = this.#mouseY;
-
-            this.#key.mouseMoveHandler(this.#mouseX, this.#mouseY);
-            // 배열의 인덱스를 움직이게 할 예정 
-            this.paint();
-
+        for (let key of this.#keys) {
+            if (key.isDragging) {
+                this.#bgmAudio.playBgmMusic();
+                key.mouseMoveHandler(this.#mouseX, this.#mouseY);
+                this.paint();
+            }
         }
 
     }
 
     mouseOut(e) {
-        this.#key.isDragging = false;
-    }
-
-    mouseUp(e) {
-        this.#key.isDragging = false;
-
-        //다이아몬드라면?\
-
-        let position = this.answerPositionCheck(e.x, e.y);
-        if (this.#key.keyId == position) {
-            // 정답 이미지 등장
-            switch (position) {
-                case 'dia':
-                    this.#tile.isDiaCorrect(true);
-                    break;
-                case 'clover':
-                    this.#tile.isCloCorrect(true);
-                    break;
-                case 'spade':
-                    this.#tile.isSpadeCorrect(true);
-                    break;
-                case 'heart':
-                    this.#tile.isHeartCorrect(true);
-                    break;
-            }
-        } else {
-            this.#key.positionReturn(this.#startX,this.#startY);
+        for (let key of this.#keys) {
+            key.isDragging = false;
         }
     }
+    
+
+    mouseUp(e) {
+        
+        if(this.#currentClick == -99) 
+        return;
+        
+        if(this.answerPositionCheck(e.x, e.y) > 0){
+            console.log("정답위치");
+            let position = this.answerPositionCheck(e.x, e.y);
+            if(this.#currentClick == position) {
+                this.#keys[this.#currentClick-1].img = `document.getElementById("answer")`;
+                // this.#keys[this.#currentClick-1].img.style.display = "none";
+                this.#CorrectAudio.playMusic();
+               
+                switch (position) {
+                    case 1:
+                        this.#quizAnswers[0] = true;
+                        this.#janglingAudio.playMusic();
+                        this.#tile.isDiaCorrect = true;
+                        break;
+                    case 2:
+                        this.#quizAnswers[1] = true;
+                        this.#janglingAudio.playMusic();
+                        this.#tile.isCloCorrect = true;
+                        break;
+                    case 3:
+                        this.#quizAnswers[2] = true;
+                        this.#janglingAudio.playMusic();
+                        this.#tile.isSpadeCorrect = true;
+                        break;
+                    case 4:
+                        this.#quizAnswers[3] = true;
+                        this.#janglingAudio.playMusic();
+                        this.#tile.isHeartCorrect = true;
+                        break;
+                }
+
+            } else {
+                this.#wrongAudio.playMusic();
+                this.#keys[this.#currentClick-1].resetPotion(this.#startX, this.#startY);
+            }
+        } 
+        
+        this.#keys[this.#currentClick-1].isDragging = false;
+        this.#currentClick = -99;
+
+    }
+
+    quizCheck(){
+        
+        for(let answer of this.#quizAnswers) {
+            if(answer == false) 
+                return
+        }
+
+        console.log("퀴즈완료");
+        this.#obj.style.display = "none";
+        this.#isClear(1);
+    }
+    
 
     answerPositionCheck(x, y) {
-        if (x > window.innerWidth * 0.43 &&
-            window.innerWidth * 0.43 + window.innerWidth * 0.07 < x &&
-            y > window.innerHeight * 0.222 &&
-            window.innerHeight * 0.222 + window.innerHeight * 0.13 < y) {
+        if (x > window.innerWidth * 0.433 &&
+            x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
+            y > window.innerHeight * 0.235 &&
+            y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
             //다이아
-            // return 'dia';
             return 1;
-        } else if (x > window.innerWidth * 0.503 &&
-            window.innerWidth * 0.503 + window.innerWidth * 0.07 < x &&
-            y > window.innerHeight * 0.222 &&
-            window.innerHeight * 0.222 + window.innerHeight * 0.13 < y) {
+        } else if (x > window.innerWidth * 0.507 &&
+            x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
+            y > window.innerHeight * 0.235 &&
+            y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
             //클로버
-            // return 'clover';
             return 2;
-        } else if (x > window.innerWidth * 0.43 &&
-            window.innerWidth * 0.43 + window.innerWidth * 0.07 < x &&
-            y > window.innerHeight * 0.36 &&
-            window.innerHeight * 0.36 + window.innerHeight * 0.13 < y) {
+        } else if (x > window.innerWidth * 0.433 &&
+            x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
+            y > window.innerHeight * 0.372 &&
+            y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
             //스페이드
-            // return 'spade';
             return 3;
-        } else if (x > window.innerWidth * 0.503 &&
-            window.innerWidth * 0.503 + window.innerWidth * 0.07 < x &&
-            y > window.innerHeight * 0.36 &&
-            window.innerHeight * 0.36 + window.innerHeight * 0.13 < y) {
+        } else if (x > window.innerWidth * 0.507 &&
+            x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
+            y > window.innerHeight * 0.372 &&
+            y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
             //하트
-            // return 'heart';
             return 4;
         } else {
             return -99;
         }
     }
 
-    
+    set isClear(callback) {
+        this.#isClear = callback;
+    }
 
 }

@@ -19,7 +19,9 @@ class Background {
     }
 
     draw(ctx){
+
         ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
+        
         let img = this.#img;
         let x = this.#x;
         let y = this.#y;
@@ -27,6 +29,10 @@ class Background {
         let h = this.#height;
 
         ctx.drawImage(img, x, y, w, h);
+    }
+
+    update(ctx){
+        this.draw(ctx);
     }
 
 }

@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeyGame</title>
-    <style>
-      body {
-      background-color: #1f1f1f;
-      }
-      .d-none{
-        display: none;
-      }
-      canvas{
-        
-      }
 
-    </style>
-    <script type="importmap">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeyGame</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1f1f1f;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    div[id$="-container"] {
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+    }
+  </style>
+  <script type="importmap">
         {
           "imports": {
             "minigame": "http://127.0.0.1:5502/module-key/key.js"
@@ -26,20 +34,19 @@
         } 
       </script>
 
-    <link rel="shortcut icon" href="#">
-    <script type="module" src="app.js" defer="defer"></script>
+  <link rel="shortcut icon" href="#">
+  <script type="module" src="app.js" defer="defer"></script>
 
 </head>
-<body style="margin : 0;padding : 0;" >
-    <!-- <canvas id="mini1"></canvas> -->
+
+<body>
+  <div id="mini1-container">
     <img src="bgimg.jpg" id="background" class="d-none">
     <img id="answer" src="answer.png" class="d-none">
-
     <img id="clo" src="mini3-clo.png" class="d-none">
     <img id="dia" src="mini3-dia.png" class="d-none">
     <img id="heart" src="mini3-heart.png" class="d-none">
     <img id="spade" src="mini3-spade.png" class="d-none">
-
     <img src="1.png" id="1" class="d-none">
     <img src="2.png" id="2" class="d-none">
     <img src="3.png" id="3" class="d-none">
@@ -51,6 +58,8 @@
     <img src="9.png" id="9" class="d-none">
     <img src="10.png" id="10" class="d-none">
     <img src="11.png" id="11" class="d-none">
-   
+  </div>
+
 </body>
+
 </html>

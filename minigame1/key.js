@@ -24,6 +24,7 @@ export default
     #shapeTop;
     #shapeBottom;
 
+    #obj;
 
     #keyId;
     // 드레그 전 체크를 위한 size (이미지보다 조금 작다)
@@ -31,26 +32,26 @@ export default
 
 
     constructor(img=null, imageNumber=-1) {
-        
-        this.#width = 75;
-        this.#height = 75;
-        //비율로 바꾸기
+        this.#width = window.innerWidth*0.054;
+        this.#height = window.innerHeight*0.1;
 
         // x의 랜덤 범위
-        this.#xRandomRange = 300;
+        this.#xRandomRange = window.innerWidth*0.23;
         // x가 시작되는 지점
-        this.#xRangeBox = window.innerWidth / 2 - 190;
+        this.#xRangeBox = window.innerWidth*0.36;
         // y의 랜덤 범위
-        this.#yRandomRange = 125;
+        this.#yRandomRange = window.innerHeight*0.15;
         // y가 시작되는 지점
-        this.#yRangeBox = 575;
+        this.#yRangeBox = window.innerHeight*0.68;
        
         let xRandomRange = this.#xRandomRange;
         let xRangeBox = this.#xRangeBox;
         let yRandomRange = this.#yRandomRange;
         let yRangeBox = this.#yRangeBox;
+        this.#img = eval(img);
 
-        this.#img = img;
+        // this.#img == document.getElementById("1")
+        //this.#clo = document.getElementById("clo");
         this.#x = (Math.floor(Math.random() * xRandomRange)) + xRangeBox;
         this.#y = (Math.floor(Math.random() * yRandomRange)) + yRangeBox;
         // 비율로 바꿔버리기!
@@ -67,6 +68,10 @@ export default
 
     }
 
+    set img(img) {
+        this.#img = eval(img);
+    }
+
     get keyId() {
         return this.#keyId;
     }
@@ -75,6 +80,14 @@ export default
 
         this.#isDragging = tf;
 
+    }
+
+    set x(x){
+        this.#x = x;
+    }
+
+    set y(y){
+        this.#y = y;
     }
 
     get isDragging() {
@@ -88,7 +101,9 @@ export default
     draw(ctx) {
         let w = this.#width;
         let h = this.#height;
-        ctx.drawImage(this.#img, this.#x, this.#y, w, h);
+        // window.onload=()=>{
+            ctx.drawImage(this.#img, this.#x, this.#y, w, h);
+        // }
     }
 
     isMouseInShape(x, y, shape) {
@@ -104,11 +119,13 @@ export default
 
     mouseOnImageCheck(startX, startY) {
 
+
         if(startX >= this.#x &&
         startX <= this.#x + this.#width &&
         startY >= this.#y &&
         startY <= this.#y + this.#height) {
             this.#isDragging = true;
+            console.log(this.#keyId);
             return true;
         }
 
@@ -117,59 +134,20 @@ export default
 
     }
 
+    resetPotion(x,y){
+            this.#x = x - this.#width/2;
+            this.#y = y - this.#height/2;
+    }
+
     mouseMoveHandler(dx, dy) {
-        let imageName = this.#keyId;
-        this.positionChange(dx, dy, imageName);
-    }
+        // let imageName = this.#keyId;
+        if(this.#isDragging) {
+            this.#x = dx - this.#width/2;
+            this.#y = dy - this.#height/2;
 
-    positionChange(dx, dy, imageName){
-
-        switch (imageName) {
-            case 1:
-                this.#x1 = dx;
-                this.#y1 = dy; 
-                break;
-            case 2:
-                this.#x2 = dx;
-                this.#y2 = dy;
-                break;
-            case 3:
-                this.#x3 = dx;
-                this.#y3 = dy;
-                break;
-            case 4:
-                this.#x4 = dx;
-                this.#y4 = dy;
-                break;
-            case 5:
-                this.#x5 = dx;
-                this.#y5 = dy;
-                break;
-            case 6:
-                this.#x6 = dx;
-                this.#y6 = dy;
-                break;
-            case 7:
-                this.#x7 = dx;
-                this.#y7 = dy;
-                break;
-            case 8:
-                this.#x8 = dx;
-                this.#y8 = dy;
-                break;
-            case 9:
-                this.#x9 = dx;
-                this.#y9 = dy;
-                break;
-            case 10:
-                this.#x10 = dx;
-                this.#y10 = dy;
-                break;
-            case 11:
-                this.#x11 = dx;
-                this.#y11 = dy;
-                break;
         }
+        
     }
+
 
 }

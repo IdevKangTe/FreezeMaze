@@ -12,9 +12,6 @@ class Music{
     this.#isBgmPlay = false;
     }
 
-
-
-
     playMusic(){
         this.#audio.play();
     }
