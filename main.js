@@ -60,7 +60,6 @@ function main() {
   main.addEventListener('keyup', onKeyUp, false);
 
   function onKeyDown(e) {
-    gameClear();
     sound.musicPlay();
     player.move(e);
     // scene = mini.changeDoor(scene);
@@ -85,7 +84,7 @@ function main() {
     }
   }
 
-  miniPosition = [[8, 35], [27, 15], [42, 44]];
+  const miniPosition = [[27, 15], [42, 44]];
 
   function allMiniGameClear(scene) {
     sound.escapeOpenPlay();
@@ -163,7 +162,7 @@ function main() {
         const game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
           sound.miniClearPlay();
-          item.miniPositionChange(miniPosition[idx]);
+          item.miniPositionChange(miniPosition[num-1]);
           miniClear[num - 1] = true;
           isPause = false;
           prevTime = performance.now();

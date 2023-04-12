@@ -323,6 +323,7 @@ export default class Item {
   }
 
   miniPositionChange(arr) {
+    if (!arr) return;
     let x = arr[0];
     let z = arr[1];
     
