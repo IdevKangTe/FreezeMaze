@@ -322,7 +322,10 @@ export default class Item {
     return bulbLight;
   }
 
-  miniPositionChange(x, z) {
+  miniPositionChange(arr) {
+    let x = arr[0];
+    let z = arr[1];
+    
     this.mini.position.set(x, -0.47, z);
     this.miniLight.position.set(x, 4, z);
   }

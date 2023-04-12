@@ -29,9 +29,9 @@ function main() {
   main.style.zIndex = 0;
 
 
-  // scene.fog = new THREE.Fog(0x000000, 0, 30);
+  scene.fog = new THREE.Fog(0x000000, 0, 30);
 
-  const light = new THREE.AmbientLight(0xffffff, 0.5);
+  const light = new THREE.AmbientLight(0xffffff, 0.1);
   scene.add(light);
   let isPause = false;
   const player = new Player();
@@ -58,6 +58,7 @@ function main() {
   main.addEventListener('keyup', onKeyUp, false);
 
   function onKeyDown(e) {
+    gameClear();
     sound.musicPlay();
     player.move(e);
     // scene = mini.changeDoor(scene);
@@ -80,6 +81,31 @@ function main() {
     if (miniClear[2]) {
       document.getElementById('clear3').style.opacity = 1;
     }
+  }
+
+  miniPosition = [[8,35],[27,15],[42,44]];
+
+  function allMiniGameClear(scene){
+    sound.escapeOpenPlay();
+    scene = item.changeDoor(scene);
+    scene.remove(item.mini);
+    scene.remove(item.miniLight);
+
+    return scene;
+  }
+
+  function gameClear() {
+    document.getElementById('info').style.display = 'none';
+    scene.fog = null;
+    scene.remove(monster);
+    scene.remove(item.mini);
+    scene.remove(item.miniLight);
+    scene.remove(item.doorLigth);
+    scene.remove(player.spotLight);
+    scene.remove(enemy.monsterLight);
+    light.intensity = 0.5;
+    sound.pause();
+    player.gameClearAnimate();
   }
 
   // ==========================
@@ -116,9 +142,11 @@ function main() {
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);
     if (!isPause) {
+      sound.musicPlay();
       requestAnimationFrame(animate);
     }
     else {
+      sound.pause();
       playMiniGame();
     }
   };
@@ -132,6 +160,8 @@ function main() {
       if (!miniClear[1]) {
         const game = new Game2();
         game.isClear = function (num) {
+          sound.miniClearPlay();
+          item.miniPositionChange(miniPosition[idx]);
           miniClear[num-1] = true;
           isPause = false;
           prevTime = performance.now();
@@ -146,6 +176,7 @@ function main() {
 
 
 }
+
 window.onload = function () {
   main();
 }

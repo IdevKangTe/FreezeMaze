@@ -24,6 +24,7 @@ export default class Sound {
     this.suspense = this.initSuspense(player.listner);
     this.monsterScream = this.initMonsterScream(player.listner);
     this.escapeOpen = this.initEscapeOpen(player.listner);
+    this.miniClear = this.initMiniClear(player.listner);
 
     this.isBGMPlaying = false;
     this.suspensePause = false;
@@ -130,6 +131,20 @@ export default class Sound {
     return audio;
   }
 
+  initMiniClear(listner) {
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/item/mini-clear.wav',
+      function (buffer) {
+        audio.setBuffer(buffer);
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
   loadPlayerSound(camera) {
     camera.add(this.footstep);
     camera.add(this.breath);
@@ -149,18 +164,7 @@ export default class Sound {
     return item;
   }
 
-  musicPlay() {
-    if (this.isBGMPlaying) {
-      return;
-    }
-    this.monsterBGM.play();
-    this.itemNotification.play();
-    this.heartbeat.play();
-    this.isBGMPlaying = true;
-    if(this.suspensePause){
-      this.suspense.play();
-    }
-  }
+
 
   run() {
     this.footstep.setVolume(1);
@@ -198,7 +202,13 @@ export default class Sound {
   }
 
   escapeOpenPlay(){
-    this.escapeOpen.play();
+    if(!this.escapeOpen.isPlaying){
+      this.escapeOpen.play();
+    }
+  }
+
+  miniClearPlay(){
+    this.miniClear.play();
   }
 
   update(player, monster, item) {
@@ -223,6 +233,19 @@ export default class Sound {
 
     let MonsterDiff = monster.position.distanceTo(player.camera.position);
     this.monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
+  }
+
+  musicPlay() {
+    if (this.isBGMPlaying) {
+      return;
+    }
+    this.monsterBGM.play();
+    this.itemNotification.play();
+    this.heartbeat.play();
+    this.isBGMPlaying = true;
+    if(this.suspensePause){
+      this.suspense.play();
+    }
   }
 
   pause() {

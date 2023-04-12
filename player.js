@@ -287,12 +287,12 @@ export default class Player {
     this.isPauseCheck = callback;
   }
 
-  GameClearAnimate(){
+  gameClearAnimate(){
     this.isGameClear = true;
     this.getDownRotateTarget();
     this.smoothFactor = 0.003;
     this.rotationSpeed = 5;
-    this.frontMoveTarget = new THREE.Vector3(25,100,25);
+    this.frontMoveTarget = new THREE.Vector3(25,70,25);
   }
 
 }
