@@ -5,229 +5,212 @@
  */
 import * as THREE from 'three';
 
-export {map2D};
+export default class Map {
+  // 맵
+  #string;
+  #map2D;
+  #map3D;
+  #map;
 
-// class Map{
-//   #stringMap;
-//   #
+  // 바닥
+  #floors;
 
-//   constructor() {
+  // 벽
+  #walls;
+  #outroGeometryW;
+  #geometryW;
+  #materialW;
 
-//   }
+  constructor() {
+    this.#string = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1
+    1	0	0	0	0	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	1	1	0	0	0	1	3	1
+    1	0	1	0	1	1	1	0	0	0	0	0	1	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	0	1	0	1	0	1
+    1	0	1	0	0	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	1	1	1	0	1	0	1	0	1	1	1	0	1	0	1	1	1	1	1	1	0	1	0	1
+    1	0	1	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	1	0	1
+    1	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	1	0	1	0	1	0	1
+    1	0	1	0	1	0	1	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	0	1
+    1	0	1	0	1	0	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	1	1	0	1	0	1	0	1	0	1
+    1	0	1	0	0	0	0	0	0	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	0	1	0	1	1	0	1	1	1	1	1	1	1	1	0	1	1	0	0	0	1	0	1	0	1
+    1	0	1	0	1	0	1	1	0	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	1	1	0	1	0	1	0	1	1	1
+    1	0	1	0	1	0	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	0	0	1
+    1	0	1	0	1	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	1	1	0	1
+    1	0	0	0	0	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0	1
+    1	1	1	0	1	1	1	1	0	1	1	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	1	1	0	1	1	1	0	1	1	1	1	0	1	0	1	1	0	1	0	1	1	1
+    1	0	0	0	1	0	0	0	0	1	1	0	1	1	0	1	1	0	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	1
+    1	0	1	0	0	0	1	1	0	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	1	0	1	0	1	0	1
+    1	0	1	0	1	1	1	0	0	1	1	0	1	1	0	1	0	1	1	0	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	1	0	0	0	0	0	1
+    1	0	1	0	1	0	0	0	1	1	1	0	1	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	1	1	1	1	0	1	1	0	1	1	1	1
+    1	0	0	0	0	0	1	0	1	1	1	0	0	0	1	0	1	0	1	1	0	1	0	1	1	0	1	0	1	1	0	1	0	1	1	0	1	0	0	0	1	1	0	0	0	0	0	0	0	1
+    1	1	0	1	1	0	1	0	1	1	1	0	1	1	1	0	1	0	1	0	0	1	0	0	0	0	0	0	1	1	0	1	0	1	1	0	1	1	1	0	1	1	0	1	1	0	1	1	0	1
+    1	0	0	0	0	0	1	0	1	1	1	0	0	0	1	0	1	0	0	0	1	1	0	1	1	1	1	0	1	1	0	0	0	0	1	0	0	0	0	0	1	1	0	0	0	0	0	0	0	1
+    1	0	1	0	1	1	1	0	1	1	1	0	1	0	0	0	0	0	1	1	1	0	0	0	0	0	1	0	1	1	0	1	1	0	1	1	0	1	1	0	1	1	0	1	0	1	0	1	1	1
+    1	0	1	0	0	0	0	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	1	1	1	0	1	0	1	1	0	1	0	0	0	1	0	0	0	0	1	1	0	1	0	1	0	0	0	1
+    1	0	1	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	1	0	1	0	1	1	0	0	0	0	1	0	0	0	1	0	1
+    1	0	0	0	0	0	1	0	1	1	1	1	1	1	0	1	1	1	0	1	1	1	1	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1
+    1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1
+    1	0	1	0	1	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	0	1
+    1	0	1	0	0	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	0	0	1
+    1	0	1	1	1	1	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1
+    1	0	0	0	0	0	0	0	0	1	1	0	1	0	1	1	1	1	1	0	1	1	1	1	0	0	1	0	1	1	0	1	1	0	1	1	0	1	1	1	0	1	1	1	0	1	0	1	0	1
+    1	0	1	0	1	1	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	1	0	1	1	0	1	1	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	1	0	0	0	1
+    1	0	1	0	0	0	0	1	0	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	1	1	0	1	1	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1
+    1	0	1	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1
+    1	0	0	0	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	1	1	0	1	1	1
+    1	0	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	0	0	1
+    1	0	0	0	0	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1
+    1	0	1	1	0	1	0	1	0	1	1	0	1	0	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	0	1	0	0	0	1	1	1	1	1	0	1	1	0	1	1	0	1	0	1
+    1	0	0	0	0	1	0	1	0	1	1	0	1	0	0	0	0	0	1	0	0	0	1	1	1	0	0	0	1	1	0	1	1	1	0	1	0	0	0	1	0	1	1	0	0	0	0	1	0	1
+    1	1	1	0	1	1	0	1	0	1	1	0	1	0	1	0	1	0	1	0	1	0	0	0	0	0	1	0	1	1	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	1	1	0	1
+    1	0	0	0	0	0	0	1	0	1	1	0	0	0	1	0	0	0	0	0	1	0	1	0	1	0	1	0	1	1	0	1	0	1	1	1	0	1	0	0	0	0	0	1	1	0	1	0	0	1
+    1	0	1	1	1	0	1	1	0	1	1	0	1	0	1	1	0	1	1	1	1	0	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	1	1	1	1	1	0	0	0	0	1	0	1	1
+    1	0	0	0	0	0	0	0	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	1	0	1	0	1	0	1	0	0	0	0	0	1	0	1	1	0	0	0	0	1
+    1	1	1	0	1	1	0	1	0	1	1	0	1	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	1	1	0	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1	0	1
+    1	0	0	0	1	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1
+    1	0	1	0	0	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1
+    1	0	1	0	1	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	0	0	0	0	1
+    1	0	1	0	0	0	0	0	1	0	0	0	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	1	1	0	1	0	1
+    1	0	1	1	1	1	0	1	1	0	1	0	1	0	1	1	0	1	0	1	0	1	1	0	1	1	1	1	1	1	1	0	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	1	0	1
+    1	3	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	1
+    1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1`;
 
-// }
+    this.#map2D = [];
+    this.#map3D = [];
+    this.initMap();
 
-// export default map;
+    this.#map = new THREE.Object3D();
+    this.#map.name = '맵';
+    this.#floors = null;
+    this.#walls = new THREE.Object3D();
+    this.#walls.name = '벽';
 
-let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1
-1	0	0	0	0	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	1	1	0	0	0	1 3	1
-1	0	1	0	1	1	1	0	0	0	0	0	1	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	0	1	0	1	0	1
-1	0	1	0	0	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	1	1	1	0	1	0	1	0	1	1	1	0	1	0	1	1	1	1	1	1	0	1	0	1
-1	0	1	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	1	0	1
-1	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	1	0	1	0	1	0	1
-1	0	1	0	1	0	1	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	0	1
-1	0	1	0	1	0	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	1	1	0	1	0	1	0	1	0	1
-1	0	1	0	0	0	0	0	0	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	0	1	0	1	1	0	1	1	1	1	1	1	1	1	0	1	1	0	0	0	1	0	1	0	1
-1	0	1	0	1	0	1	1	0	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	1	1	0	1	0	1	0	1	1	1
-1	0	1	0	1	0	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	0	0	1
-1	0	1	0	1	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	0	1	1	1	0	1
-1	0	0	0	0	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0	1
-1	1	1	0	1	1	1	1	0	1	1	0	0	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	1	1	0	1	1	1	0	1	1	1	1	0	1	0	1	1	0	1	0	1	1	1
-1	0	0	0	1	0	0	0	0	1	1	0	1	1	0	1	1	0	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	1
-1	0	1	0	0	0	1	1	0	1	1	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	0	0	0	1	1	0	1	0	1	0	1
-1	0	1	0	1	1	1	0	0	1	1	0	1	1	0	1	0	1	1	0	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	1	0	0	0	0	0	1
-1	0	1	0	1	0	0	0	1	1	1	0	1	0	0	0	0	0	1	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	1	1	1	1	0	1	1	0	1	1	1	1
-1	0	0	0	0	0	1	0	1	1	1	0	0	0	1	0	1	0	1	1	0	1	0	1	1	0	1	0	1	1	0	1	0	1	1	0	1	0	0	0	1	1	0	0	0	0	0	0	0	1
-1	1	0	1	1	0	1	0	1	1	1	0	1	1	1	0	1	0	1	0	0	1	0	0	0	0	0	0	1	1	0	1	0	1	1	0	1	1	1	0	1	1	0	1	1	0	1	1	0	1
-1	0	0	0	0	0	1	0	1	1	1	0	0	0	1	0	1	0	0	0	1	1	0	1	1	1	1	0	1	1	0	0	0	0	1	0	0	0	0	0	1	1	0	0	0	0	0	0	0	1
-1	0	1	0	1	1	1	0	1	1	1	0	1	0	0	0	0	0	1	1	1	0	0	0	0	0	1	0	1	1	0	1	1	0	1	1	0	1	1	0	1	1	0	1	0	1	0	1	1	1
-1	0	1	0	0	0	0	0	1	1	1	0	1	1	1	1	1	0	1	1	1	0	1	1	1	0	1	0	1	1	0	1	0	0	0	0	0	0	0	0	1	1	0	1	0	1	0	0	0	1
-1	0	1	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	0	1	0	1	0	1	1	0	0	0	0	1	0	0	0	1	0	1
-1	0	0	0	0	0	1	0	1	1	1	1	1	1	0	1	1	1	0	1	1	1	1	1	1	0	1	1	0	1	1	1	0	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1
-1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1
-1	0	1	0	1	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	1	0	1
-1	0	1	0	0	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	0	0	0	1
-1	0	1	1	1	1	1	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1
-1	0	0	0	0	0	0	0	0	1	1	0	1	0	1	1	1	1	1	0	1	1	1	1	0	0	1	0	1	1	0	1	1	0	1	1	0	1	1	1	0	1	1	1	0	1	0	1	0	1
-1	0	1	0	1	1	1	1	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	1	0	1	1	0	1	1	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	1	0	0	0	1
-1	0	1	0	0	0	0	1	0	1	1	0	1	0	1	1	1	1	1	1	1	1	0	1	0	1	1	0	1	1	0	1	1	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1
-1	0	1	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1
-1	0	0	0	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	1	1	0	1	1	1
-1	0	1	1	0	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	0	0	1
-1	0	0	0	0	0	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1
-1	0	1	1	0	1	0	1	0	1	1	0	1	0	1	1	1	1	1	1	1	1	1	0	0	0	1	0	1	1	0	1	0	0	0	1	1	1	1	1	0	1	1	0	1	1	0	1	0	1
-1	0	0	0	0	1	0	1	0	1	1	0	1	0	0	0	0	0	1	0	0	0	1	1	1	0	0	0	1	1	0	1	1	1	0	1	0	0	0	1	0	1	0	0	1	0	0	1	0	1
-1	1	1	0	1	1	0	1	0	1	1	0	1	0	1	0	1	0	1	0	1	0	0	0	0	0	1	0	1	1	0	1	0	0	0	1	0	1	0	1	0	1	1	1	1	0	1	1	0	1
-1	0	0	0	0	0	0	1	0	1	1	0	0	0	1	0	0	0	0	0	1	0	1	0	1	0	1	0	1	1	0	1	0	1	1	1	0	1	0	0	0	0	0	1	1	0	1	0	0	1
-1	0	1	1	1	0	1	1	0	1	1	0	1	0	1	1	0	1	1	1	1	0	1	0	1	0	1	0	1	1	0	0	0	0	0	0	0	1	1	1	1	1	0	0	0	0	1	0	1	1
-1	0	0	0	0	0	0	0	0	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	1	0	1	0	1	0	1	0	0	0	0	0	1	0	1	1	0	0	0	0	1
-1	1	1	0	1	1	0	1	0	1	1	0	1	1	1	0	1	1	1	1	0	1	1	1	1	0	1	0	1	1	0	1	0	1	0	1	1	1	1	1	0	1	0	1	1	1	0	1	0	1
-1	0	0	0	1	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	1	0	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	1
-1	0	1	0	0	0	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	0	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1
-1	0	1	0	1	1	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1	0	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	0	0	0	0	0	0	1
-1	0	1	0	0	0	0	0	1	0	0	0	1	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	1	1	1	0	1	0	1
-1	0	1	1	1	1	0	1	1	0	1	0	1	0	1	1	0	1	0	1	0	1	1	0	1	1	1	1	1	1	1	0	1	0	1	1	1	0	1	0	1	0	1	1	0	0	0	1	0	1
-1	3	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	1
-1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1`;
-
-
-// 문자열 전체(g)에서 숫자0~9가 아닌 것 삭제 (string -> array)
-stringMap = stringMap.split(/[^0-9]/g);
-// console.log(excelNum);
-
-// 문자열 숫자로 변환
-const numMap = stringMap.map((row) => (row *= 1));
-// console.log(mapNum);
-
-// 이차원 배열에 담기
-const map2D = [];
-let mapX = [];
-
-numMap.forEach((num) => {
-  mapX.push(num);
-  if (mapX.length === 50) {
-    map2D.push(mapX);
-    mapX = [];
+    this.initFloor();
+    this.initWall();
   }
-});
-// console.log(map);
 
-// map 배열 값 타입 확인
-// const g = (map) => {
-//     for(i in map) {
-//         if (typeof map[i] !== "number") {
-//             console.log(i);
-//         }
-//         else {
-//             console.log('nothing');
-//         }
-//     }
-// };
-// console.log(g(map));
+  initMap() {
+    // 문자열 전체(g)에서 숫자0~9가 아닌 것 삭제 (string -> array)
+    const stringMap = this.#string.split(/\r|\t|\s*/g);
+    const numMap = stringMap.map(row => row *= 1);
+    console.log(numMap);
+    let zMap = [];
+    numMap.forEach((num, idx) => {
+      zMap.push(num);
+      if (zMap.length == 50) {
+        this.#map2D.push(zMap);
+        zMap = [];
+      }
+    });
+  }
 
-// 바닥, 벽 재질
-function onLoad(x, y, z) {
-  return (texture) => {
-    texture.repeat.x = x; // x축 반복
-    texture.repeat.y = y; // y축 반복
-    texture.repeat.z = z; // z축 반복
+  initFloor() {
+    // 바닥
+    const floorBasic = new THREE.TextureLoader().load(
+      'texture/floor/Floor_BaseColor.jpg',
+      this.onLoad(100, 100, 1)
+    );
+    const floorNormal = new THREE.TextureLoader().load(
+      'texture/floor/Floor_Normal.jpg',
+      this.onLoad(100, 100, 1)
+    );
+    const floorHeight = new THREE.TextureLoader().load(
+      'texture/floor/Floor_Height.png',
+      this.onLoad(100, 100, 1)
+    );
+    const floorRoughness = new THREE.TextureLoader().load(
+      'texture/floor/Floor_Roughness.jpg',
+      this.onLoad(100, 100, 1)
+    );
 
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-  };
+    // 바닥 속성
+    const geometry = new THREE.PlaneGeometry(2000, 2000, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
+      map: floorBasic,
+      normalMap: floorNormal,
+      displacementMap: floorHeight,
+      displacementScale: 0,
+      roughnessMap: floorRoughness,
+    });
+
+    this.#floors = new THREE.Mesh(geometry, material);
+    this.#floors.name = '바닥';
+    this.#floors.rotateX(-Math.PI / 2);
+    this.#map.add(this.#floors);
+  }
+
+  initWall() {
+    // 벽
+    const wallBasic = new THREE.TextureLoader().load(
+      'texture/ice/ice_001_COLOR.jpg',
+      this.onLoad(1, 10, 1)
+    );
+    const wallNormal = new THREE.TextureLoader().load(
+      'texture/ice/ice_001_NRM.jpg',
+      this.onLoad(1, 10, 1)
+    );
+    const wallHeight = new THREE.TextureLoader().load(
+      'texture/ice/ice_001_DISP.png',
+      this.onLoad(1, 10, 1)
+    );
+    const wallRoughness = new THREE.TextureLoader().load(
+      'texture/ice/ice_001_SPEC.jpg',
+      this.onLoad(1, 10, 1)
+    );
+
+    // 벽 속성
+    this.#outroGeometryW = new THREE.BoxGeometry(1, 1, 1);
+    this.#geometryW = new THREE.BoxGeometry(1, 10, 1);
+    this.#materialW = new THREE.MeshPhysicalMaterial({
+      map: wallBasic,
+      normalMap: wallNormal,
+      displacementMap: wallHeight,
+      color: 0xafe0ff,
+      displacementScale: 0,
+      roughnessMap: wallRoughness,
+      clearcoat: 1,
+      clearcoatRoughness: 0,
+      reflectivity: 1,
+      transparent: true,
+      opacity: 0.8,
+    });
+
+    let idx = 0;
+
+    this.#map2D.forEach((z, zIdx) => {
+      z.forEach((x, xIdx) => {
+        if (x != 1) return;
+        const mesh = new THREE.Mesh(this.#geometryW, this.#materialW);
+        this.#map3D.push(mesh);
+
+        this.#map3D[idx].position.x = xIdx;
+        this.#map3D[idx].position.y = 0;
+        this.#map3D[idx].position.z = zIdx;
+
+        this.#walls.add(this.#map3D[idx]);
+        idx++;
+      })
+    });
+
+    this.#map.add(this.#walls);
+  }
+
+  onLoad(x, y, z) {
+    return (texture) => {
+      texture.repeat.x = x; // x축 반복
+      texture.repeat.y = y; // y축 반복
+      texture.repeat.z = z; // z축 반복
+
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    };
+  }
+
+  load(scene) {
+    scene.add(this.#map);
+    return { scene, map3D: this.#map3D, map2D: this.#map2D };
+  }
+
+  // replace(scene) {
+  //   scene.
+  // }
+
 }
-
-const textureLoader = new THREE.TextureLoader();
-
-// 바닥
-const floorBasic = textureLoader.load(
-  'texture/floor/Floor_BaseColor.jpg',
-  onLoad(100, 100, 1)
-);
-const floorNormal = textureLoader.load(
-  'texture/floor/Floor_Normal.jpg',
-  onLoad(100, 100, 1)
-);
-const floorHeight = textureLoader.load(
-  'texture/floor/Floor_Height.png',
-  onLoad(100, 100, 1)
-);
-const floorRoughness = textureLoader.load(
-  'texture/floor/Floor_Roughness.jpg',
-  onLoad(100, 100, 1)
-);
-
-// 벽
-const basicTexture = textureLoader.load(
-  'texture/ice/ice_001_COLOR.jpg',
-  onLoad(1, 10, 1)
-);
-const normalTexture = textureLoader.load(
-  'texture/ice/ice_001_NRM.jpg',
-  onLoad(1, 10, 1)
-);
-const heightTexture = textureLoader.load(
-  'texture/ice/ice_001_DISP.png',
-  onLoad(1, 10, 1)
-);
-const roughnessTexture = textureLoader.load(
-  'texture/ice/ice_001_SPEC.jpg',
-  onLoad(1, 10, 1)
-);
-
-// 바닥 속성
-const floor = {
-  geometry: new THREE.PlaneGeometry(2000, 2000, 1, 1),
-  material: new THREE.MeshStandardMaterial({
-    map: floorBasic,
-    normalMap: floorNormal,
-    displacementMap: floorHeight,
-    displacementScale: 0,
-    roughnessMap: floorRoughness,
-  }),
-};
-
-// 벽 속성
-const wall = {
-  geometry: new THREE.BoxGeometry(1, 1, 1),
-  material: new THREE.MeshPhysicalMaterial({
-    map: basicTexture,
-    normalMap: normalTexture,
-    displacementMap: heightTexture,
-    color: 0xafe0ff,
-    displacementScale: 0,
-    roughnessMap: roughnessTexture,
-    clearcoat: 1,
-    clearcoatRoughness: 0,
-    reflectivity: 1,
-    transparent: true,
-    opacity: 0.8,
-  }),
-};
-
-// 맵
-const map = new THREE.Object3D();
-map.name = '맵';
-
-// 바닥
-const floors = new THREE.Mesh(floor.geometry, floor.material);
-floors.name = '바닥';
-floors.rotateX(-Math.PI / 2);
-
-// 벽
-const walls = new THREE.Object3D();
-walls.name = '벽';
-
-const map3D = [];
-let idx = 0;
-
-map2D.forEach((num1, zIndex) => {
-  let _map2D = map2D[zIndex];
-  _map2D.forEach((num2, xIndex) => {
-    // 값이 1인 위치에 기둥(=벽) 세우기
-    if (_map2D[xIndex] === 1) {
-      const mesh = new THREE.Mesh(wall.geometry, wall.material);
-      map3D.push(mesh);
-      
-      map3D[idx].position.x = xIndex;
-      map3D[idx].position.y = 0;
-      map3D[idx].position.z = zIndex;
-
-      walls.add(map3D[idx]);
-      idx++;
-    }
-  });
-});
-
-export default function load(scene) {
-  map.add(floors, walls);
-  scene.add(map);
-
-  return {scene, map3D};
-}
-
-// removeExitWall() {
-//   const endingMap = map3D.map();
-//   scene.add(endingMap);
-// }
-

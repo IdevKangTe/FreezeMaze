@@ -5,7 +5,7 @@ export default class Item {
   miniLight;
   doorWall;
   door;
-  doorLigth;
+  doorLight;
 
   constructor() {
     this.textureLoader = new THREE.TextureLoader();
@@ -20,8 +20,8 @@ export default class Item {
     this.miniLight.castShadow = true;
     this.door.position.set(46.625, 1.5, 8);
     this.doorWall.position.set(46.988, 1.5, 8);
-    this.doorLigth = this.initDoorLight();
-    this.doorLigth.position.set(48, 1.5, 0);
+    this.doorLight = this.initDoorLight();
+    this.doorLight.position.set(48, 1.5, 0);
   }
 
   load(scene) {
@@ -36,7 +36,7 @@ export default class Item {
   changeDoor(scene) {
     scene.remove(this.door);
     scene.remove(this.doorWall);
-    scene.add(this.doorLigth);
+    scene.add(this.doorLight);
     return scene;
   }
 

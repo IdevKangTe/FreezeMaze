@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 // import { map } from './map.js';
-import load from './js/map.js';
+import Map from './js/map.js';
 import Item from './js/item.js';
 import Sound from './js/sound.js';
 import Player from './js/player.js';
@@ -46,9 +46,11 @@ function main() {
   camera = sound.loadPlayerSound(camera);
 
   let cube = [];
-  ({ scene, map3D: cube } = load(scene));
+  let map2D = [];
+  const map = new Map();
+  ({ scene, map3D: cube, map2D } = map.load(scene));
 
-  const enemy = new Monster();
+  const enemy = new Monster(map2D);
   ({ scene, monster } = enemy.load(scene));
   monster = sound.loadMonsterSound(monster);
 

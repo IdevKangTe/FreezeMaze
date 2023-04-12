@@ -125,7 +125,7 @@ export default class Player {
     );
     let Intersects = [];
 
-    for (var i in cube) {
+    for (let i in cube) {
       Intersects.push(Raycaster.intersectObject(cube[i]));
       if (Intersects[i].length > 0) {
         return true;

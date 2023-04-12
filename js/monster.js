@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import {map2D} from './map.js';
-
 // export { initMonster, initMonsterLight };
 export default class Monster {
   monster;
@@ -9,6 +7,7 @@ export default class Monster {
   direc;
   monsterMesh;
   monsterSpeed;
+  map2D;
 
   isMad;
 
@@ -16,7 +15,8 @@ export default class Monster {
   yTarget;
   isMoving;
 
-  constructor() {
+  constructor(map) {
+    this.map2D = map;
     this.monsterMesh = this.normalMaterial();
     const geometry = new THREE.SphereGeometry(0.5, 100, 100); //기본형태
     this.monster = new THREE.Mesh(geometry, this.monsterMesh);
@@ -308,7 +308,7 @@ export default class Monster {
     if (monsterZ >= 49) monsterZ = 48;
     if (monsterX >= 49) monsterX = 48;
 
-    let vis = JSON.parse(JSON.stringify(map2D));
+    let vis = JSON.parse(JSON.stringify(this.map2D));
     vis[playerZ][playerX] = 0; // 몬스터 -> 사람 까지의 방문 여부를 표기하기 위해서 사람 좌표 0으로 셋팅
     vis[monsterZ][monsterX] = 1;
 
