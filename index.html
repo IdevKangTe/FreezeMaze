@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FREEZE MAZE</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <link href="css/total.css" rel="stylesheet" type="text/css" />
-    <link href="css/progress-bar.css" rel="stylesheet" type="text/css" />
-    <script type="importmap">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FREEZE MAZE</title>
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link href="css/total.css" rel="stylesheet" type="text/css" />
+  <link href="css/progress-bar.css" rel="stylesheet" type="text/css" />
+  <script type="importmap">
       {
         "imports": {
           "three": "https://unpkg.com/three@0.138.0/build/three.module.js"
         }
       }
     </script>
-    <script src="main.js" type="module" defer="defer"></script>
-  </head>
-  <body>
-    <div id="info">
-      <progress id="progress" max="100" min="0" value="70"></progress>
-      <div id="keys">
-        <img src="img/key.png" id="clear1" />
-        <img src="img/key.png" id="clear2" />
-        <img src="img/key.png" id="clear3" />
-      </div>
+  <script src="main.js" type="module" defer="defer"></script>
+</head>
+
+<body>
+  <div id="info">
+    <progress id="progress" max="100" min="0" value="70"></progress>
+    <div id="keys">
+      <img src="img/key.png" id="clear1" />
+      <img src="img/key.png" id="clear2" />
+      <img src="img/key.png" id="clear3" />
     </div>
-    <div id="mini2-container">
-      <img src="img/mini2/bg.jpg" id="mini2bg">
-      <img src="img/mini2/mini-2-bg.jpg" id="mini2-bg" class="mini2">
   </div>
-  </body>
+  </div>
+  <div id="mini1-container">
+    <div id="contentContainer2">
+      <img id="cvbelt" src="img/mini1/6.jpg" class="d-none">
+    </div>
+    <div id="contentContainer">
+      <!-- <audio src="./sound/mini1-conveyorbelt-bgm.mp3" id="bgm" loop autoplay="autoplay"></audio> -->
+      <img id="pipe1" src="img/mini1/3.png" class="d-none">
+      <img id="pipe2" src="img/mini1/2.png" class="d-none">
+      <img id="pipe3" src="img/mini1/1.png" class="d-none">
+      <img id="pipe4" src="img/mini1/4.png" class="d-none">
+      <img id="pipe5" src="img/mini1/5.png" class="d-none">
+    </div>
+    <img id="coverImg" src="img/mini1/bgimg.png" class="d-none">
+    <img id="lightoff" src="img/mini1/mini1-empty-min.png" class="d-none">
+    <img id="redlight" src="img/mini1/mini1-red-min.png" class="d-none">
+    <img id="greenlight" src="img/mini1/mini1-green-min.png" class="d-none">
+    <img id="keySpace" src="img/mini1/keySpace.png" class="d-none">
+  </div>
+  <div id="mini2-container">
+    <img src="img/mini2/bg.jpg" id="mini2bg">
+    <img src="img/mini2/mini-2-bg.jpg" id="mini2-bg" class="mini2">
+  </div>
+</body>
+
 </html>

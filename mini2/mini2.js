@@ -48,15 +48,11 @@ export default class Mini2 {
 	init() {
 		// console.log("init");
 		// 캔버스 설정
-		// this.#width = window.innerWidth;
-		// this.#height = window.innerHeight;
 		this.#canvas.width = window.innerWidth;
 		this.#canvas.height = window.innerHeight;
 		this.#canvas.style.position = "absolute";
 		this.#canvas.style.top = 0;
 		this.#canvas.style.left = 0;
-		console.log("canvas", this.#canvas);
-		// this.#canvas.style.display = this.#display;
 
 		this.#background = new Background(); // 배경
 		this.#bundle = new Bundle(); // 양쪽 전선
@@ -89,11 +85,6 @@ export default class Mini2 {
 		this.#isPainting = true;
 	}
 
-	setLine(aa) {
-		// 왼쪽 전선 클릭 시 새 라인 생성
-		this.#lines.push(new Line(aa));
-	}
-
 	mouseMoveHandler(e) {
 		this.#ctx.lineWidth = 16;
 		this.#ctx.strokeStyle = this.#color;
@@ -121,11 +112,7 @@ export default class Mini2 {
 		this.#background.draw(this.#ctx);
 		this.#bundle.draw(this.#ctx);
 		
-		// if (side !== "right" || this.#isPainting) return;
-		let b = `${side}${color}`;
-		console.log("line", this.#lines);
 		if (side !== "right" || this.#isPainting || this.#color !== color) {
-			console.log("aaa");
 			this.#lines = [];
 			return;
 		}
@@ -143,8 +130,10 @@ export default class Mini2 {
 		this.#bundle.draw(this.#ctx);
 
 		if (this.#lines.length == 4 && this.#isClear) {
-			this.#canvas.style.display = "none";
-			this.#isClear(2);
+			setTimeout(() => {
+				this.#canvas.style.display = "none";
+				this.#isClear(2);
+			}, 830);
 		}
 	}
 
@@ -163,9 +152,6 @@ export default class Mini2 {
 		this.#ctx.reset();
 		this.#background.draw(this.#ctx);
 		this.#bundle.draw(this.#ctx);
-		// 전선 그리기(lines.draw())
-
-		// requestAnimationFrame(() => this.run());
 	}
 
 	set isClear(callback) {

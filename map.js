@@ -7,17 +7,19 @@ import * as THREE from 'three';
 
 export {map2D};
 
-class Map{
+// class Map{
+//   #stringMap;
+//   #
 
-  constructor() {
+//   constructor() {
 
-  }
+//   }
 
-}
+// }
 
 // export default map;
 
-let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	0	1
 1	0	0	0	0	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	1	0	0	0	0	0	0	0	1	1	0	0	0	1 3	1
 1	0	1	0	1	1	1	0	0	0	0	0	1	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	1	0	1	0	1	0	0	0	0	1	0	1	0	1
 1	0	1	0	0	0	1	0	1	1	0	1	1	0	1	0	1	0	0	0	1	0	1	0	1	0	1	1	1	0	1	0	1	0	1	1	1	0	1	0	1	1	1	1	1	1	0	1	0	1
@@ -68,7 +70,6 @@ let stringMap = `1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
 1	3	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	0	0	1	0	0	0	0	0	0	0	1	0	0	0	0	1	0	0	0	1
 1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1`;
 
-// console.log(excelNum);
 
 // 문자열 전체(g)에서 숫자0~9가 아닌 것 삭제 (string -> array)
 stringMap = stringMap.split(/[^0-9]/g);
@@ -168,7 +169,7 @@ const floor = {
 
 // 벽 속성
 const wall = {
-  geometry: new THREE.BoxGeometry(1, 10, 1),
+  geometry: new THREE.BoxGeometry(1, 1, 1),
   material: new THREE.MeshPhysicalMaterial({
     map: basicTexture,
     normalMap: normalTexture,
@@ -205,8 +206,9 @@ map2D.forEach((num1, zIndex) => {
   _map2D.forEach((num2, xIndex) => {
     // 값이 1인 위치에 기둥(=벽) 세우기
     if (_map2D[xIndex] === 1) {
-      map3D.push(new THREE.Mesh(wall.geometry, wall.material));
-
+      const mesh = new THREE.Mesh(wall.geometry, wall.material);
+      map3D.push(mesh);
+      
       map3D[idx].position.x = xIndex;
       map3D[idx].position.y = 0;
       map3D[idx].position.z = zIndex;
@@ -221,5 +223,11 @@ export default function load(scene) {
   map.add(floors, walls);
   scene.add(map);
 
-  return { scene, map3D};
+  return {scene, map3D};
 }
+
+// removeExitWall() {
+//   const endingMap = map3D.map();
+//   scene.add(endingMap);
+// }
+

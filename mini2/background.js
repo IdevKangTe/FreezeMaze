@@ -11,7 +11,7 @@ export default class Background {
 
 	constructor() {
 		this.#img = document.getElementById("mini2-bg");
-		this.#dw = 800;
+		this.#dw = window.innerWidth/3;
 		this.#dh = window.innerHeight;
 		this.#dx = (window.innerWidth - this.#dw)/2;
 		this.#dy = 0;
@@ -25,6 +25,7 @@ export default class Background {
 
 	// canvas 크기 변경
 	resize() {
+		this.#dw = window.innerWidth/3;
 		this.#dh = window.innerHeight;
 		this.#dx = (window.innerWidth - this.#dw)/2;
 	}

@@ -5,7 +5,9 @@ import Item from './item.js';
 import Sound from './sound.js';
 import Player from './player.js';
 import Monster from './monster.js';
-import Game2 from './mini2/canvas.js';
+import Game1 from './mini1/mini1.js';
+import Game2 from './mini2/mini2.js';
+// import Game3 from './mini3/mini3.js';
 // import { RoundedBoxGeometry } from './node_modules/three-rounded-box/package.json';
 function main() {
   // ==========================
@@ -69,7 +71,7 @@ function main() {
   }
 
 
-  const miniClear = [true, false, false]; // 미니게임 클리어 여부
+  const miniClear = [false, false, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate(miniClear) {
     if (miniClear[0]) {
@@ -83,9 +85,9 @@ function main() {
     }
   }
 
-  miniPosition = [[8,35],[27,15],[42,44]];
+  miniPosition = [[8, 35], [27, 15], [42, 44]];
 
-  function allMiniGameClear(scene){
+  function allMiniGameClear(scene) {
     sound.escapeOpenPlay();
     scene = item.changeDoor(scene);
     scene.remove(item.mini);
@@ -125,7 +127,7 @@ function main() {
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
 
-    
+
     player.update(deltaTime, cube, mini);
     progress.value = player.stamina;
 
@@ -156,13 +158,13 @@ function main() {
   // const games = [true, new Game2(), new Game2()]; // 미니게임 배열
   // 미니게임 실행
   function playMiniGame() {
-    // miniClear.forEach((mini, idx) => {
-      if (!miniClear[1]) {
-        const game = new Game2();
+    for (let idx in miniClear) {
+      if (!miniClear[idx]) {
+        const game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
           sound.miniClearPlay();
           item.miniPositionChange(miniPosition[idx]);
-          miniClear[num-1] = true;
+          miniClear[num - 1] = true;
           isPause = false;
           prevTime = performance.now();
           requestAnimationFrame(animate);
@@ -171,7 +173,7 @@ function main() {
         game.run();
         return;
       };
-    // });
+    }
   }
 
 

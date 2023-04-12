@@ -24,7 +24,7 @@ export default class Bundle {
 	#rightBlue;
 
 	constructor() {
-		this.#w = 800;
+		this.#w = window.innerWidth/3;
 		this.#h = window.innerHeight;
 		this.#x = (window.innerWidth - this.#w) / 2;
 
@@ -50,12 +50,6 @@ export default class Bundle {
 
 	draw(ctx) {
 		// 단선 그리기
-		// ctx.rotate(20*Math.PI/180);
-
-
-
-
-		ctx.resetTransform();
 
 		ctx.drawImage(this.#bundleImg,
 			186, 346 + this.#bHeight, this.#bWidth, this.#bHeight,
@@ -90,27 +84,6 @@ export default class Bundle {
 			1033, 346 + this.#bHeight + 1000, this.#bWidth, this.#bHeight,
 			this.#rightBlue.x, this.#rightBlue.y, this.#rx, this.#ry
 		);
-
-		// console.log(Math.PI);
-		// const d = 180 * Math.PI / 180;
-		// const sin = Math.sin(Math.PI / 6);
-		// const cos = Math.cos(Math.PI / 6);
-		// ctx.rotate(25 * (Math.PI / 180));
-		// ctx.fillStyle = "red";
-		// ctx.fillRect(0, 0, 10, 10);
-		// ctx.translate(this.#leftRed.x+this.#rx, this.#leftRed.y);
-		// ctx.translate(this.#leftRed.x+this.#rx-2, this.#leftRed.y-1);
-		// ctx.fillRect(0, 0, this.#rx, this.#ry);
-		// ctx.transform(1, d, 0, 1, this.#leftRed.x+this.#rx-2, this.#leftRed.y-1);
-		// ctx.fillRect(0, 0, this.#rx, this.#ry);
-		// ctx.drawImage(this.#bundleImg,
-		// 	216, 346 + this.#bHeight, this.#bWidth-40, this.#bHeight,
-		// 	0, 0, this.#rx, this.#ry
-		// );
-		// ctx.translate(-this.#leftRed.x, -this.#leftRed.y);
-		// ctx.translate(-this.#leftRed.x-this.#rx, -this.#leftRed.y);
-
-
 	}
 
 	// 클릭 이벤트 좌표정보(전선 크기)
@@ -207,9 +180,4 @@ export default class Bundle {
 		this.#rightRed = { x: window.innerWidth - (this.#x + this.#w * 0.145 + this.#rx), y: this.#h * 0.56 };
 		this.#rightBlue = { x: window.innerWidth - (this.#x + this.#w * 0.145 + this.#rx), y: this.#h * 0.72 };
 	}
-
-	update() {
-		
-	}
-	
 }
