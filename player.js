@@ -12,7 +12,7 @@ export default class Player {
   sideRotationTarget;
   downRotationTarget;
   stamina;
-
+  
   isSideRotating;
   isDownRotating;
   isMoving;
@@ -23,6 +23,7 @@ export default class Player {
   isOutOfStamina;
   isMiniPosition;
   isPauseCheck;
+  isGameClear;
 
   constructor() {
     this.camera = new THREE.PerspectiveCamera(
@@ -58,6 +59,7 @@ export default class Player {
     this.isOutOfStamina = false;
     this.isMiniPosition = false;
     this.isPauseCheck = null;
+    this.isGameClear = false;
   }
 
   load(scene) {
@@ -158,9 +160,8 @@ export default class Player {
       this.camera.rotation.x = this.downRotationTarget;
     }
 
-    if(this.isLookDown && !this.isDownRotating){
+    if(this.isLookDown && !this.isDownRotating && !this.isGameClear){
       this.downLocation(deltaTime);
-      // console.log(this.isDownRotating);
     } else {
       this.camera.position.copy(this.moveToTarget());
     }
@@ -174,6 +175,7 @@ export default class Player {
     } else {
       this.stamina = this.stamina > 100 ? 100 : this.stamina + 0.3;
     }
+
 
   }
 
@@ -207,8 +209,12 @@ export default class Player {
         case 32:
           if(this.isMiniPosition){
             this.getDownRotateTarget();
+            this.downLocationTarget = 0.3;
+
           }
           break;
+        case 75:
+          this.GameClearAnimate();
       }
     }
   }
@@ -228,14 +234,13 @@ export default class Player {
     ) {
       this.downRotationTarget += Math.PI / 2;
       this.isFrontDirection = true;
-      this.downLocationTarget = 0.3;
+      
     } else if (
       Math.round(this.cameraDirection.z) == -1 &&
       Math.round(this.cameraDirection.x) == 0
     ) {
       this.downRotationTarget -= Math.PI / 2;
       this.isFrontDirection = false;
-      this.downLocationTarget = 0.3;
     }
   }
 
@@ -255,12 +260,9 @@ export default class Player {
   }
 
   lookUp() {
-    console.log('lookup');
     if (this.isFrontDirection) {
-      console.log('frontDirection');
       this.downRotationTarget -= Math.PI / 2;
     } else {
-      console.log('notfrontdirection')
       this.downRotationTarget += Math.PI / 2;
     }
   }
@@ -283,6 +285,14 @@ export default class Player {
 
   isPauseCheck(callback) {
     this.isPauseCheck = callback;
+  }
+
+  GameClearAnimate(){
+    this.isGameClear = true;
+    this.getDownRotateTarget();
+    this.smoothFactor = 0.003;
+    this.rotationSpeed = 5;
+    this.frontMoveTarget = new THREE.Vector3(25,100,25);
   }
 
 }

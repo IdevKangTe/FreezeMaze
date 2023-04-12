@@ -29,9 +29,9 @@ function main() {
   main.style.zIndex = 0;
 
 
-  scene.fog = new THREE.Fog(0x000000, 0, 30);
+  // scene.fog = new THREE.Fog(0x000000, 0, 30);
 
-  const light = new THREE.AmbientLight(0xffffff, 0.1);
+  const light = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(light);
   let isPause = false;
   const player = new Player();
