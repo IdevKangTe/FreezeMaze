@@ -6,7 +6,7 @@ import Pipe from "./pipe.js";
 import Light from "./light.js";
 import Intro from "./intro.js";
 
-export default class App {
+export default class Game1 {
     #canvas;
     ctx;
     conveyor;

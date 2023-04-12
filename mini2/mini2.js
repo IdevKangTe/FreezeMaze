@@ -6,7 +6,7 @@ import Background from "./background.js";
 import Bundle from './bundle.js';
 import Line from './line.js';
 
-export default class Mini2 {
+export default class Game2 {
 	#canvas;
 	#ctx;
 	#width;
@@ -46,7 +46,6 @@ export default class Mini2 {
 	}
 
 	init() {
-		// console.log("init");
 		// 캔버스 설정
 		this.#canvas.width = window.innerWidth;
 		this.#canvas.height = window.innerHeight;
@@ -146,8 +145,6 @@ export default class Mini2 {
 	}
 
 	run() {
-		console.log("Start");
-
 		window.onresize = this.resize.bind(this);
 		this.#ctx.reset();
 		this.#background.draw(this.#ctx);

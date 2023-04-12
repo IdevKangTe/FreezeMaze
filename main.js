@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 // import { map } from './map.js';
-import load from './map.js';
-import Item from './item.js';
-import Sound from './sound.js';
-import Player from './player.js';
-import Monster from './monster.js';
+import load from './js/map.js';
+import Item from './js/item.js';
+import Sound from './js/sound.js';
+import Player from './js/player.js';
+import Monster from './js/monster.js';
 import Game1 from './mini1/mini1.js';
 import Game2 from './mini2/mini2.js';
-// import Game3 from './mini3/mini3.js';
+import Game3 from './mini3/mini3.js';
 // import { RoundedBoxGeometry } from './node_modules/three-rounded-box/package.json';
 function main() {
   // ==========================
@@ -70,9 +70,9 @@ function main() {
   }
 
 
-  const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniClear = [true, true, false]; // 미니게임 클리어 여부
 
-  function miniClearUpdate(miniClear) {
+  function miniClearUpdate() {
     if (miniClear[0]) {
       document.getElementById('clear1').style.opacity = 1;
     }
@@ -86,13 +86,15 @@ function main() {
 
   const miniPosition = [[27, 15], [42, 44]];
 
-  function allMiniGameClear(scene) {
+  function allMiniGameClear(num) {
+    if(miniClear[2]==false){
+      item.miniPositionChange(miniPosition[num - 1]);
+      return;
+    }
     sound.escapeOpenPlay();
     scene = item.changeDoor(scene);
     scene.remove(item.mini);
     scene.remove(item.miniLight);
-
-    return scene;
   }
 
   function gameClear() {
@@ -130,12 +132,10 @@ function main() {
     player.update(deltaTime, cube, mini);
     progress.value = player.stamina;
 
-    miniClearUpdate(miniClear);
-
     item.update();
 
     if (!player.isLookDown) {
-      enemy.update(camera, deltaTime, cube);
+      // enemy.update(camera, deltaTime, cube);
     }
 
     sound.update(player, monster, item);
@@ -162,8 +162,9 @@ function main() {
         const game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
           sound.miniClearPlay();
-          item.miniPositionChange(miniPosition[num-1]);
           miniClear[num - 1] = true;
+          allMiniGameClear(num);
+          miniClearUpdate();
           isPause = false;
           prevTime = performance.now();
           requestAnimationFrame(animate);

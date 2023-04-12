@@ -3,7 +3,7 @@
 	padding: 0;
 }
 body {
-	background-color: #1f1f1f;
+	/* background-color: #1f1f1f; */
 	margin: 0 auto;
 	overflow: hidden;
 }
@@ -12,5 +12,9 @@ div[id$="-container"] {
 	position: fixed;
 	top: 0;
 	left: 0;
+	display: none;
+}
+
+.d-none{
 	display: none;
 }
