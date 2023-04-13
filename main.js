@@ -29,7 +29,7 @@ export default function main() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
-
+  const info = document.getElementById("info");
   
   let tutorial = null;
   
@@ -41,7 +41,7 @@ export default function main() {
     main.focus();
     main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
     main.addEventListener('keyup', onKeyUp, false);
-
+    info.style.display = "block";
   }
   function onKeyDown(e) {
     sound.musicPlay();
@@ -130,7 +130,7 @@ export default function main() {
   }
 
   function gameClear() {
-    document.getElementById('info').style.display = 'none';
+    info.style.display = 'none';
     scene.fog = null;
     sound.pause();
     sound.quite();
@@ -198,6 +198,7 @@ export default function main() {
 
   // 미니게임 실행
   function playMiniGame() {
+    info.style.display = "none";
     if (isGameOver) {
       console.log('gameover');
       const gameOver = new InOutroCanvas();
@@ -233,6 +234,7 @@ export default function main() {
           allMiniGameClear(num);
           requestAnimationFrame(animate);
           main.focus();
+          info.style.display = "block";
           game = null;
         }
         if (idx == 0) {

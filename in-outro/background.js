@@ -3,7 +3,7 @@
 import Music from './music.js';
 
 export default
-class Background {
+	class Background {
 	#img;
 	#x;
 	#y;
@@ -14,13 +14,13 @@ class Background {
 	#animimationName;
 	#musicIntro;
 	#isIntroMusicPlay;
-	
 
-	
+
+
 	// 밖에서 "Background객체.isGameover"의 t/f 조정하기
 	#isGameover
 
-	constructor(w= window.innerWidth, h= window.innerHeight) {
+	constructor(w = window.innerWidth, h = window.innerHeight) {
 		this.#img = document.getElementById("in-outro-background");
 		this.#w = w;
 		this.#h = h;
@@ -30,29 +30,27 @@ class Background {
 		this.#opacityStep = 0.008;
 		this.#animimationName;
 
-		this.#musicIntro = new Music("../sound/game/in-outro/intro.mp3", 5);
+		this.#musicIntro = new Music("../sound/game/in-outro/gameover.mp3", 5);
 		this.#isIntroMusicPlay = false;
-		
-		this.#isGameover = false;		
+
+		this.#isGameover = false;
 	}
 
-	get img(){
+	get img() {
 		return this.#img;
 	}
 
-	set img(img){
+	set img(img) {
 		this.#img = img;
 	}
 
-	changeImg(){
+	changeImg() {
 		this.#img.src = "../img/in-outro/gameoverImg.jpg";
 	}
 
-
-
 	draw(ctx) {
 
-		if(this.#isGameover){
+		if (this.#isGameover) {
 			this.changeImg();
 		}
 
@@ -62,9 +60,7 @@ class Background {
 		let w = this.#w;
 		let h = this.#h;
 
-
-		ctx.drawImage(img,x,y,w,h);		
-		
+		ctx.drawImage(img, x, y, w, h);
 	}
 
 	// 지우고 다시 그리기 위한 reDraw 메서드
@@ -73,47 +69,36 @@ class Background {
 		let y = this.#y;
 		let w = this.#w;
 		let h = this.#h;
-		
+
 		ctx.clearRect(x, y, w, h);
 		ctx.globalAlpha = this.#opacity;
 		this.draw(ctx);
-
 	}
 
 	playIntroMusic() {
 		this.#isIntroMusicPlay = true;
 	}
 
-	  
 	update(ctx) {
 
 		if (!this.#isIntroMusicPlay) {
 			this.#musicIntro.playMusic();
 			this.#isIntroMusicPlay = true;
-	}
+		}
 
 		if (this.#opacity < 1) {
 			this.#opacity += this.#opacityStep;
-			
 		}
-		
-		if( 0.99 < this.#opacity )
-		return;
+
+		if (0.99 < this.#opacity)
+			return;
 
 		this.reDrawBackground(ctx);
-
 	}
 
-	invisible(){
+	invisible() {
 		// style에 영향을 주는 게 가능하나?
-			this.#img.style.display="none";
+		this.#img.style.display = "none";
 	}
-
-
-
-	
-
-
-
 
 }
