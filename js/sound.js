@@ -15,7 +15,7 @@ export default class Sound {
   miniBG;
 
   isBGMPlaying;
-  isSuspensePlaying;
+  isChasePlaying;
 
   constructor(player) {
     this.footstep = this.initFootstep(player.listner);
@@ -31,7 +31,7 @@ export default class Sound {
     this.mini1BG = this.initMini1BG(player.listner);
 
     this.isBGMPlaying = false;
-    this.isSuspensePlaying = false;
+    this.isChasePlaying = false;
   }
 
   initFootstep(listner) {
@@ -210,15 +210,19 @@ export default class Sound {
   }
 
   chase() {
-    this.isSuspensePlaying = true;
+    if(this.isChasePlaying){
+      return;
+    }
+    this.isChasePlaying = true;
     this.suspense.play();
     this.monsterScream.play();
     this.heartbeat.setVolume(1.5);
     this.heartbeat.setPlaybackRate(1.5);
+    
   }
 
   notChase() {
-    this.isSuspensePlaying = false;
+    this.isChasePlaying = false;
     this.suspense.pause();
     this.heartbeat.setVolume(1);
     this.heartbeat.setPlaybackRate(1.5);
@@ -255,7 +259,7 @@ export default class Sound {
   }
 
   miniBGPause(){
-    this.miniBG.pause();
+    this.miniBG.stop();
   }
 
   mini1BGPlay(){
@@ -265,14 +269,14 @@ export default class Sound {
   }
 
   mini1BGPause(){
-    this.mini1BG.pause();
+    this.mini1BG.stop();
   }
 
   itemNotificationPause(){
-    this.itemNotification.pause();
+    this.itemNotification.stop();
   }
 
-  update(player, monster, item) {
+  update(player, enemy, item) {
     
     if (player.isMoving || player.isRotating) {
       this.footstepSoundPlay();
@@ -286,12 +290,18 @@ export default class Sound {
       this.notRun();
     }
 
+    if(enemy.isNear){
+      this.chase();
+    } else {
+      this.notChase();
+    }
+
     let itemDiff = item.mini.position.distanceTo(player.camera.position);
     this.itemNotification.setVolume(
       1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
     );
 
-    let MonsterDiff = monster.position.distanceTo(player.camera.position);
+    let MonsterDiff = enemy.monster.position.distanceTo(player.camera.position);
     this.monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);
   }
 
@@ -302,9 +312,6 @@ export default class Sound {
     this.monsterBGM.play();
     this.itemNotification.play();
     this.heartbeat.play();
-    if(this.isSuspensePlaying){
-      this.suspense.play();
-    }
     this.isBGMPlaying = true;
   }
 
@@ -317,9 +324,6 @@ export default class Sound {
     this.monsterScream.pause();
     if(this.suspense.isPlaying){
       this.suspense.pause();
-      this.isSuspensePlaying = true;
-    } else {
-      this.isSuspensePlaying = false;
     }
     this.isBGMPlaying = false;
   }

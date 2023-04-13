@@ -47,7 +47,6 @@ export default class Light {
 
 
     lightOn(color) {
-        console.log("color", color);
         this.color = color;
     }
 

@@ -40,9 +40,6 @@ class Logo{
     // none -> block가 안되더라.
     // this.#style.display = "none";
     
-    console.log(this.#imgLogoZe.width);
-    console.log(this.#imgLogoZe.width);
-
     // Free 로고의 크기, 위치
     this.#widthLogo = this.#imgLogo.width;
     this.#heightLogo = this.#imgLogo.height;
@@ -158,7 +155,6 @@ class Logo{
 
         if (Math.abs(this.#zeOpacity) >= 0.001) {
             this.#zeOpacity -= this.#opacityStep;
-            // console.log(logozeOpacity);
           }
         
           this.#background.draw(ctx);

@@ -98,7 +98,6 @@ export default class Game1 {
     check(e) {
         let key = e.key;
         if (key == " ") { //스페이스
-            console.log("정답판정");
             if (this.#canvas.clientWidth / 2 - 200 <= this.currentPos3 && this.currentPos3 <= this.#canvas.clientWidth / 2 - 100) { //맞았을때
                 this.correct.volume = 1.0;
                 this.correct.play();

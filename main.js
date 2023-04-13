@@ -43,7 +43,6 @@ function main() {
   main.style.position = "relative";
   main.style.zIndex = 0;
 
-
   scene.fog = new THREE.Fog(0x000000, 0, 30);
 
   const light = new THREE.AmbientLight(0xffffff, 0.1);
@@ -83,8 +82,8 @@ function main() {
     player.ctrlUp(e);
   }
 
-
   const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniPosition = [[27, 15], [42, 44]];
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -97,8 +96,6 @@ function main() {
       document.getElementById('clear3').style.opacity = 1;
     }
   }
-
-  const miniPosition = [[27, 15], [42, 44]];
 
   function allMiniGameClear(num) {
     if (miniClear[2] == false) {
@@ -135,7 +132,6 @@ function main() {
   let deltaTime = 0;
   let prevTime = 0;
 
-
   const progress = document.getElementById('progress');
 
   let animate = function () {
@@ -144,7 +140,6 @@ function main() {
 
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
-
 
     player.update(deltaTime, cube, mini);
     progress.value = player.stamina;
@@ -161,7 +156,7 @@ function main() {
       enemy.update(camera, deltaTime, cube);
     }
 
-    sound.update(player, monster, item);
+    sound.update(player, enemy, item);
 
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);
@@ -183,7 +178,6 @@ function main() {
       if (!miniClear[idx]) {
         let game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
-          console.log("clear");
           isPause = false;
           miniClear[num - 1] = true;
           prevTime = performance.now();

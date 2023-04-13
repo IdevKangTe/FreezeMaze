@@ -91,7 +91,6 @@ export default class Map {
     // 문자열 전체(g)에서 숫자0~9가 아닌 것 삭제 (string -> array)
     const stringMap = this.#string.split(/\r|\t|\s*/g);
     const numMap = stringMap.map(row => row *= 1);
-    console.log(numMap);
     let zMap = [];
     numMap.forEach((num, idx) => {
       zMap.push(num);
@@ -211,7 +210,6 @@ export default class Map {
 
   deleteDoor(scene){
     this.#map3D[242].position.y = -999;
-    // return {scene, cube: this.#map3D};
     return scene;
   }
 

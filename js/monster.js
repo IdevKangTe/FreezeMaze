@@ -404,7 +404,6 @@ export default class Monster {
     // 추적 좌표 reverse
     chaseD.reverse();
     if (chaseD.length < 2) {
-      console.log('chase 끝');
       return;
     }
 

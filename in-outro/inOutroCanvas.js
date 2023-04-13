@@ -23,7 +23,6 @@ class inOutroCanvas {
 	#now;
 
 	constructor() {
-		console.log("in");
 		// canvas 객체 생성 후 body노드의 맨 마지막 자식으로 추가
 		this.#obj = document.createElement("canvas");
 		this.#ctx = this.#obj.getContext("2d");
