@@ -26,6 +26,10 @@ export default class Game2 {
 	#endX;
 	#endY;
 
+	#play;
+	#wrong;
+	#correct;
+
 	#isClear;
 
 	constructor() {
@@ -67,6 +71,10 @@ export default class Game2 {
 		this.#startY = null;
 		this.#endX = null;
 		this.#endY = null;
+
+		this.#play = new Audio("../sound/item/mini2/mini2_electric_zap01.wav")
+		this.#wrong = new Audio("../sound/item/mini2/mini2_electric_incorrect.mp3")
+		// this.#correct = new Audio("../sound/item/mini2/mini2_electric_incorrect.mp3");
 	}
 
 	mouseDownHandler(e) {
@@ -75,6 +83,9 @@ export default class Game2 {
 
 		// 왼쪽 전선에서만 선 그리기 실행
 		if (this.#side !== "left" || this.#isPainting) return;
+		this.#play.volume = 1.0;
+		this.#play.play();
+
 		let isDupl = false;
 		for (let line of this.#lines) {
 			isDupl = line.isDupl(this.#color);
@@ -108,9 +119,10 @@ export default class Game2 {
 		this.#ctx.reset();
 		this.#background.draw(this.#ctx);
 		this.#bundle.draw(this.#ctx);
-		
+
 		if (side !== "right" || this.#isPainting || this.#color !== color) {
 			this.#lines = [];
+			this.#wrong.play();
 			return;
 		}
 		const line = new Line({

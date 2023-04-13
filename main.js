@@ -89,15 +89,15 @@ export default function main() {
   ({ scene, monster } = enemy.load(scene));
   monster = sound.loadMonsterSound(monster);
   let isGameOver = false;
-  monster.isCatch = function() {
+  enemy.isCatch = function() {
     isGameOver = true;
-  };
+  }.bind(this);
 
   const item = new Item();
   ({ scene, mini } = item.load(scene));
   mini = sound.loadItemSound(mini);
 
-  const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniClear = [true, false, false]; // 미니게임 클리어 여부
   const miniPosition = [[27, 15], [42, 44], [2000, 2000]];
   let allMiniGameClearCheck = false;
   let gameClearCheck = false;
