@@ -8,6 +8,7 @@ import Game1 from './mini1/mini1.js';
 import Game2 from './mini2/mini2.js';
 import Game3 from './mini3/mini3.js';
 import TutorialCanvas from './js/tutorialCanvas.js';
+import InOutroCanvas from './in-outro/inOutroCanvas.js';
 
 export default function main() {
 
@@ -28,21 +29,23 @@ export default function main() {
 
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
 
-  
-  const tutorial = new TutorialCanvas();
-  
+
+  let tutorial = null;
+
+  tutorial = new TutorialCanvas();
+
   tutorial.run();
   tutorial.isClear = function () {
     main.tabIndex = 1;
     main.focus();
     main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
     main.addEventListener('keyup', onKeyUp, false);
-  
+
     function onKeyDown(e) {
       sound.musicPlay();
       player.move(e);
     }
-  
+
     function onKeyUp(e) {
       player.ctrlUp(e);
     }
@@ -89,7 +92,7 @@ export default function main() {
   ({ scene, mini } = item.load(scene));
   mini = sound.loadItemSound(mini);
 
-  const miniClear = [true, true, false]; // 미니게임 클리어 여부
+  const miniClear = [false, false, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -143,7 +146,7 @@ export default function main() {
   let animate = function () {
     // 프레임 처리
     let now = performance.now();
-
+    console.log("y", camera.position.y);
 
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
@@ -162,7 +165,7 @@ export default function main() {
 
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);
-    if (!isPause) {
+    if (!isPause && camera.position.y < 67) {
       sound.musicPlay();
       requestAnimationFrame(animate);
     }
@@ -176,6 +179,13 @@ export default function main() {
 
   // 미니게임 실행
   function playMiniGame() {
+    if (miniClear.filter(bool => bool === true).length == 3) {
+      const outro = new InOutroCanvas();
+        outro.mode("outro");
+        outro.run();
+        return;
+    }
+
     for (let idx in miniClear) {
       if (!miniClear[idx]) {
         let game = eval(`new Game${idx * 1 + 1}()`);
@@ -200,7 +210,7 @@ export default function main() {
         sound.miniBGPlay();
         game.run();
         return;
-      };
+      }
     }
   }
 }

@@ -12,9 +12,13 @@ class Background {
 	#opacity;
 	#opacityStep;
 	#animimationName;
+	#musicIntro;
+	#isIntroMusicPlay;
+	
+
 	
 	// 밖에서 "Background객체.isGameover"의 t/f 조정하기
-	#isGameover;
+	#isGameover
 
 	constructor(w= window.innerWidth, h= window.innerHeight) {
 		this.#img = document.getElementById("in-outro-background");
@@ -25,6 +29,9 @@ class Background {
 		this.#opacity = 0;
 		this.#opacityStep = 0.008;
 		this.#animimationName;
+
+		this.#musicIntro = new Music("../sound/game/in-outro/intro.mp3", 5);
+		this.#isIntroMusicPlay = false;
 		
 		this.#isGameover = false;		
 	}
@@ -37,15 +44,16 @@ class Background {
 		this.#img = img;
 	}
 
-	changeBackgroundImg(){
+	changeImg(){
 		this.#img.src = "../img/in-outro/gameoverImg.jpg";
 	}
-	
+
+
 
 	draw(ctx) {
 
 		if(this.#isGameover){
-			this.changeBackgroundImg();
+			this.changeImg();
 		}
 
 		let img = this.#img;
@@ -72,9 +80,17 @@ class Background {
 
 	}
 
-	
+	playIntroMusic() {
+		this.#isIntroMusicPlay = true;
+	}
+
 	  
 	update(ctx) {
+
+		if (!this.#isIntroMusicPlay) {
+			this.#musicIntro.playMusic();
+			this.#isIntroMusicPlay = true;
+	}
 
 		if (this.#opacity < 1) {
 			this.#opacity += this.#opacityStep;

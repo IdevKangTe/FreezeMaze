@@ -1,5 +1,4 @@
 // inOutroCanvas의 UI중 첫번째 (1/3)
-
 import Background from './background.js';
 import Music from './music.js';
 
@@ -21,9 +20,7 @@ export default
     #opacity;
     #zeOpacity;
     #background;
-    #musicIntro;
     #musicOutro;
-    #isIntroMusicPlay;
     #isOutroMusicPlay;
 
     // 밖에서 "Logo객체.isIntro"의 t/f 조정하기
@@ -40,8 +37,8 @@ export default
         // none -> block가 안되더라.
         // this.#style.display = "none";
 
-        console.log(this.#imgLogoZe.width);
-        console.log(this.#imgLogoZe.width);
+        // console.log(this.#imgLogoZe.width);
+        // console.log(this.#imgLogoZe.width);
 
         // Free 로고의 크기, 위치
         this.#widthLogo = this.#imgLogo.width;
@@ -59,31 +56,16 @@ export default
         this.#opacity = 0;
         this.#zeOpacity = 1;
 
+        //이거 지금 true로 잠깐 바꿔놓음
         this.#isIntro = false;
         this.#isOutro = false;
-        this.#isIntroMusicPlay = false;
         this.#isOutroMusicPlay = false;
 
         this.#background = new Background();
-        this.#musicIntro = new Music("../sound/game/in-outro/intro.mp3", 5);
         this.#musicOutro = new Music("../sound/game/in-outro/outro.mp3", 8);
 
-    }
 
-    get isIntro() {
-        return this.#isIntro;
-    }
 
-    set isIntro(tf) {
-        this.#isIntro = tf;
-    }
-
-    get isOutro() {
-        return this.#isOutro;
-    }
-
-    set isOutro(tf) {
-        this.#isOutro = tf;
     }
 
     get img() {
@@ -118,17 +100,16 @@ export default
         ctx.drawImage(img, x, y, w, h);
     }
 
-    invisible() {
-        // style에 영향을 주는 게 가능하나?
-        this.#imgLogo.style.display = "none";
+    playIntro() {
+        this.#isIntro = true;
+    }
+
+    playOutro() {
+        this.#isOutro = true;
     }
 
     animateLogoFadeIn(ctx) {
 
-        if (!this.#isIntroMusicPlay) {
-            this.#musicIntro.playMusic();
-            this.#isIntroMusicPlay = true;
-        }
 
         if (this.#opacity < 1) {
             this.#opacity += this.#opacityStep;
@@ -180,7 +161,6 @@ export default
         if (this.#isOutro) {
             this.animateLogoFadeOut(ctx);
         }
-
 
 
     }
