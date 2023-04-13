@@ -72,7 +72,7 @@ function main() {
   }
 
 
-  const miniClear = [true, true, false]; // 미니게임 클리어 여부
+  const miniClear = [false, false, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -161,7 +161,7 @@ function main() {
   function playMiniGame() {
     for (let idx in miniClear) {
       if (!miniClear[idx]) {
-        const game = eval(`new Game${idx * 1 + 1}()`);
+        let game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
           isPause = false;
           miniClear[num - 1] = true;
@@ -172,6 +172,7 @@ function main() {
           allMiniGameClear(num);
           requestAnimationFrame(animate);
           main.focus();
+          game = null;
         }
         sound.miniBGPlay();
         game.run();

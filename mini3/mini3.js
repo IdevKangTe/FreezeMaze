@@ -63,7 +63,6 @@ export default class Game3 {
         // 클릭한 이미지 숫자(1~11) 저장
         this.#currentClick = -99;
 
-        this.#bgmAudio = new Music();
         this.#janglingAudio = new Music("../sound/item/mini3/mini3_key_jangle.wav", 0.2);
         this.#CorrectAudio = new Music("../sound/item/mini3/mini3_key_turning01.wav", 0.8);
         this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
@@ -72,7 +71,7 @@ export default class Game3 {
     }
 
 
-    update(e) {
+    update() {
         let ctx = this.#ctx;
         
         this.#background.update(ctx);
@@ -80,19 +79,14 @@ export default class Game3 {
             key.update(ctx);
         }
         this.#tile.update(ctx)
-
-        this.quizCheck();
-
     }
-
+    
     run() {
-
         this.paint();
-
-        this.#tid = setInterval(()=>{    
-            this.update();
-        },50);
-
+        this.update();
+        
+        requestAnimationFrame(() => this.run());
+        this.quizCheck();
         
     }
 
@@ -112,7 +106,6 @@ export default class Game3 {
     }
 
     mouseDown(e) {
-        e.preventDefault();
         this.#startX = Math.floor(e.clientX);
         this.#startY = Math.floor(e.clientY);
 
@@ -127,7 +120,6 @@ export default class Game3 {
     }
 
     mouseMove(e) {
-
         this.#mouseX = parseInt(e.clientX);
         this.#mouseY = parseInt(e.clientY);
 
@@ -157,7 +149,6 @@ export default class Game3 {
             let position = this.answerPositionCheck(e.x, e.y);
             if(this.#currentClick == position) {
                 this.#keys[this.#currentClick-1].img = document.getElementById("answer");
-                // this.#keys[this.#currentClick-1].img.style.display = "none";
                 this.#CorrectAudio.playMusic();
                
                 switch (position) {

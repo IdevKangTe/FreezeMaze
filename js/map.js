@@ -178,7 +178,7 @@ export default class Map {
     this.#map2D.forEach((z, zIdx) => {
       z.forEach((x, xIdx) => {
         if (x != 1) return;
-        const mesh = new THREE.Mesh(this.#geometryW, this.#materialW);
+        const mesh = new THREE.Mesh(this.#outroGeometryW, this.#materialW);
         this.#map3D.push(mesh);
 
         this.#map3D[idx].position.x = xIdx;
