@@ -4,7 +4,6 @@ import Tile from "./tile.js";
 import Music from "./music.js";
 
 export default class Game3 {
-
     #canvas;
     #ctx;
     #tile;
@@ -31,13 +30,14 @@ export default class Game3 {
     constructor() {
         this.#canvas = document.createElement("canvas");
         document.body.append(this.#canvas);
-        this.#ctx = this.#canvas.getContext("2d");
 		this.#canvas.style.position = "absolute";
 		this.#canvas.style.top = 0;
 		this.#canvas.style.left = 0;
         this.#canvas.width = window.innerWidth;
         this.#canvas.height = window.innerHeight;
-        // this.#canvas.onclick = this.clickHandler.bind(this);
+
+        this.#ctx = this.#canvas.getContext("2d");
+        
         this.#canvas.onmousedown = this.mouseDown.bind(this);
         this.#canvas.onmousemove = this.mouseMove.bind(this);
         this.#canvas.onmouseout = this.mouseOut.bind(this);
@@ -84,11 +84,10 @@ export default class Game3 {
     run() {
         this.paint();
         this.update();
-        
+
         requestAnimationFrame(() => this.run());
         this.quizCheck();
-        
-    }
+
 
 
     paint() {

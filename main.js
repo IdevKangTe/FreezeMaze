@@ -89,7 +89,7 @@ function main() {
   const miniPosition = [[27, 15], [42, 44]];
 
   function allMiniGameClear(num) {
-    if(miniClear[2]==false){
+    if (miniClear[2] == false) {
       item.miniPositionChange(miniPosition[num - 1]);
       return;
     }
@@ -137,7 +137,7 @@ function main() {
     item.update();
 
     if (!player.isLookDown) {
-      // enemy.update(camera, deltaTime, cube);
+      enemy.update(camera, deltaTime, cube);
     }
 
     sound.update(player, monster, item);
@@ -156,7 +156,6 @@ function main() {
 
   animate();
 
-  // const games = [true, new Game2(), new Game2()]; // 미니게임 배열
   // 미니게임 실행
   function playMiniGame() {
     for (let idx in miniClear) {
