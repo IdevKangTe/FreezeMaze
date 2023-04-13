@@ -23,7 +23,20 @@ function main() {
     antialias: true,
     preserveDrawingBuffer: true,
   });
+
   renderer.setSize(window.innerWidth, window.innerHeight);
+  window.onresize = resize.bind(this);
+
+  function resize() {
+		main.width = window.innerWidth;
+		main.height = window.innerHeight;
+
+		camera.aspect = main.width / main.height;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(main.width, main.height);
+	};
+
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
   main.tabIndex = 0;
   main.focus();
@@ -71,7 +84,7 @@ function main() {
   }
 
 
-  const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniClear = [true, true, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -137,6 +150,8 @@ function main() {
     progress.value = player.stamina;
 
     if(Math.abs(camera.position.x - 48) <0.3 && Math.abs(camera.position.z - 1) < 0.3){
+      main.removeEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
+      main.removeEventListener('keyup', onKeyUp, false);
       gameClear();
     }
 
