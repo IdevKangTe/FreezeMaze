@@ -74,7 +74,7 @@ export default class Game2 {
 
 		this.#play = new Audio("../sound/item/mini2/mini2_electric_zap01.wav")
 		this.#wrong = new Audio("../sound/item/mini2/mini2_electric_incorrect.mp3")
-		// this.#correct = new Audio("../sound/item/mini2/mini2_electric_incorrect.mp3");
+		this.#correct = new Audio("../sound/item/mini2/mini2_electric_correct.wav");
 	}
 
 	mouseDownHandler(e) {
@@ -125,6 +125,7 @@ export default class Game2 {
 			this.#wrong.play();
 			return;
 		}
+		this.#correct.play();
 		const line = new Line({
 			startX: this.#startX,
 			startY: this.#startY,
