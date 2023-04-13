@@ -26,6 +26,9 @@ export default class Game3 {
 	#isClear;
 	#quizAnswers;
 
+	#count;
+	#clearDelay;
+
 	constructor() {
 		this.#canvas = document.createElement("canvas");
 		document.body.append(this.#canvas);
@@ -67,6 +70,8 @@ export default class Game3 {
 		this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
 
 		this.#isClear = null;
+		this.#count = 0;
+		this.#clearDelay = 20;
 	}
 
 
@@ -85,7 +90,13 @@ export default class Game3 {
 		this.update();
 
 		requestAnimationFrame(() => this.run());
-		this.quizCheck();
+		this.#count = this.#quizAnswers.filter(bool => bool === true).length;
+		if (this.#count == 4) {
+			this.#clearDelay--;
+			if (this.#clearDelay != 0) return;
+			this.#canvas.style.display = "none";
+			this.#isClear(3);
+		}
 	}
 
 	paint() {
@@ -179,17 +190,6 @@ export default class Game3 {
 		this.#currentClick = -99;
 
 	}
-
-	quizCheck() {
-
-		for (let answer of this.#quizAnswers) {
-			if (answer == false)
-				return;
-		}
-		this.#canvas.style.display = "none";
-		this.#isClear(3);
-	}
-
 
 	answerPositionCheck(x, y) {
 		if (x > window.innerWidth * 0.433 &&

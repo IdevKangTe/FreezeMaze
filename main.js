@@ -162,6 +162,7 @@ function main() {
       if (!miniClear[idx]) {
         let game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
+          console.log("clear");
           isPause = false;
           miniClear[num - 1] = true;
           prevTime = performance.now();
