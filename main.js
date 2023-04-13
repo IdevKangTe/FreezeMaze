@@ -84,6 +84,8 @@ function main() {
 
   const miniClear = [false, false, false]; // 미니게임 클리어 여부
   const miniPosition = [[27, 15], [42, 44]];
+  let allMiniGameClearCheck = false;
+  let gameClearCheck = false;
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -103,11 +105,11 @@ function main() {
       return;
     }
     sound.escapeOpenPlay();
-    sound.itemNotificationPause();
     scene = map.deleteDoor(scene);
     scene = item.changeDoor(scene);
     scene.remove(item.mini);
     scene.remove(item.miniLight);
+    allMiniGameClearCheck = true;
   }
 
   function gameClear() {
@@ -123,6 +125,7 @@ function main() {
     sound.pause();
     scene = map.changeWallHeight(scene);
     player.gameClearAnimate();
+    gameClearCheck = true;
   }
 
   // ==========================
@@ -156,7 +159,9 @@ function main() {
       enemy.update(camera, deltaTime, cube);
     }
 
-    sound.update(player, enemy, item);
+    if(!gameClearCheck){
+      sound.update(player, enemy, item, allMiniGameClearCheck);
+    }
 
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);

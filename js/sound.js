@@ -61,7 +61,7 @@ export default class Sound {
       function (buffer) {
         audio.setBuffer(buffer);
         audio.setLoop(true);
-        audio.setVolume(1); // 오디오 볼륨을 조절합니다.
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
       }
     );
     return audio;
@@ -169,7 +169,7 @@ export default class Sound {
       'sound/item/mini1/mini1-conveyorbelt-bgm.mp3',
       function (buffer) {
         audio.setBuffer(buffer);
-        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setVolume(1); // 오디오 볼륨을 조절합니다.
         audio.setLoop(true);
         audio.setRefDistance(0.5);
         audio.setDistanceModel('linear');
@@ -210,13 +210,15 @@ export default class Sound {
   }
 
   chase() {
+    console.log('chase');
+    console.log(this.suspense.isPlaying);
     if(this.isChasePlaying){
       return;
     }
     this.isChasePlaying = true;
     this.suspense.play();
     this.monsterScream.play();
-    this.heartbeat.setVolume(1.5);
+    this.heartbeat.setVolume(1);
     this.heartbeat.setPlaybackRate(1.5);
     
   }
@@ -276,12 +278,18 @@ export default class Sound {
     this.itemNotification.stop();
   }
 
-  update(player, enemy, item) {
+  update(player, enemy, item, check) {
     
     if (player.isMoving || player.isRotating) {
       this.footstepSoundPlay();
     } else {
       this.footstep.pause();
+    }
+
+    if(player.stamina <=0){
+      if(!this.breath.isPlaying){
+        this.breath.play();
+      }
     }
 
     if (player.isRunning) {
@@ -290,16 +298,18 @@ export default class Sound {
       this.notRun();
     }
 
-    if(enemy.isNear){
+    if(enemy.isNearDistance){
       this.chase();
     } else {
       this.notChase();
     }
 
-    let itemDiff = item.mini.position.distanceTo(player.camera.position);
-    this.itemNotification.setVolume(
-      1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
-    );
+    if(!check){
+      let itemDiff = item.mini.position.distanceTo(player.camera.position);
+      this.itemNotification.setVolume(
+        1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
+      );
+    }
 
     let MonsterDiff = enemy.monster.position.distanceTo(player.camera.position);
     this.monsterBGM.setVolume(1 / MonsterDiff < 0.07 ? 0 : 1 / MonsterDiff);

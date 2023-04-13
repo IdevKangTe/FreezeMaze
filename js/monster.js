@@ -10,6 +10,7 @@ export default class Monster {
   map2D;
 
   isMad;
+  isNearDistance;
 
   xzTarget;
   yTarget;
@@ -47,6 +48,7 @@ export default class Monster {
     this.xzTarget = this.monster.position.clone();
     this.yTarget = 0;
     this.isMoving = false;
+    this.isNearDistance = false;
   } // initMonster
 
   load(scene) {
@@ -235,6 +237,7 @@ export default class Monster {
     this.hover(deltaTime);
 
     this.isMoving = this.movingCheck();
+    this.isNearDistance = this.isNear(camera);
 
     if (!this.isMoving) {
       // 몬스터가 이동을 완료한 경우
@@ -285,8 +288,10 @@ export default class Monster {
     let MonsterDiff = this.monster.position.distanceTo(camera.position.clone());
 
     if (MonsterDiff < 15) {
+      this.isNearDistance = true;
       return true;
     } else {
+      this.isNearDistance = false;
       return false;
     }
   }
@@ -465,6 +470,7 @@ export default class Monster {
   moving(cube, camera) {
     if (this.isNear(camera)) {
       // 가까울경우
+      console.log('chase');
       if (!this.isMad) {
         // 이전 값이 random 이었으면
         this.monster.material = this.madMaterial();
