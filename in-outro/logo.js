@@ -1,7 +1,6 @@
 // inOutroCanvas의 UI중 첫번째 (1/3)
-
 import Background from './background.js';
-import Music from '../music.js';
+import Music from './music.js';
 
 export default
 class Logo{
@@ -59,6 +58,7 @@ class Logo{
     this.#opacity = 0;
     this.#zeOpacity = 1;
 
+    //이거 지금 true로 잠깐 바꿔놓음
     this.#isIntro = false;
     this.#isOutro = false;
     this.#isIntroMusicPlay = false;
@@ -70,22 +70,6 @@ class Logo{
     
 
 
-    }
-
-    get isIntro() {
-        return this.#isIntro;
-    }
-
-    set isIntro(tf) {
-        this.#isIntro = tf;
-    }
-
-    get isOutro() {
-        return this.#isOutro;
-    }
-
-    set isOutro(tf) {
-        this.#isOutro = tf;
     }
 
     get img(){
@@ -120,9 +104,12 @@ class Logo{
         ctx.drawImage(img,x,y,w,h);
     }
 
-    invisible(){
-    // style에 영향을 주는 게 가능하나?
-        this.#imgLogo.style.display="none";
+    playIntro(){
+        this.#isIntro = true;
+    }
+
+    playOutro(){
+        this.#isOutro = true;
     }
 
     animateLogoFadeIn(ctx){
@@ -182,7 +169,6 @@ class Logo{
         if(this.#isOutro){
         this.animateLogoFadeOut(ctx);
         }
-
 
 
     }

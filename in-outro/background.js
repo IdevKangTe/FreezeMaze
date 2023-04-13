@@ -1,6 +1,6 @@
 // inOutroCanvas의 UI중 두번째 (2/3)
 
-import Music from '../music.js';
+import Music from './music.js';
 
 export default
 class Background {
@@ -37,7 +37,7 @@ class Background {
 		this.#img = img;
 	}
 
-	changeBackgroundImg(){
+	changeImg(){
 		this.#img.src = "gameoverImg.jpg";
 	}
 	
@@ -45,7 +45,7 @@ class Background {
 	draw(ctx) {
 
 		if(this.#isGameover){
-			this.changeBackgroundImg();
+			this.changeImg();
 		}
 
 		let img = this.#img;
@@ -72,7 +72,6 @@ class Background {
 
 	}
 
-	
 	  
 	update(ctx) {
 
