@@ -12,6 +12,7 @@ export default class Sound {
   itemNotification;
   escapeOpen;
   mini1BG;
+  mini2BG;
   miniBG;
 
   isBGMPlaying;
@@ -29,6 +30,7 @@ export default class Sound {
     this.miniClear = this.initMiniClear(player.listner);
     this.miniBG = this.initMiniBG(player.listner);
     this.mini1BG = this.initMini1BG(player.listner);
+    this.mini2BG = this.initMini1BG(player.listner);
 
     this.isBGMPlaying = false;
     this.isChasePlaying = false;
@@ -178,6 +180,21 @@ export default class Sound {
     return audio;
   }
 
+  initMini1BG(listner){
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/item/mini2/mini2_electric_base.wav',
+      function (buffer) {
+        audio.setBuffer(buffer);
+        audio.setVolume(1); // 오디오 볼륨을 조절합니다.
+        audio.setLoop(true);
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
   loadPlayerSound(camera) {
     camera.add(this.footstep);
     camera.add(this.breath);
@@ -270,6 +287,16 @@ export default class Sound {
 
   mini1BGPause(){
     this.mini1BG.pause();
+  }
+
+  mini2BGPlay(){
+    if(!this.mini2BG.isPlaying){
+      this.mini2BG.play();
+    }
+  }
+
+  mini2BGPause(){
+    this.mini2BG.pause();
   }
 
   itemNotificationPause(){

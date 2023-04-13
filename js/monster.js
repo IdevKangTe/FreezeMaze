@@ -15,7 +15,7 @@ export default class Monster {
   xzTarget;
   yTarget;
   isMoving;
-  isCatch;
+  #isCatch;
 
   constructor(map) {
     this.map2D = map;
@@ -52,7 +52,7 @@ export default class Monster {
     this.yTarget = 0;
     this.isMoving = false;
     this.isNearDistance = false;
-    this.isCatch = null;
+    this.#isCatch = null;
   } // initMonster
 
   load(scene) {
@@ -414,9 +414,10 @@ export default class Monster {
     chaseD.reverse();
     if (chaseD.length < 2) {
       // 게임오버
-      if (!this.isCatch) return;
-      this.isCatch();
-      return;
+      console.log(this.#isCatch);
+      if (!this.#isCatch) return this.monster.position;
+      this.#isCatch();
+      return this.monster.position;
     }
 
     switch (chaseD[1][2]) {
@@ -440,7 +441,7 @@ export default class Monster {
   }
 
   set isCatch(callback) {
-    this.isCatch = callback;
+    this.#isCatch = callback;
   }
 
   randomMove(cube) {
