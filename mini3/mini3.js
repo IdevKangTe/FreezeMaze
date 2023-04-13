@@ -17,7 +17,6 @@ export default class Game3 {
     #mouseX;
     #mouseY;
 
-    #bgmAudio
     #janglingAudio;
     #CorrectAudio;
     #wrongAudio;
@@ -87,8 +86,7 @@ export default class Game3 {
 
         requestAnimationFrame(() => this.run());
         this.quizCheck();
-
-
+    }
 
     paint() {
         let ctx = this.#ctx;
@@ -124,7 +122,6 @@ export default class Game3 {
 
         for (let key of this.#keys) {
             if (key.isDragging) {
-                this.#bgmAudio.playBgmMusic();
                 key.mouseMoveHandler(this.#mouseX, this.#mouseY);
                 this.paint();
             }
@@ -190,7 +187,6 @@ export default class Game3 {
             if(answer == false) 
                 return;
         }
-        this.#bgmAudio.isStop();
         this.#canvas.style.display = "none";
         this.#isClear(3);
     }
