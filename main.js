@@ -30,11 +30,11 @@ export default function main() {
 
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
 
-
+  
   let tutorial = null;
-
+  
   tutorial = new TutorialCanvas();
-
+  
   tutorial.run();
   tutorial.isClear = function () {
     main.tabIndex = 1;
@@ -42,14 +42,14 @@ export default function main() {
     main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
     main.addEventListener('keyup', onKeyUp, false);
 
-    function onKeyDown(e) {
-      sound.musicPlay();
-      player.move(e);
-    }
+  }
+  function onKeyDown(e) {
+    sound.musicPlay();
+    player.move(e);
+  }
 
-    function onKeyUp(e) {
-      player.ctrlUp(e);
-    }
+  function onKeyUp(e) {
+    player.ctrlUp(e);
   }
   main.style.position = "relative";
   main.style.zIndex = 0;
@@ -88,12 +88,19 @@ export default function main() {
   const enemy = new Monster(map2D);
   ({ scene, monster } = enemy.load(scene));
   monster = sound.loadMonsterSound(monster);
+  let isGameOver = false;
+  monster.isCatch = function() {
+    isGameOver = true;
+  };
 
   const item = new Item();
   ({ scene, mini } = item.load(scene));
   mini = sound.loadItemSound(mini);
 
   const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniPosition = [[27, 15], [42, 44], [2000, 2000]];
+  let allMiniGameClearCheck = false;
+  let gameClearCheck = false;
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -150,7 +157,6 @@ export default function main() {
   let animate = function () {
     // 프레임 처리
     let now = performance.now();
-    console.log("y", camera.position.y);
 
     deltaTime = (now - prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
     prevTime = now;
@@ -159,7 +165,7 @@ export default function main() {
     progress.value = player.stamina;
 
     if(Math.abs(camera.position.x - 48) <0.3 && Math.abs(camera.position.z - 1) < 0.3){
-      main.removeEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
+      main.removeEventListener('keydown', onKeyDown, false);
       main.removeEventListener('keyup', onKeyUp, false);
       gameClear();
     }
@@ -190,6 +196,13 @@ export default function main() {
 
   // 미니게임 실행
   function playMiniGame() {
+    if (isGameOver) {
+      const gameOver = new InOutroCanvas();
+      gameOver.mode("gameover");
+      gameOver.run();
+      return;
+    }
+
     if (miniClear.filter(bool => bool === true).length == 3) {
       const outro = new InOutroCanvas();
         outro.mode("outro");

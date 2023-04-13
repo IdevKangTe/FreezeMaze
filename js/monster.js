@@ -15,6 +15,7 @@ export default class Monster {
   xzTarget;
   yTarget;
   isMoving;
+  isCatch;
 
   constructor(map) {
     this.map2D = map;
@@ -51,6 +52,7 @@ export default class Monster {
     this.yTarget = 0;
     this.isMoving = false;
     this.isNearDistance = false;
+    this.isCatch = null;
   } // initMonster
 
   load(scene) {
@@ -234,7 +236,7 @@ export default class Monster {
 
   //============================================================================================
 
-  update(camera, deltaTime, cube){
+  update(camera, deltaTime, cube) {
     this.enemyLight();
     this.hover(deltaTime);
 
@@ -246,12 +248,12 @@ export default class Monster {
       this.monster.position.x = this.xzTarget.x;
       this.monster.position.z = this.xzTarget.z;
       this.xzTarget = this.moving(cube, camera);
-      if(this.xzTarget.x==47 && this.xzTarget.z==8){
+      if (this.xzTarget.x == 47 && this.xzTarget.z == 8) {
         this.xzTarget.x = 46;
         this.xzTarget.z = this.nextGo == 2 ? 9 : 7;
       }
     }
-    else{
+    else {
       this.monster.position.copy(this.monster.position.clone().add(this.move(deltaTime)));
     }
   }
@@ -299,7 +301,7 @@ export default class Monster {
   }
 
   chase(camera) {
-  
+
     let dz = [-1, 1, 0, 0]; // 상하좌우 z축 변화
     let dx = [0, 0, -1, 1];
 
@@ -411,6 +413,9 @@ export default class Monster {
     // 추적 좌표 reverse
     chaseD.reverse();
     if (chaseD.length < 2) {
+      // 게임오버
+      if (!this.isCatch) return;
+      this.isCatch();
       return;
     }
 
@@ -434,6 +439,10 @@ export default class Monster {
     return this.xzTarget;
   }
 
+  set isCatch(callback) {
+    this.isCatch = callback;
+  }
+
   randomMove(cube) {
     let collisionDirections = this.monsterCollison(cube); // 충돌인 곳이 true가 담겨있음
     let notCollision = [];
@@ -444,7 +453,7 @@ export default class Monster {
       }
     }
     switch (
-      notCollision.length // 충돌이 안난곳의 갯수
+    notCollision.length // 충돌이 안난곳의 갯수
     ) {
       case 3: // 3곳중에 랜덤으로 간다
         this.nextGo = notCollision[Math.floor(Math.random() * 3)];
@@ -508,7 +517,7 @@ export default class Monster {
   movingCheck() {
     if (
       Math.abs(this.xzTarget.x - this.monster.position.x) +
-        Math.abs(this.xzTarget.z - this.monster.position.z) >
+      Math.abs(this.xzTarget.z - this.monster.position.z) >
       0.03
     ) {
       return true;
