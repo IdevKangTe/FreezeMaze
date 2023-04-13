@@ -15,7 +15,7 @@ export default class Sound {
   miniBG;
 
   isBGMPlaying;
-  isSuspensePause;
+  isSuspensePlaying;
 
   constructor(player) {
     this.footstep = this.initFootstep(player.listner);
@@ -31,7 +31,7 @@ export default class Sound {
     this.mini1BG = this.initMini1BG(player.listner);
 
     this.isBGMPlaying = false;
-    this.isSuspensePause = false;
+    this.isSuspensePlaying = false;
   }
 
   initFootstep(listner) {
@@ -210,7 +210,7 @@ export default class Sound {
   }
 
   chase() {
-    this.isSuspensePause = true;
+    this.isSuspensePlaying = true;
     this.suspense.play();
     this.monsterScream.play();
     this.heartbeat.setVolume(1.5);
@@ -218,6 +218,7 @@ export default class Sound {
   }
 
   notChase() {
+    this.isSuspensePlaying = false;
     this.suspense.pause();
     this.heartbeat.setVolume(1);
     this.heartbeat.setPlaybackRate(1.5);
@@ -301,7 +302,7 @@ export default class Sound {
     this.monsterBGM.play();
     this.itemNotification.play();
     this.heartbeat.play();
-    if(this.isSuspensePause){
+    if(this.isSuspensePlaying){
       this.suspense.play();
     }
     this.isBGMPlaying = true;
@@ -316,7 +317,9 @@ export default class Sound {
     this.monsterScream.pause();
     if(this.suspense.isPlaying){
       this.suspense.pause();
-      this.isSuspensePause = true;
+      this.isSuspensePlaying = true;
+    } else {
+      this.isSuspensePlaying = false;
     }
     this.isBGMPlaying = false;
   }

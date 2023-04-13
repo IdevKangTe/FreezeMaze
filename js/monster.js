@@ -234,20 +234,21 @@ export default class Monster {
     this.enemyLight();
     this.hover(deltaTime);
 
-    // this.isMoving = this.movingCheck(this.xzTarget);
     this.isMoving = this.movingCheck();
 
-  if (!this.isMoving) {
-    // 몬스터가 이동을 완료한 경우
-    this.monster.position.x = this.xzTarget.x;
-    this.monster.position.z = this.xzTarget.z;
-    this.xzTarget = this.moving(cube, camera);
-    // this.xzTarget = this.moving(cube, camera, this.xzTarget);
-  }
-  else{
-    this.monster.position.copy(this.monster.position.clone().add(this.move(deltaTime)));
-  }
-  // this.monster.position.copy(this.monster.position.clone().add(this.move(deltaTime, this.xzTarget, this.yTarget)));
+    if (!this.isMoving) {
+      // 몬스터가 이동을 완료한 경우
+      this.monster.position.x = this.xzTarget.x;
+      this.monster.position.z = this.xzTarget.z;
+      this.xzTarget = this.moving(cube, camera);
+      if(this.xzTarget.x==47 && this.xzTarget.z==8){
+        this.xzTarget.x = 46;
+        this.xzTarget.z = this.nextGo == 2 ? 9 : 7;
+      }
+    }
+    else{
+      this.monster.position.copy(this.monster.position.clone().add(this.move(deltaTime)));
+    }
   }
 
 
@@ -472,7 +473,6 @@ export default class Monster {
         this.isMad = true;
         this.monsterSpeed = 5;
       }
-      console.log("chase");
       this.xzTarget = this.chase(camera);
     } else {
       // 가깝지 않을 경우
@@ -483,8 +483,7 @@ export default class Monster {
         this.isMad = false;
         this.monsterSpeed = 4;
       }
-      console.log("random");
-      // console.log(this.monster.position);
+
       this.xzTarget = this.randomMove(cube);
     }
     return this.xzTarget;
