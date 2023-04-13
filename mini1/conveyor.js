@@ -11,7 +11,7 @@ export default class Conveyor{
     currentPos6;
     bg;
 
-    constructor(x=-100,y=0){
+    constructor(x=-300,y=0){
         this.x = x;
         this.y = y;
         //좌표
@@ -23,7 +23,7 @@ export default class Conveyor{
         // this.conveyor = document.getElementById("cvbelt");
         this.speed = 5;
 
-        this.startX = 100;
+        this.startX = 50;
 
         this.theThing6 = document.querySelector("#cvbelt");
 

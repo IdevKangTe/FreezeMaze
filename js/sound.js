@@ -322,6 +322,10 @@ export default class Sound {
     if (this.isBGMPlaying) {
       return;
     }
+    if(this.isChasePlaying){
+      this.suspense.play();
+      this.isChasePlaying = false;
+    }
     this.monsterBGM.play();
     this.itemNotification.play();
     this.heartbeat.play();
@@ -336,6 +340,7 @@ export default class Sound {
     this.itemNotification.pause();
     this.monsterScream.pause();
     if(this.suspense.isPlaying){
+      this.isChasePlaying = true;
       this.suspense.pause();
     }
     this.isBGMPlaying = false;
