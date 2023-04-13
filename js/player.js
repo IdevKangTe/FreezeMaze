@@ -210,7 +210,6 @@ export default class Player {
           if(this.isMiniPosition){
             this.getDownRotateTarget();
             this.downLocationTarget = 0.3;
-
           }
           break;
         case 75:

@@ -68,7 +68,7 @@ export default class Game3 {
         this.#CorrectAudio = new Music("../sound/item/mini3/mini3_key_turning01.wav", 0.8);
         this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
 
-        // this.#isClear = null;
+        this.#isClear = null;
     }
 
 

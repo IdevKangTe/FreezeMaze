@@ -11,6 +11,7 @@ export default class Sound {
 
   itemNotification;
   escapeOpen;
+  miniBG;
 
   isBGMPlaying;
   suspensePause;
@@ -25,6 +26,8 @@ export default class Sound {
     this.monsterScream = this.initMonsterScream(player.listner);
     this.escapeOpen = this.initEscapeOpen(player.listner);
     this.miniClear = this.initMiniClear(player.listner);
+    this.miniBG = this.initMiniBG(player.listner);
+
 
     this.isBGMPlaying = false;
     this.suspensePause = false;
@@ -123,6 +126,7 @@ export default class Sound {
       'sound/game/escapedoor_open.wav',
       function (buffer) {
         audio.setBuffer(buffer);
+        audio.setLoop(false);
         audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
         audio.setRefDistance(0.5);
         audio.setDistanceModel('linear');
@@ -131,10 +135,10 @@ export default class Sound {
     return audio;
   }
 
-  initMiniClear(listner) {
+  initMiniBG(listner) {
     const audio = new THREE.PositionalAudio(listner);
     this.audioLoader.load(
-      'sound/item/mini-clear.wav',
+      'sound/item/mini3/bgm_basic.wav',
       function (buffer) {
         audio.setBuffer(buffer);
         audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
@@ -161,6 +165,7 @@ export default class Sound {
 
   loadItemSound(item) {
     item.add(this.itemNotification);
+    item.add(this.miniBG);
     return item;
   }
 
@@ -213,15 +218,24 @@ export default class Sound {
     }
   }
 
+  miniBGPlay(){
+    if(!this.miniBG.isPlaying){
+      this.miniBG.play();
+    }
+  }
+
+  miniBGPause(){
+    this.miniBG.pause();
+  }
+
   update(player, monster, item) {
-    // let camera = new THREE.Vector3();
-    // let item = new TH
     
     if (player.isMoving || player.isRotating) {
       this.footstepSoundPlay();
     } else {
       this.footstep.pause();
     }
+
     if (player.isRunning) {
       this.run();
     } else {
@@ -244,10 +258,10 @@ export default class Sound {
     this.monsterBGM.play();
     this.itemNotification.play();
     this.heartbeat.play();
-    this.isBGMPlaying = true;
     if(this.suspensePause){
       this.suspense.play();
     }
+    this.isBGMPlaying = true;
   }
 
   pause() {

@@ -163,15 +163,17 @@ function main() {
       if (!miniClear[idx]) {
         const game = eval(`new Game${idx * 1 + 1}()`);
         game.isClear = function (num) {
-          sound.miniClearPlay();
-          miniClear[num - 1] = true;
-          allMiniGameClear(num);
-          miniClearUpdate();
           isPause = false;
+          miniClear[num - 1] = true;
           prevTime = performance.now();
+          sound.miniBGPause();
+          sound.miniClearPlay();
+          miniClearUpdate();
+          allMiniGameClear(num);
           requestAnimationFrame(animate);
           main.focus();
         }
+        sound.miniBGPlay();
         game.run();
         return;
       };
