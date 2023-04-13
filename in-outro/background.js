@@ -1,6 +1,6 @@
 // inOutroCanvas의 UI중 두번째 (2/3)
 
-import Music from '../music.js';
+import Music from './music.js';
 
 export default
 class Background {
@@ -14,10 +14,10 @@ class Background {
 	#animimationName;
 	
 	// 밖에서 "Background객체.isGameover"의 t/f 조정하기
-	#isGameover
+	#isGameover;
 
 	constructor(w= window.innerWidth, h= window.innerHeight) {
-		this.#img = document.getElementById("background");
+		this.#img = document.getElementById("in-outro-background");
 		this.#w = w;
 		this.#h = h;
 		this.#x = 0;
@@ -38,7 +38,7 @@ class Background {
 	}
 
 	changeBackgroundImg(){
-		this.#img.src = "gameoverImg.jpg";
+		this.#img.src = "../img/in-outro/gameoverImg.jpg";
 	}
 	
 

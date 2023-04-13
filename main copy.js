@@ -26,30 +26,6 @@ export default function main() {
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  document.body.insertBefore(renderer.domElement, document.body.firstChild);
-
-  
-  const tutorial = new TutorialCanvas();
-  
-  tutorial.run();
-  tutorial.isClear = function () {
-    main.tabIndex = 1;
-    main.focus();
-    main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
-    main.addEventListener('keyup', onKeyUp, false);
-  
-    function onKeyDown(e) {
-      sound.musicPlay();
-      player.move(e);
-    }
-  
-    function onKeyUp(e) {
-      player.ctrlUp(e);
-    }
-  }
-  main.style.position = "relative";
-  main.style.zIndex = 0;
-
   window.onresize = resize.bind(this);
 
   function resize() {
@@ -61,6 +37,24 @@ export default function main() {
 
     renderer.setSize(main.width, main.height);
   };
+
+  document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+  main.tabIndex = 1;
+  main.focus();
+  main.style.position = "relative";
+  main.style.zIndex = 0;
+  main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
+  main.addEventListener('keyup', onKeyUp, false);
+
+  function onKeyDown(e) {
+    sound.musicPlay();
+    player.move(e);
+  }
+
+  function onKeyUp(e) {
+    player.ctrlUp(e);
+  }
 
   scene.fog = new THREE.Fog(0x000000, 0, 30);
 
@@ -139,8 +133,10 @@ export default function main() {
 
 
   const progress = document.getElementById('progress');
+  let doTutorial = false;
 
   let animate = function () {
+    resize();
     // 프레임 처리
     let now = performance.now();
 
@@ -162,6 +158,10 @@ export default function main() {
 
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);
+    playTutorial();
+    
+    if (!doTutorial) return;
+    
     if (!isPause) {
       sound.musicPlay();
       requestAnimationFrame(animate);
@@ -173,6 +173,18 @@ export default function main() {
   };
 
   animate();
+
+  function playTutorial() {
+    let tutorial = new TutorialCanvas();
+    tutorial.isClear = function () {
+      doTutorial = true;
+      prevTime = performance.now();
+      requestAnimationFrame(animate);
+      main.focus();
+      tutorial = null;
+    }
+    tutorial.run();
+  }
 
   // 미니게임 실행
   function playMiniGame() {

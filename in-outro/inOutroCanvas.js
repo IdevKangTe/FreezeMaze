@@ -10,7 +10,7 @@ import Logo from './logo.js';
 import Background from './background.js';
 
 export default 
-class inOutroCanvas {
+class InOutroCanvas {
 	#obj;
 	#ctx;
 	#width;
@@ -18,6 +18,7 @@ class inOutroCanvas {
 	#display;
 	#logo;
 	#background;
+	#bkImage;
 	#deltaTime;
 	#prevTime;
 	#now;
@@ -60,8 +61,8 @@ class inOutroCanvas {
 		this.#prevTime = this.#now;
 		// 프레임 시간 계산
 		
-		this.#bkImage.update(ctx);
-		this.#logo.update(ctx);
+		this.#bkImage.update(this.#ctx);
+		this.#logo.update(this.#ctx);
 		
 	   
 		// 메인에서 이 메서드를 requestAnimationFrame에 답아서 반복 호출 해주세요.

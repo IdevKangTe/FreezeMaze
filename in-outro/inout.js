@@ -1,6 +1,6 @@
 //inOutroCanvas가 메인으로 바뀌면서 얘는 필요 없습니다.
 
-import Logo from '../logo.js';
+import Logo from './logo.js';
 import Background from './background.js';
 
 let canvas = document.getElementById("in-outro");
