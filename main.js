@@ -165,6 +165,9 @@ function main() {
           isPause = false;
           miniClear[num - 1] = true;
           prevTime = performance.now();
+          if(idx==0){
+            sound.mini1BGPause();
+          }
           sound.miniBGPause();
           sound.miniClearPlay();
           miniClearUpdate();
@@ -172,6 +175,9 @@ function main() {
           requestAnimationFrame(animate);
           main.focus();
           game = null;
+        }
+        if(idx==0){
+          sound.mini1BGPlay();
         }
         sound.miniBGPlay();
         game.run();

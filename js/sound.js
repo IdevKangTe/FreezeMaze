@@ -11,6 +11,7 @@ export default class Sound {
 
   itemNotification;
   escapeOpen;
+  mini1BG;
   miniBG;
 
   isBGMPlaying;
@@ -27,7 +28,7 @@ export default class Sound {
     this.escapeOpen = this.initEscapeOpen(player.listner);
     this.miniClear = this.initMiniClear(player.listner);
     this.miniBG = this.initMiniBG(player.listner);
-
+    this.mini1BG = this.initMini1BG(player.listner);
 
     this.isBGMPlaying = false;
     this.suspensePause = false;
@@ -162,6 +163,21 @@ export default class Sound {
     return audio;
   }
 
+  initMini1BG(listner){
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/item/mini1/mini1-conveyorbelt-bgm.mp3',
+      function (buffer) {
+        audio.setBuffer(buffer);
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setLoop(true);
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
   loadPlayerSound(camera) {
     camera.add(this.footstep);
     camera.add(this.breath);
@@ -179,10 +195,9 @@ export default class Sound {
   loadItemSound(item) {
     item.add(this.itemNotification);
     item.add(this.miniBG);
+    item.add(this.mini1BG);
     return item;
   }
-
-
 
   run() {
     this.footstep.setVolume(1);
@@ -239,6 +254,16 @@ export default class Sound {
 
   miniBGPause(){
     this.miniBG.pause();
+  }
+
+  mini1BGPlay(){
+    if(!this.mini1BG.isPlaying){
+      this.mini1BG.play();
+    }
+  }
+
+  mini1BGPause(){
+    this.mini1BG.pause();
   }
 
   update(player, monster, item) {
