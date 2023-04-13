@@ -63,9 +63,7 @@ export default class Game1 {
 
         this.correct = new Audio("./sound/item/mini1/conveyor-Correct2.mp3");
         this.incorrect = new Audio("./sound/item/mini1/mini1-incorrect.mp3");
-        this.bg = new Audio("./sound/item/mini1/mini1-conveyorbelt-bgm.mp3");
     }
-
 
     draw() {
         this.ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
@@ -78,8 +76,6 @@ export default class Game1 {
             this.intro.draw(this.ctx);//스페이스 이미지가 나타난다
         }
     }
-
-
 
     run() {
         this.draw();
@@ -99,10 +95,6 @@ export default class Game1 {
         this.currentPos3 = this.pipe.currentPos3;
     }
 
-
-
-
-
     check(e) {
         let key = e.key;
         if (key == " ") { //스페이스
@@ -119,20 +111,6 @@ export default class Game1 {
             }
         }
     }
-
-
-
-
-
-
-
-    // music(){
-    //     this.bg.play();
-    //     console.log("gg");
-    //     //소리 안나오네
-    // }
-
-
 
     set isClear(callback) {
         this.#isClear = callback;
