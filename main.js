@@ -83,7 +83,7 @@ function main() {
   }
 
   const miniClear = [false, false, false]; // 미니게임 클리어 여부
-  const miniPosition = [[27, 15], [42, 44]];
+  const miniPosition = [[27, 15], [42, 44],[2000,2000]];
   let allMiniGameClearCheck = false;
   let gameClearCheck = false;
 
@@ -100,10 +100,11 @@ function main() {
   }
 
   function allMiniGameClear(num) {
+    item.miniPositionChange(miniPosition[num - 1]);
     if (miniClear[2] == false) {
-      item.miniPositionChange(miniPosition[num - 1]);
       return;
     }
+    
     sound.escapeOpenPlay();
     scene = map.deleteDoor(scene);
     scene = item.changeDoor(scene);
@@ -115,6 +116,8 @@ function main() {
   function gameClear() {
     document.getElementById('info').style.display = 'none';
     scene.fog = null;
+    sound.pause();
+    sound.quite();
     scene.remove(monster);
     scene.remove(item.mini);
     scene.remove(item.miniLight);
@@ -122,7 +125,6 @@ function main() {
     scene.remove(player.spotLight);
     scene.remove(enemy.monsterLight);
     light.intensity = 0.5;
-    sound.pause();
     scene = map.changeWallHeight(scene);
     player.gameClearAnimate();
     gameClearCheck = true;

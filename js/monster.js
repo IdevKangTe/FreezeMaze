@@ -18,6 +18,8 @@ export default class Monster {
 
   constructor(map) {
     this.map2D = map;
+    this.map2D[8][47] = 0;
+    console.log(this.map2D);
     this.monsterMesh = this.normalMaterial();
     const geometry = new THREE.SphereGeometry(0.5, 100, 100); //기본형태
     this.monster = new THREE.Mesh(geometry, this.monsterMesh);

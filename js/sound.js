@@ -261,7 +261,7 @@ export default class Sound {
   }
 
   miniBGPause(){
-    this.miniBG.stop();
+    this.miniBG.pause();
   }
 
   mini1BGPlay(){
@@ -271,11 +271,11 @@ export default class Sound {
   }
 
   mini1BGPause(){
-    this.mini1BG.stop();
+    this.mini1BG.pause();
   }
 
   itemNotificationPause(){
-    this.itemNotification.stop();
+    this.itemNotification.pause();
   }
 
   update(player, enemy, item, check) {
@@ -305,10 +305,13 @@ export default class Sound {
     }
 
     if(!check){
+      console.log('item');
       let itemDiff = item.mini.position.distanceTo(player.camera.position);
       this.itemNotification.setVolume(
         1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff
       );
+    } else {
+      this.itemNotification.setVolume(0);
     }
 
     let MonsterDiff = enemy.monster.position.distanceTo(player.camera.position);
@@ -336,5 +339,18 @@ export default class Sound {
       this.suspense.pause();
     }
     this.isBGMPlaying = false;
+  }
+
+  quite(){
+    this.footstep.setVolume(0);
+    this.breath.setVolume(0);
+    this.heartbeat.setVolume(0);
+    this.monsterBGM.setVolume(0);
+    this.suspense.setVolume(0);
+    this.monsterScream.setVolume(0);
+    this.itemNotification.setVolume(0);
+    this.escapeOpen.setVolume(0);
+    this.mini1BG.setVolume(0);
+    this.miniBG.setVolume(0);
   }
 }
