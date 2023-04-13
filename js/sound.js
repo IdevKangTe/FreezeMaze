@@ -51,7 +51,7 @@ export default class Sound {
     this.audioLoader.load('sound/player/breath.wav', function (buffer) {
       audio.setBuffer(buffer);
       audio.setLoop(false);
-      audio.setVolume(1); // 오디오 볼륨을 조절합니다.
+      audio.setVolume(1.7); // 오디오 볼륨을 조절합니다.
     });
     return audio;
   }
@@ -241,8 +241,8 @@ export default class Sound {
   notChase() {
     this.isChasePlaying = false;
     this.suspense.pause();
-    this.heartbeat.setVolume(1);
-    this.heartbeat.setPlaybackRate(1.5);
+    this.heartbeat.setVolume(0.5);
+    this.heartbeat.setPlaybackRate(1);
   }
 
   staminaout() {
