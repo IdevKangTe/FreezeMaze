@@ -210,8 +210,6 @@ export default class Sound {
   }
 
   chase() {
-    console.log('chase');
-    console.log(this.suspense.isPlaying);
     if(this.isChasePlaying){
       return;
     }
@@ -305,7 +303,6 @@ export default class Sound {
     }
 
     if(!check){
-      console.log('item');
       let itemDiff = item.mini.position.distanceTo(player.camera.position);
       this.itemNotification.setVolume(
         1 / itemDiff < 0.1 ? 0 : 1 / itemDiff > 0.8 ? 0.8 : 1 / itemDiff

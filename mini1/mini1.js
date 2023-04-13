@@ -19,6 +19,7 @@ export default class Game1 {
     currentPos3;
     correctPipe;
     #isClear;
+    #tid;
 
     // 음악
     correct;
@@ -60,6 +61,7 @@ export default class Game1 {
 
         this.#isClear = null;
         this.clearDelay = 50;
+        this.#tid = null;
 
         this.correct = new Audio("./sound/item/mini1/conveyor-Correct2.mp3");
         this.incorrect = new Audio("./sound/item/mini1/mini1-incorrect.mp3");
@@ -79,12 +81,13 @@ export default class Game1 {
 
     run() {
         this.draw();
-        requestAnimationFrame(() => this.run());
+        this.#tid = requestAnimationFrame(() => this.run());
         if (this.correctPipe) {
             this.clearDelay--;
             if (this.clearDelay != 0) return;
             this.#canvas.style.display = "none";
             this.#isClear(1);
+            cancelAnimationFrame(this.#tid);
         }
         this.conveyor.animation6();
         this.pipe.animation1();

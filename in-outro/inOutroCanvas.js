@@ -109,7 +109,6 @@ export default
 				this.#obj.style.display = "none";
 				this.#isDone();
 				clearInterval(this.#tid);
-				// console.log("count", this.#count);
 				break;
 			case "outro":
 

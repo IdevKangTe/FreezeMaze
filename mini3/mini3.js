@@ -89,13 +89,14 @@ export default class Game3 {
 		this.paint();
 		this.update();
 
-		requestAnimationFrame(() => this.run());
+		this.#tid = requestAnimationFrame(() => this.run());
 		this.#count = this.#quizAnswers.filter(bool => bool === true).length;
 		if (this.#count == 4) {
 			this.#clearDelay--;
 			if (this.#clearDelay != 0) return;
 			this.#canvas.style.display = "none";
 			this.#isClear(3);
+			cancelAnimationFrame(this.#tid);
 		}
 	}
 
