@@ -72,7 +72,7 @@ function main() {
   }
 
 
-  const miniClear = [false, false, false]; // 미니게임 클리어 여부
+  const miniClear = [true, true, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate() {
     if (miniClear[0]) {

@@ -97,11 +97,6 @@ export default class Game1 {
         this.pipe.animation4();
         this.pipe.animation5();
         this.currentPos3 = this.pipe.currentPos3;
-
-        this.canvas.addEventListener("mousedown", () => {
-            this.bg.volume = 1.0;
-            this.bg.play();
-        }) //클릭하면 컨베이어 소리 나옴
     }
 
 

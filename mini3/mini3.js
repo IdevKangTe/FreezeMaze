@@ -4,226 +4,225 @@ import Tile from "./tile.js";
 import Music from "./music.js";
 
 export default class Game3 {
-    #canvas;
-    #ctx;
-    #tile;
-    #keys;
-    #background;
+	#canvas;
+	#ctx;
+	#tile;
+	#keys;
+	#background;
 
-    // 마우스를 처음 클릭(이미지 내)한 x, y 지점
-    #startX;
-    #startY;
-    // 마우스 드래그 하더라도 같이 움직이는 마우스의 x, y 지점
-    #mouseX;
-    #mouseY;
+	// 마우스를 처음 클릭(이미지 내)한 x, y 지점
+	#startX;
+	#startY;
+	// 마우스 드래그 하더라도 같이 움직이는 마우스의 x, y 지점
+	#mouseX;
+	#mouseY;
 
-    #janglingAudio;
-    #CorrectAudio;
-    #wrongAudio;
+	#janglingAudio;
+	#CorrectAudio;
+	#wrongAudio;
 
-    #tid;
-    #currentClick;
-    #isClear;
-    #quizAnswers;
+	#tid;
+	#currentClick;
+	#isClear;
+	#quizAnswers;
 
-    constructor() {
-        this.#canvas = document.createElement("canvas");
-        document.body.append(this.#canvas);
+	constructor() {
+		this.#canvas = document.createElement("canvas");
+		document.body.append(this.#canvas);
 		this.#canvas.style.position = "absolute";
 		this.#canvas.style.top = 0;
 		this.#canvas.style.left = 0;
-        this.#canvas.width = window.innerWidth;
-        this.#canvas.height = window.innerHeight;
+		this.#canvas.width = window.innerWidth;
+		this.#canvas.height = window.innerHeight;
 
-        this.#ctx = this.#canvas.getContext("2d");
-        
-        this.#canvas.onmousedown = this.mouseDown.bind(this);
-        this.#canvas.onmousemove = this.mouseMove.bind(this);
-        this.#canvas.onmouseout = this.mouseOut.bind(this);
-        this.#canvas.onmouseup = this.mouseUp.bind(this);
-        this.#tid = null;
+		this.#ctx = this.#canvas.getContext("2d");
 
-        this.#background = new Background();
-        this.#tile = new Tile();
-        this.#keys = [];
-        this.#quizAnswers = [false, false, false, false];
+		this.#canvas.onmousedown = this.mouseDown.bind(this);
+		this.#canvas.onmousemove = this.mouseMove.bind(this);
+		this.#canvas.onmouseout = this.mouseOut.bind(this);
+		this.#canvas.onmouseup = this.mouseUp.bind(this);
+		this.#tid = null;
 
-        for(let i=0; i<11; i++){
-            let imageNumber = i+1;
-            this.#keys.push(new Key(`document.getElementById("${imageNumber}")`, imageNumber));
-        }
+		this.#background = new Background();
+		this.#tile = new Tile();
+		this.#keys = [];
+		this.#quizAnswers = [false, false, false, false];
 
-        // 마우스를 처음 클릭(이미지 내)한 x, y 지점
-        this.#startX = 0;
-        this.#startY = 0;
-        // 마우스 드래그 하더라도 같이 움직이는 마우스의 x, y 지점
-        this.#mouseX = 0;
-        this.#mouseY = 0;
-        // 클릭한 이미지 숫자(1~11) 저장
-        this.#currentClick = -99;
+		for (let i = 0; i < 11; i++) {
+			let imageNumber = i + 1;
+			this.#keys.push(new Key(`document.getElementById("${imageNumber}")`, imageNumber));
+		}
 
-        this.#janglingAudio = new Music("../sound/item/mini3/mini3_key_jangle.wav", 0.2);
-        this.#CorrectAudio = new Music("../sound/item/mini3/mini3_key_turning01.wav", 0.8);
-        this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
+		// 마우스를 처음 클릭(이미지 내)한 x, y 지점
+		this.#startX = 0;
+		this.#startY = 0;
+		// 마우스 드래그 하더라도 같이 움직이는 마우스의 x, y 지점
+		this.#mouseX = 0;
+		this.#mouseY = 0;
+		// 클릭한 이미지 숫자(1~11) 저장
+		this.#currentClick = -99;
 
-        this.#isClear = null;
-    }
+		this.#janglingAudio = new Music("../sound/item/mini3/mini3_key_jangle.wav", 0.2);
+		this.#CorrectAudio = new Music("../sound/item/mini3/mini3_key_turning01.wav", 0.8);
+		this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
+
+		this.#isClear = null;
+	}
 
 
-    update() {
-        let ctx = this.#ctx;
-        
-        this.#background.update(ctx);
-        for(let key of this.#keys) {
-            key.update(ctx);
-        }
-        this.#tile.update(ctx)
-    }
-    
-    run() {
-        this.paint();
-        this.update();
+	update() {
+		let ctx = this.#ctx;
 
-        requestAnimationFrame(() => this.run());
-        this.quizCheck();
-    }
+		this.#background.update(ctx);
+		for (let key of this.#keys) {
+			key.update(ctx);
+		}
+		this.#tile.update(ctx)
+	}
 
-    paint() {
-        let ctx = this.#ctx;
-        let background = this.#background;
-        let tile = this.#tile;
-        ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
-        background.draw(ctx);
+	run() {
+		this.paint();
+		this.update();
 
-        for(let key of this.#keys){
-            key.draw(ctx);            
-        }
+		requestAnimationFrame(() => this.run());
+		this.quizCheck();
+	}
 
-        tile.draw(ctx);
-    }
+	paint() {
+		let ctx = this.#ctx;
+		let background = this.#background;
+		let tile = this.#tile;
+		ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		background.draw(ctx);
 
-    mouseDown(e) {
-        this.#startX = Math.floor(e.clientX);
-        this.#startY = Math.floor(e.clientY);
+		for (let key of this.#keys) {
+			key.draw(ctx);
+		}
 
-        for(let key of this.#keys){
-            if(key.mouseOnImageCheck(this.#startX, this.#startY)){
-                this.#currentClick = key.keyId;
-                this.#janglingAudio.playMusic();
-                break;
-            }
-            
-        }
-    }
+		tile.draw(ctx);
+	}
 
-    mouseMove(e) {
-        this.#mouseX = parseInt(e.clientX);
-        this.#mouseY = parseInt(e.clientY);
+	mouseDown(e) {
+		this.#startX = Math.floor(e.clientX);
+		this.#startY = Math.floor(e.clientY);
 
-        for (let key of this.#keys) {
-            if (key.isDragging) {
-                key.mouseMoveHandler(this.#mouseX, this.#mouseY);
-                this.paint();
-            }
-        }
+		for (let key of this.#keys) {
+			if (key.mouseOnImageCheck(this.#startX, this.#startY)) {
+				this.#currentClick = key.keyId;
+				this.#janglingAudio.playMusic();
+				break;
+			}
 
-    }
+		}
+	}
 
-    mouseOut(e) {
-        for (let key of this.#keys) {
-            key.isDragging = false;
-        }
-    }
-    
+	mouseMove(e) {
+		this.#mouseX = parseInt(e.clientX);
+		this.#mouseY = parseInt(e.clientY);
 
-    mouseUp(e) {
-        
-        if(this.#currentClick == -99) 
-        return;
-        
-        if(this.answerPositionCheck(e.x, e.y) > 0){
-            let position = this.answerPositionCheck(e.x, e.y);
-            if(this.#currentClick == position) {
-                this.#keys[this.#currentClick-1].img = document.getElementById("answer");
-                this.#CorrectAudio.playMusic();
-               
-                switch (position) {
-                    case 1:
-                        this.#quizAnswers[0] = true;
-                        this.#janglingAudio.playMusic();
-                        this.#tile.isDiaCorrect = true;
-                        break;
-                    case 2:
-                        this.#quizAnswers[1] = true;
-                        this.#janglingAudio.playMusic();
-                        this.#tile.isCloCorrect = true;
-                        break;
-                    case 3:
-                        this.#quizAnswers[2] = true;
-                        this.#janglingAudio.playMusic();
-                        this.#tile.isSpadeCorrect = true;
-                        break;
-                    case 4:
-                        this.#quizAnswers[3] = true;
-                        this.#janglingAudio.playMusic();
-                        this.#tile.isHeartCorrect = true;
-                        break;
-                }
+		for (let key of this.#keys) {
+			if (key.isDragging) {
+				key.mouseMoveHandler(this.#mouseX, this.#mouseY);
+				this.paint();
+			}
+		}
 
-            } else {
-                this.#wrongAudio.playMusic();
-                this.#keys[this.#currentClick-1].resetPotion(this.#startX, this.#startY);
-            }
-        } 
-        
-        this.#keys[this.#currentClick-1].isDragging = false;
-        this.#currentClick = -99;
+	}
 
-    }
+	mouseOut(e) {
+		for (let key of this.#keys) {
+			key.isDragging = false;
+		}
+	}
 
-    quizCheck(){
-        
-        for(let answer of this.#quizAnswers) {
-            if(answer == false) 
-                return;
-        }
-        this.#canvas.style.display = "none";
-        this.#isClear(3);
-    }
-    
+	mouseUp(e) {
 
-    answerPositionCheck(x, y) {
-        if (x > window.innerWidth * 0.433 &&
-            x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
-            y > window.innerHeight * 0.235 &&
-            y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
-            //다이아
-            return 1;
-        } else if (x > window.innerWidth * 0.507 &&
-            x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
-            y > window.innerHeight * 0.235 &&
-            y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
-            //클로버
-            return 2;
-        } else if (x > window.innerWidth * 0.433 &&
-            x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
-            y > window.innerHeight * 0.372 &&
-            y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
-            //스페이드
-            return 3;
-        } else if (x > window.innerWidth * 0.507 &&
-            x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
-            y > window.innerHeight * 0.372 &&
-            y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
-            //하트
-            return 4;
-        } else {
-            return -99;
-        }
-    }
+		if (this.#currentClick == -99)
+			return;
 
-    set isClear(callback) {
-        this.#isClear = callback;
-    }
+		if (this.answerPositionCheck(e.x, e.y) > 0) {
+			let position = this.answerPositionCheck(e.x, e.y);
+			if (this.#currentClick == position) {
+				this.#keys[this.#currentClick - 1].img = document.getElementById("answer");
+				this.#CorrectAudio.playMusic();
+
+				switch (position) {
+					case 1:
+						this.#quizAnswers[0] = true;
+						this.#janglingAudio.playMusic();
+						this.#tile.isDiaCorrect = true;
+						break;
+					case 2:
+						this.#quizAnswers[1] = true;
+						this.#janglingAudio.playMusic();
+						this.#tile.isCloCorrect = true;
+						break;
+					case 3:
+						this.#quizAnswers[2] = true;
+						this.#janglingAudio.playMusic();
+						this.#tile.isSpadeCorrect = true;
+						break;
+					case 4:
+						this.#quizAnswers[3] = true;
+						this.#janglingAudio.playMusic();
+						this.#tile.isHeartCorrect = true;
+						break;
+				}
+
+			} else {
+				this.#wrongAudio.playMusic();
+				this.#keys[this.#currentClick - 1].resetPotion(this.#startX, this.#startY);
+			}
+		}
+
+		this.#keys[this.#currentClick - 1].isDragging = false;
+		this.#currentClick = -99;
+
+	}
+
+	quizCheck() {
+
+		for (let answer of this.#quizAnswers) {
+			if (answer == false)
+				return;
+		}
+		this.#canvas.style.display = "none";
+		this.#isClear(3);
+	}
+
+
+	answerPositionCheck(x, y) {
+		if (x > window.innerWidth * 0.433 &&
+			x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
+			y > window.innerHeight * 0.235 &&
+			y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
+			//다이아
+			return 1;
+		} else if (x > window.innerWidth * 0.507 &&
+			x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
+			y > window.innerHeight * 0.235 &&
+			y < window.innerHeight * 0.235 + window.innerHeight * 0.114) {
+			//클로버
+			return 2;
+		} else if (x > window.innerWidth * 0.433 &&
+			x < window.innerWidth * 0.433 + window.innerWidth * 0.061 &&
+			y > window.innerHeight * 0.372 &&
+			y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
+			//스페이드
+			return 3;
+		} else if (x > window.innerWidth * 0.507 &&
+			x < window.innerWidth * 0.507 + window.innerWidth * 0.061 &&
+			y > window.innerHeight * 0.372 &&
+			y < window.innerHeight * 0.372 + window.innerHeight * 0.114) {
+			//하트
+			return 4;
+		} else {
+			return -99;
+		}
+	}
+
+	set isClear(callback) {
+		this.#isClear = callback;
+	}
 
 }

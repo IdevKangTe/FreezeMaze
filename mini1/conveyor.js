@@ -29,8 +29,6 @@ export default class Conveyor{
 
         this.currentPos6 = 0;
 
-        this.bg = new Audio("./sound/mini3-conveyorbelt-bgm.mp3");
-
     }
 
     draw(ctx){
