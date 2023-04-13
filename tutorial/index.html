@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="tutorial.css" type="text/css" rel="stylesheet">
+    <!-- <link href="tutorial.css" type="text/css" rel="stylesheet"> -->
     <title>tutorial</title>
 
     <!-- <script type="importmap">
@@ -14,21 +14,33 @@
           }
         }
       </script> -->
-    <script type="module" src="tutorial.js" defer="defer"></script>
+    <script type="module" src="app.js" defer="defer"></script>
     <style >
+      .d-none{
+        display: none;
+      }
+
+      body{
+      background-color: #1f1f1f;
+      margin: 0 auto;
+      margin: 0;
+      padding: 0;
+      }
     </style>
 </head>
 <body>
 <div id="tutorial">
-    <canvas id="canvasTutorial"></canvas>
-    <div id="contentContainer">
-        <img class="keyBoard" id="keyControl" src="keyControl.png" height="120" width="120">
-        <img class="keyBoard" id="keySpace" src="keySpace.png" height="120" width="260">
-        <img class="keyBoard" id="keyArrowLeft" src="keyArrowLeft.png" height="120" width="120">
-        <img class="keyBoard" id="keyArrowDown" src="keyArrowDown.png" height="120" width="120"  >
-        <img class="keyBoard" id="keyArrowRight" src="keyArrowRight.png" height="120" width="120">
-        <img class="keyBoard" id="keyArrowUp" src="keyArrowUp.png" height="120" width="120">
-    </div>
+      <img class="d-none" id="ControlLeft" src="keyControlOpacity.png">
+      <img class="d-none" id="ArrowLeft" src="keyArrowLeftOpacity.png">
+      <img class="d-none" id="ArrowRight" src="keyArrowRightOpacity.png">
+      <img class="d-none" id="ArrowUp" src="keyArrowUpOpacity.png">
+
+      <img class="d-none" id="ControlLeftUsing" src="keyControl.png">
+      <img class="d-none" id="ArrowLeftUsing" src="keyArrowLeft.png">
+      <img class="d-none" id="ArrowRightUsing" src="keyArrowRight.png">
+      <img class="d-none" id="ArrowUpUsing" src="keyArrowUp.png">
+
+      <img class="d-none" id="UsedKey" src="used.png">
 </div>
 </body>
 </html>
