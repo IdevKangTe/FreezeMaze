@@ -24,7 +24,6 @@ export default class Game1 {
         this.#canvas = document.createElement("canvas");
         document.body.append(this.#canvas);
         //캔버스 크기 설정
-        console.log("inner", window.innerWidth);
         this.#canvas.width = window.innerWidth/3;
         this.#canvas.height = window.innerHeight;
         
@@ -39,7 +38,6 @@ export default class Game1 {
         this.#canvas.style.left = 0;
         this.#canvas.style.left = window.innerWidth/3+"px";
         
-
         this.ctx = this.#canvas.getContext("2d");
 
         this.#canvas.onkeydown = this.check.bind(this);
@@ -82,7 +80,6 @@ export default class Game1 {
 
     run() {
         this.draw();
-        console.log("??");
         requestAnimationFrame(() => this.run());
         if (this.correctPipe) {
             this.clearDelay--;

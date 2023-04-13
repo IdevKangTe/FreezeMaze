@@ -101,8 +101,6 @@ export default class Game2 {
 		this.#bundle.draw(this.#ctx);
 	}
 
-	// startPainting()
-
 	mouseUpHandler(e) {
 		this.#isPainting = false;
 		const side = this.#bundle.setSide(e.x, e.y);
