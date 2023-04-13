@@ -213,7 +213,7 @@ export default class Player {
           }
           break;
         case 75:
-          this.GameClearAnimate();
+          this.gameClearAnimate();
       }
     }
   }

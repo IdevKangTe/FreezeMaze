@@ -48,7 +48,7 @@ function main() {
   let cube = [];
   let map2D = [];
   const map = new Map();
-  ({ scene, map3D: cube, map2D } = map.load(scene));
+  ({ scene, cube, map2D } = map.load(scene));
 
   const enemy = new Monster(map2D);
   ({ scene, monster } = enemy.load(scene));
@@ -64,7 +64,6 @@ function main() {
   function onKeyDown(e) {
     sound.musicPlay();
     player.move(e);
-    // scene = mini.changeDoor(scene);
   }
 
   function onKeyUp(e) {
@@ -72,7 +71,7 @@ function main() {
   }
 
 
-  const miniClear = [true, true, false]; // 미니게임 클리어 여부
+  const miniClear = [false, false, false]; // 미니게임 클리어 여부
 
   function miniClearUpdate() {
     if (miniClear[0]) {
@@ -94,6 +93,8 @@ function main() {
       return;
     }
     sound.escapeOpenPlay();
+    sound.itemNotificationPause();
+    scene = map.deleteDoor(scene);
     scene = item.changeDoor(scene);
     scene.remove(item.mini);
     scene.remove(item.miniLight);
@@ -110,6 +111,7 @@ function main() {
     scene.remove(enemy.monsterLight);
     light.intensity = 0.5;
     sound.pause();
+    scene = map.changeWallHeight(scene);
     player.gameClearAnimate();
   }
 
@@ -133,6 +135,10 @@ function main() {
 
     player.update(deltaTime, cube, mini);
     progress.value = player.stamina;
+
+    if(Math.abs(camera.position.x - 48) <0.3 && Math.abs(camera.position.z - 1) < 0.3){
+      gameClear();
+    }
 
     item.update();
 

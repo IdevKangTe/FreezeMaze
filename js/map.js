@@ -178,7 +178,7 @@ export default class Map {
     this.#map2D.forEach((z, zIdx) => {
       z.forEach((x, xIdx) => {
         if (x != 1) return;
-        const mesh = new THREE.Mesh(this.#outroGeometryW, this.#materialW);
+        const mesh = new THREE.Mesh(this.#geometryW, this.#materialW);
         this.#map3D.push(mesh);
 
         this.#map3D[idx].position.x = xIdx;
@@ -206,11 +206,21 @@ export default class Map {
 
   load(scene) {
     scene.add(this.#map);
-    return { scene, map3D: this.#map3D, map2D: this.#map2D };
+    return { scene, cube: this.#map3D, map2D: this.#map2D };
   }
 
-  // replace(scene) {
-  //   scene.
-  // }
+  deleteDoor(scene){
+    this.#map3D[242].position.y = -999;
+    // return {scene, cube: this.#map3D};
+    return scene;
+  }
+
+  changeWallHeight(scene){
+    for(let box of this.#map3D){
+      box.geometry = this.#outroGeometryW;
+    }
+    return scene;
+  }
+
 
 }

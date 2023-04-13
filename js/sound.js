@@ -266,6 +266,10 @@ export default class Sound {
     this.mini1BG.pause();
   }
 
+  itemNotificationPause(){
+    this.itemNotification.pause();
+  }
+
   update(player, monster, item) {
     
     if (player.isMoving || player.isRotating) {
