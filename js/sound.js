@@ -126,7 +126,20 @@ export default class Sound {
       'sound/game/escapedoor_open.wav',
       function (buffer) {
         audio.setBuffer(buffer);
-        audio.setLoop(false);
+        audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
+        audio.setRefDistance(0.5);
+        audio.setDistanceModel('linear');
+      }
+    );
+    return audio;
+  }
+
+  initMiniClear(listner){
+    const audio = new THREE.PositionalAudio(listner);
+    this.audioLoader.load(
+      'sound/item/mini-clear.wav',
+      function (buffer) {
+        audio.setBuffer(buffer);
         audio.setVolume(0.5); // 오디오 볼륨을 조절합니다.
         audio.setRefDistance(0.5);
         audio.setDistanceModel('linear');
