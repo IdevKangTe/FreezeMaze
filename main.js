@@ -89,9 +89,10 @@ export default function main() {
   ({ scene, monster } = enemy.load(scene));
   monster = sound.loadMonsterSound(monster);
   let isGameOver = false;
-  monster.isCatch = function() {
+  enemy.isCatch = function() {
     isGameOver = true;
-  };
+    isPause = true;
+  }.bind(this);
 
   const item = new Item();
   ({ scene, mini } = item.load(scene));
@@ -153,6 +154,7 @@ export default function main() {
   let prevTime = 0;
 
   const progress = document.getElementById('progress');
+  let tid = null;
 
   let animate = function () {
     // 프레임 처리
@@ -172,7 +174,7 @@ export default function main() {
 
     item.update();
 
-    if (!player.isLookDown) {
+    if (!player.isLookDown && !isGameOver) {
       enemy.update(camera, deltaTime, cube);
     }
 
@@ -184,7 +186,7 @@ export default function main() {
     renderer.render(scene, camera);
     if (!isPause && camera.position.y < 67) {
       sound.musicPlay();
-      requestAnimationFrame(animate);
+      tid = requestAnimationFrame(animate);
     }
     else {
       sound.pause();
@@ -197,9 +199,11 @@ export default function main() {
   // 미니게임 실행
   function playMiniGame() {
     if (isGameOver) {
+      console.log('gameover');
       const gameOver = new InOutroCanvas();
       gameOver.mode("gameover");
       gameOver.run();
+      cancelAnimationFrame(tid);
       return;
     }
 
