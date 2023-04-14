@@ -67,7 +67,8 @@ export default class Game3 {
 
 		this.#janglingAudio = new Music("../sound/item/mini3/mini3_key_jangle.wav", 0.2);
 		this.#CorrectAudio = new Music("../sound/item/mini3/mini3_key_turning01.wav", 0.8);
-		this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
+		this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_incorrect.wav");
+		// this.#wrongAudio = new Music("../sound/item/mini3/mini3_key_putdown.wav");
 
 		this.#isClear = null;
 		this.#count = 0;

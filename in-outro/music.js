@@ -14,5 +14,12 @@ class Music{
         this.#audio.play();
     }
 
+    stopMusic() {
+        this.#audio.pause();
+    }
+
+    volumeDown() {
+        this.#audio.volume -= 0.1;
+    }
 
 }

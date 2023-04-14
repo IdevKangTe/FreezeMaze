@@ -52,7 +52,7 @@ export default
 		this.#now = 0;
 		this.#tid = null;
 
-		this.#introDelay = 150;
+		this.#introDelay = 200;
 		this.#outroDelay = 150;
 		this.#mode = null;
 
@@ -105,7 +105,8 @@ export default
 				if (this.#introDelay == 0) {
 					this.#logo.playIntro();
 				}
-				if (this.#count < 350) return;
+				if (this.#count < 603) return;
+				this.#background.stopIntroMusic();
 				this.#obj.style.display = "none";
 				this.#isDone();
 				clearInterval(this.#tid);

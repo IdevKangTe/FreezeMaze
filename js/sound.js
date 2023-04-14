@@ -30,7 +30,7 @@ export default class Sound {
     this.miniClear = this.initMiniClear(player.listner);
     this.miniBG = this.initMiniBG(player.listner);
     this.mini1BG = this.initMini1BG(player.listner);
-    this.mini2BG = this.initMini1BG(player.listner);
+    this.mini2BG = this.initMini2BG(player.listner);
 
     this.isBGMPlaying = false;
     this.isChasePlaying = false;
@@ -180,7 +180,7 @@ export default class Sound {
     return audio;
   }
 
-  initMini1BG(listner){
+  initMini2BG(listner){
     const audio = new THREE.PositionalAudio(listner);
     this.audioLoader.load(
       'sound/item/mini2/mini2_electric_base.wav',

@@ -43,6 +43,7 @@ export default function main() {
     main.addEventListener('keyup', onKeyUp, false);
     info.style.display = "block";
   }
+
   function onKeyDown(e) {
     sound.musicPlay();
     player.move(e);
@@ -51,6 +52,7 @@ export default function main() {
   function onKeyUp(e) {
     player.ctrlUp(e);
   }
+  
   main.style.position = "relative";
   main.style.zIndex = 0;
 
@@ -184,7 +186,7 @@ export default function main() {
 
     // 랜더링을 수행합니다.
     renderer.render(scene, camera);
-    if (!isPause && camera.position.y < 67) {
+    if (!isPause && camera.position.y < 60) {
       sound.musicPlay();
       tid = requestAnimationFrame(animate);
     }
@@ -225,16 +227,16 @@ export default function main() {
           if (idx == 0) {
             sound.mini1BGPause();
           }
-          if(idx == 1){
+          if (idx == 1){
             sound.mini2BGPause();
           }
           sound.miniBGPause();
           sound.miniClearPlay();
-          miniClearUpdate();
           allMiniGameClear(num);
           requestAnimationFrame(animate);
           main.focus();
           info.style.display = "block";
+          miniClearUpdate();
           game = null;
         }
         if (idx == 0) {
