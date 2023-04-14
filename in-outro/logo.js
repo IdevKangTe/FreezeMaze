@@ -129,6 +129,7 @@ export default
 
         if (!this.#isOutroMusicPlay) {
             this.#musicOutro.playMusic();
+            this.#musicOutro.volumeDown();
             this.#isOutroMusicPlay = true;
         }
 

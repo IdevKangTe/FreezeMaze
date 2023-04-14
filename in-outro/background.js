@@ -76,15 +76,22 @@ export default
 	}
 
 	playIntroMusic() {
-		this.#isIntroMusicPlay = true;
+		this.#musicIntro.playMusic();
+		// this.#isIntroMusicPlay = this.#isIntroMusicPlay == true ? false : true;
+	}
+
+	stopIntroMusic() {
+		this.#musicIntro.stopMusic();
 	}
 
 	update(ctx) {
 
-		if (!this.#isIntroMusicPlay) {
-			this.#musicIntro.playMusic();
-			this.#isIntroMusicPlay = true;
-		}
+		// if (this.#isIntroMusicPlay) {
+		// 	this.#musicIntro.playMusic();
+		// }
+		// else {
+		// 	this.#musicIntro.stopMusic();
+		// }
 
 		if (this.#opacity < 1) {
 			this.#opacity += this.#opacityStep;
