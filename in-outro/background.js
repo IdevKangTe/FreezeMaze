@@ -36,6 +36,13 @@ export default
 		this.#isGameover = false;
 	}
 
+	resize() {
+		this.#x = 0;
+		this.#y = 0;
+		this.#w = window.innerWidth;
+		this.#h = window.innerHeight;
+	}
+
 	get img() {
 		return this.#img;
 	}
@@ -85,7 +92,7 @@ export default
 	}
 
 	update(ctx) {
-
+		this.resize();
 		// if (this.#isIntroMusicPlay) {
 		// 	this.#musicIntro.playMusic();
 		// }

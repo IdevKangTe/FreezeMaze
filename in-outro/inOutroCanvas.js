@@ -58,6 +58,16 @@ export default
 
 		this.#isDone = null;
 		this.#count = 0;
+
+		window.onresize = this.resize.bind(this);
+	}
+
+	resize() {
+		this.#obj.width = window.innerWidth;
+		this.#obj.height = window.innerHeight;
+
+		this.#background.resize();
+		this.#logo.resize();
 	}
 
 	get ctx() {
@@ -67,12 +77,14 @@ export default
 	run() {
 		// 프레임 처리
 		this.#now = performance.now();
-
+		
 		this.#deltaTime = (this.#now - this.#prevTime) / 1000; // 이전 프레임과 현재 프레임의 시간 간격을 초 단위로 계산
 		this.#prevTime = this.#now;
 		// 프레임 시간 계산
-
+		
 		this.#tid = setInterval(() => {
+			this.resize();
+			this.paint();
 			this.update();
 		}, 17);
 
@@ -85,6 +97,7 @@ export default
 	paint() {
 		let ctx = this.#ctx;
 		let logo = this.#logo;
+		this.#background.draw(ctx);
 	}
 
 	//호출 시 모드를 바꾸고 run을 하면 됩니다.

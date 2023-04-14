@@ -60,9 +60,13 @@ export default
 
         this.#background = new Background();
         this.#musicOutro = new Music("../sound/game/in-outro/outro.mp3", 8);
+    }
 
-
-
+    resize() {
+        this.#x = window.innerWidth / 2 - this.#widthLogo / 2;
+        this.#y = window.innerHeight / 2 - this.#heightLogo / 2;
+        this.#xZe = this.#x + 307;
+        this.#yZe = this.#y + 17;
     }
 
     get img() {
