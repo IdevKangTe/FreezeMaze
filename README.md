@@ -1,7 +1,7 @@
 <div align=center>
-  <img width="30%" src="https://github.com/cst52o/Gookie/assets/126298725/7c18a4fc-4f0b-457f-bd6f-64225d2a44a5"/>
+  <img width="70%" src="https://github.com/cst52o/Gookie/assets/126298725/449c6c74-033e-49bb-b941-a28f9a1a7564"/>
   <h1>Freeze Maze</h1>
-  <h2><a href="https://github.com/IdevKangTe/FreezeMaze.git">Freeze Maze 링크</a></h2>
+  <h2><a href="https://idevkangte.github.io/FreezeMaze/">Freeze Maze 링크</a></h2>
 <h3>리얼한 공포 테마의 1인칭 시점 3D 탈출 게임</h3>
 </div>
 
@@ -58,64 +58,157 @@
 
 ## 주요 기능 소개
 
-### 메인 화면
-고용노동부 데이터를 이용한 직종 동향 조회 기능, 사용자 맞춤 추천 서비스
+### 3D 맵
+Three.js를 활용한 3D 맵 구현
+
+
+
 <div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/6f0d72a8-c8fa-44e6-8770-012f8b8242a7"/>  
+<img width="30%" src="https://github.com/cst52o/Gookie/assets/126298725/14677589-610f-49f9-9c99-c81b4d67ccbe"/>  
+<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/0be4ff63-cfd8-4c99-bd6f-8900083f3240"/>  
 </div>
 
-### 회원 서비스 시스템
-카카오톡, 네이버, 구글 로그인 API를 이용한 회원 서비스 시스템
+### 몬스터 추적 로직
+BPS 알고리즘을 이용한 몬스터의 미로 추적 로직 구현
+
+<details>
+<summary>몬스터 로직 코드</summary>
+<div markdown="1">       
+
+````
+  chase(camera) {
+
+    let dz = [-1, 1, 0, 0]; // 상하좌우 z축 변화
+    let dx = [0, 0, -1, 1];
+
+    let cameraRound = camera.position.round();
+    let monsterRound = this.monster.position.round();
+
+    let playerZ = cameraRound.z;
+    let playerX = cameraRound.x;
+    let monsterZ = monsterRound.z;
+    let monsterX = monsterRound.x;
+
+    if (playerZ >= 49) playerZ = 48;
+    if (playerX >= 49) playerZ = 48;
+    if (monsterZ >= 49) monsterZ = 48;
+    if (monsterX >= 49) monsterX = 48;
+
+    let vis = JSON.parse(JSON.stringify(this.map2D));
+    vis[playerZ][playerX] = 0; // 몬스터 -> 사람 까지의 방문 여부를 표기하기 위해서 사람 좌표 0으로 셋팅
+    vis[monsterZ][monsterX] = 1;
+
+    let queue = [[monsterZ, monsterX]]; // 큐에 몬스터 좌표 넣어줌
+    let direction = JSON.parse(JSON.stringify(vis));
+
+    while (queue.length > 0) {
+      // 큐가 빌 때까지 while문 돌린다.
+      let [nowZ, nowX] = queue.shift(); // 큐의 맨 앞에값 꺼냄
+      if (nowZ == playerZ && nowX == playerX) {
+        // 탐색하는 좌표가 플레이어의 좌표라면 while문 탈출
+        break;
+      }
+      // 상하좌우
+      for (let k = 0; k < 4; k++) {
+        // for문으로 상하좌우 탐색
+        let d = '';
+        let nz = nowZ + dz[k]; // 다음으로 이동할 곳의 x좌표
+        let nx = nowX + dx[k]; // 다음으로 이동할 곳의 y좌표
+        switch (k) {
+          case 0:
+            d = 'U';
+            break;
+          case 1:
+            d = 'D';
+            break;
+          case 2:
+            d = 'L';
+            break;
+          case 3:
+            d = 'R';
+            break;
+        }
+
+        if (nz < 0 || nz > 49 || nx < 0 || nx > 49) continue; // 범위를 벗어나는 경우
+        if (vis[nz][nx] === 1) continue; // 벽이면 continue
+        if (vis[nz][nx] === 0) {
+          // 아직 방문하지 않은 곳이라면
+          vis[nz][nx] = vis[nowZ][nowX] + 1; // 이전 방문까지 걸린 거리 +1
+          direction[nz][nx] = d;
+          queue.push([nz, nx]); // 다음 탐색을 위해 큐에 push
+        }
+      }
+    }
+
+    let chaseD = [[playerZ, playerX, direction[playerZ][playerX]]]; // 역추적
+
+    let chaseCount = 0;
+
+    
+    while (true) {
+      let preDirection =
+        direction[chaseD[chaseCount][0]][chaseD[chaseCount][1]]; // 현재좌표가 상하좌우 중 어디서 왔는지 표기
+
+      let preZ = chaseD[chaseCount][0]; // 마지막으로 추적하고 있는 곳의 x좌표
+      let preX = chaseD[chaseCount][1]; // 마지막으로 추적하고 있는 곳의 x좌표
+
+      if (preZ == monsterZ && preX == monsterX) {
+        // 추적하는 곳이 몬스터 좌표면 while문 탈출
+        break;
+      }
+      // 왼오위아래 상하좌우
+      let nextDirection;
+      let monsterDirection = '';
+
+      switch (preDirection) {
+        case 'U':
+          nextDirection = 1;
+          monsterDirection = 'D';
+          break;
+        case 'D':
+          nextDirection = 0;
+          monsterDirection = 'U';
+          break;
+        case 'L':
+          nextDirection = 3;
+          monsterDirection = 'R';
+          break;
+        case 'R':
+          nextDirection = 2;
+          monsterDirection = 'L';
+          break;
+      }
+
+      chaseD.push([
+        preZ + dz[nextDirection],
+        preX + dx[nextDirection],
+        monsterDirection,
+      ]); // 바로이전 칸의 위치좌표 추가
+      chaseCount += 1;
+    }
+}
+````
+
+</div>
+</details>
+
+
+### 첫번째 미니 게임
+파이프 맞추기 타이밍 게임
 <div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/881ec731-6f9e-4d95-b23b-547b3c1325e1"/>
+  <img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/0f974f65-cce6-4797-ba13-89dc705d47d3"/>
 </div>
 
-### 훈련과정 시스템
-HRD-OpenAPI를 이용한 40만개의 DB 훈련과정 시스템
+### 두번째 미니 게임
+색깔 전선 연결 그리기 게임
 <div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/a83c5fa6-0e4a-4ecf-94da-bc0aa4cc561d"/>
+<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/1e8a5aad-047e-4dd7-b8f3-1828fa5e3c8e"/>
 </div>
 
-### 자유게시판 시스템
-카카오톡 공유 api, 북마크, 좋아요, 인기글 시스템
+### 세번째 미니 게임
+열쇠 모양 맞추기 게임
 <div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/356c1d65-bd3c-491c-8dcc-795a5a5ae474"/>
-</div>
-
-### 후기게시판 시스템
-유저의 수료 완료 여부에 따라 글쓰기 권한을 따로 부여, 북마크 시스템
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/4c9fd88a-d632-46ed-bc74-c44a58340a13"/>
-</div>
-
-### 쿠키챗 시스템
-WebSocket과 Stomp를 이용한 실시간 1대1 채팅 시스템
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/45e2c759-af43-4fb9-82b9-bd264c60c738"/>
-</div>
-
-### 포인트 시스템
-카카오페이 API, 토스 API 를 적용한 포인트 결제 시스템
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/57edb2b9-c5c4-4e2e-92e7-8ae0b4254bb0"/>
-</div>
-
-### 신고 시스템
-모듈화한 코드를 이용해 모든 페이지에서 온 데이터를 처리하는 신고 시스템
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/392a91aa-5c08-444e-ad71-f3502b6ca14a"/>
-</div>
-
-### 관리자 시스템
-사이트의 데이터를 추출, 가공해 보여주는 대시보드와 회원, 배너, 게시글, 신고 관리 시스템
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/3a7286db-afdd-4c0f-91d6-2ab022e7c981"/>
-</div>
-
-### 서버 환경 구축
-우분투 20.04, ApacheTomcat과 서버용 미니 PC를 이용한 서버 구축
-<div align=center>
-<img width="60%" src="https://github.com/cst52o/Gookie/assets/126298725/3fafa340-5754-431c-b750-e2bb282d913c"/>
+<img width="80%" src="https://github.com/cst52o/Gookie/assets/126298725/c26a6fd6-3626-4a3f-9a32-d445276d4df3"/>
 </div>
 
 <br>
@@ -126,11 +219,10 @@ WebSocket과 Stomp를 이용한 실시간 1대1 채팅 시스템
 
 ## 팀원 소개
 
-|<img src="https://github.com/cst52o/Gookie/assets/126298725/54391f3d-179b-4324-ac3d-654c4df7b620"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/9b58820b-b51a-4f50-ba5d-a21d49e07b0c"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/0f6497e4-c374-466f-848b-f291dfd88928"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/6ba09d7b-0ff1-44d0-8cd7-8defb3e71c35"/>|
-|:---:|:---:|:---:|:---:|
-|**전희재**|**강윤지**|**오미경**|**최혜인**|
-|팀장<br>수강 정보 등록<br>훈련과정 시스템<br>자유게시판 시스템<br>후기게시판 시스템<br>서버환경<br>파일 저장, 배포, 삭제 시스템<br>고용노동부 데이터 분석|포인트 시스템<br>관리자 시스템<br>우분투 배포 서버 구축<br>도메인 설정<br>서버환경<br>파일 저장, 배포, 삭제 시스템|쿠키챗 시스템<br>신고 시스템<br>우분투 배포 서버 구축<br>도메인 설정<br>페이징 기능 모듈화<br>공통 CSS 레이아웃 모듈화|회원 관리 시스템<br>이메일 검증<br>고객센터 시스템<br>프로필 모달창 모듈화|
-|포트폴리오 링크|포트폴리오 링크|포트폴리오 링크|포트폴리오 링크|
+|<img src="https://github.com/cst52o/Gookie/assets/126298725/605307f2-2768-4322-98df-032ab50c4ab7"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/34671ddd-f6a1-4f4d-95f8-5ab225131c8b"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/62cc7bd1-0d8a-4da8-9962-110e7d57e611"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/db950b9e-0b8f-4095-95d1-94f8e1893749"/>|<img src="https://github.com/cst52o/Gookie/assets/126298725/33500b71-38a7-48fd-993d-623f4423af40"/>|
+|:---:|:---:|:---:|:---:|:---:|
+|**전희재**|**강윤지**|**오미경**|**최혜인**|**김미리**|
+|Player<br>3D 애니메이션<br>3D 파일 구조화<br>사운드<br>디자인|Monster<br>몬스터 랜덤 이동<br>몬스터 추격 로직|Map<br>전선 게임<br>2D 파일 구조화<br>전체 파일 머지<br>2D 3D 캔버스 전환|Effect<br>열쇠 게임<br>파이프 게임<br>인아웃트로|Mini Game<br>전선 게임<br>파이프 게임|
 
 <br>
 
@@ -140,12 +232,4 @@ WebSocket과 Stomp를 이용한 실시간 1대1 채팅 시스템
 
 ## 외부 리소스
 
-[3dicons - Open source 3D icon library](https://www.figma.com/community/file/1030350068466019692)
-
-[Wobbly Ratings](https://codepen.io/daledesilva/pen/ExONzVE)
-
-[BootStrap - SB Admin 2](https://getbootstrap.com/)
-
-[sockjs-client](https://github.com/sockjs/sockjs-client)
-
-[STOMP.js](https://github.com/stomp-js/stompjs)
+[3D Textures](https://3dtextures.me/)
