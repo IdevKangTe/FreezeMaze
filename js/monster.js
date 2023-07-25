@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 // export { initMonster, initMonsterLight };
 export default class Monster {
   monster;
@@ -68,7 +68,7 @@ export default class Monster {
   madMaterial() {
     const textureLoader = new THREE.TextureLoader();
     const basicTexture = textureLoader.load(
-      'texture/monster_mad/Alien_Muscle_001_COLOR.jpg',
+      "texture/monster_mad/Alien_Muscle_001_COLOR.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -80,7 +80,7 @@ export default class Monster {
     );
 
     const normalTexture = textureLoader.load(
-      'texture/monster_mad/Alien_Muscle_001_NORM.jpg',
+      "texture/monster_mad/Alien_Muscle_001_NORM.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -92,7 +92,7 @@ export default class Monster {
     );
 
     const heightTexture = textureLoader.load(
-      'texture/monster_mad/Alien_Muscle_001_DISP.png',
+      "texture/monster_mad/Alien_Muscle_001_DISP.png",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -104,7 +104,7 @@ export default class Monster {
     );
 
     const roughnessTexture = textureLoader.load(
-      'texture/monster_mad/Alien_Muscle_001_SPEC.jpg',
+      "texture/monster_mad/Alien_Muscle_001_SPEC.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -116,7 +116,7 @@ export default class Monster {
     );
 
     const occTexture = textureLoader.load(
-      'texture/monster_mad/Alien_Muscle_001_OCC.jpg',
+      "texture/monster_mad/Alien_Muscle_001_OCC.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -152,13 +152,10 @@ export default class Monster {
     this.monsterLight.color.set(0x99ffcc);
   }
 
-
-
-
   normalMaterial() {
     const textureLoader = new THREE.TextureLoader();
     const basicTexture = textureLoader.load(
-      'texture/monster/Abstract_Organic_002_COLOR.jpg',
+      "texture/monster/Abstract_Organic_002_COLOR.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -170,7 +167,7 @@ export default class Monster {
     );
 
     const normalTexture = textureLoader.load(
-      'texture/monster/Abstract_Organic_002_NORM.jpg',
+      "texture/monster/Abstract_Organic_002_NORM.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -182,7 +179,7 @@ export default class Monster {
     );
 
     const heightTexture = textureLoader.load(
-      'texture/monster/Abstract_Organic_002_DISP.png',
+      "texture/monster/Abstract_Organic_002_DISP.png",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -194,7 +191,7 @@ export default class Monster {
     );
 
     const roughnessTexture = textureLoader.load(
-      'texture/monster/Abstract_Organic_002_ROUGH.jpg',
+      "texture/monster/Abstract_Organic_002_ROUGH.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -206,7 +203,7 @@ export default class Monster {
     );
 
     const occTexture = textureLoader.load(
-      'texture/monster/Abstract_Organic_002_OCC.jpg',
+      "texture/monster/Abstract_Organic_002_OCC.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -252,12 +249,12 @@ export default class Monster {
         this.xzTarget.x = 46;
         this.xzTarget.z = this.nextGo == 2 ? 9 : 7;
       }
-    }
-    else {
-      this.monster.position.copy(this.monster.position.clone().add(this.move(deltaTime)));
+    } else {
+      this.monster.position.copy(
+        this.monster.position.clone().add(this.move(deltaTime))
+      );
     }
   }
-
 
   monsterCollison(cube) {
     let collsionDirection = [false, false, false, false]; // 왼오위아래 중에  충돌 있는지 검사
@@ -301,7 +298,6 @@ export default class Monster {
   }
 
   chase(camera) {
-
     let dz = [-1, 1, 0, 0]; // 상하좌우 z축 변화
     let dx = [0, 0, -1, 1];
 
@@ -335,21 +331,21 @@ export default class Monster {
       // 상하좌우
       for (let k = 0; k < 4; k++) {
         // for문으로 상하좌우 탐색
-        let d = '';
+        let d = "";
         let nz = nowZ + dz[k]; // 다음으로 이동할 곳의 x좌표
         let nx = nowX + dx[k]; // 다음으로 이동할 곳의 y좌표
         switch (k) {
           case 0:
-            d = 'U';
+            d = "U";
             break;
           case 1:
-            d = 'D';
+            d = "D";
             break;
           case 2:
-            d = 'L';
+            d = "L";
             break;
           case 3:
-            d = 'R';
+            d = "R";
             break;
         }
 
@@ -381,24 +377,24 @@ export default class Monster {
       }
       // 왼오위아래 상하좌우
       let nextDirection;
-      let monsterDirection = '';
+      let monsterDirection = "";
 
       switch (preDirection) {
-        case 'U':
+        case "U":
           nextDirection = 1;
-          monsterDirection = 'D';
+          monsterDirection = "D";
           break;
-        case 'D':
+        case "D":
           nextDirection = 0;
-          monsterDirection = 'U';
+          monsterDirection = "U";
           break;
-        case 'L':
+        case "L":
           nextDirection = 3;
-          monsterDirection = 'R';
+          monsterDirection = "R";
           break;
-        case 'R':
+        case "R":
           nextDirection = 2;
-          monsterDirection = 'L';
+          monsterDirection = "L";
           break;
       }
 
@@ -421,16 +417,16 @@ export default class Monster {
     }
 
     switch (chaseD[1][2]) {
-      case 'L':
+      case "L":
         this.nextGo = 1; //1
         break;
-      case 'R':
+      case "R":
         this.nextGo = 0; //1
         break;
-      case 'U':
+      case "U":
         this.nextGo = 3; //2
         break;
-      case 'D':
+      case "D":
         this.nextGo = 2; // 3
         break;
     }
@@ -454,7 +450,7 @@ export default class Monster {
       }
     }
     switch (
-    notCollision.length // 충돌이 안난곳의 갯수
+      notCollision.length // 충돌이 안난곳의 갯수
     ) {
       case 3: // 3곳중에 랜덤으로 간다
         this.nextGo = notCollision[Math.floor(Math.random() * 3)];
@@ -482,7 +478,7 @@ export default class Monster {
   moving(cube, camera) {
     if (this.isNear(camera)) {
       // 가까울경우
-      console.log('chase');
+      console.log("chase");
       if (!this.isMad) {
         // 이전 값이 random 이었으면
         this.monster.material = this.madMaterial();
@@ -518,7 +514,7 @@ export default class Monster {
   movingCheck() {
     if (
       Math.abs(this.xzTarget.x - this.monster.position.x) +
-      Math.abs(this.xzTarget.z - this.monster.position.z) >
+        Math.abs(this.xzTarget.z - this.monster.position.z) >
       0.03
     ) {
       return true;

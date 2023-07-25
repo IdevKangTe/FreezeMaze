@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 export default class Item {
   textureLoader;
   mini;
@@ -42,7 +42,7 @@ export default class Item {
 
   initmini() {
     const basicTexture = this.textureLoader.load(
-      'texture/item/Sci_fi_Metal_Panel_004_basecolor.jpg',
+      "texture/item/Sci_fi_Metal_Panel_004_basecolor.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -54,7 +54,7 @@ export default class Item {
     );
 
     const normalTexture = this.textureLoader.load(
-      'texture/item/Sci_fi_Metal_Panel_004_normal.jpg',
+      "texture/item/Sci_fi_Metal_Panel_004_normal.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -66,7 +66,7 @@ export default class Item {
     );
 
     const heightTexture = this.textureLoader.load(
-      'texture/item/Sci_fi_Metal_Panel_004_height.png',
+      "texture/item/Sci_fi_Metal_Panel_004_height.png",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -78,7 +78,7 @@ export default class Item {
     );
 
     const roughnessTexture = this.textureLoader.load(
-      'texture/item/Sci_fi_Metal_Panel_004_roughness.jpg',
+      "texture/item/Sci_fi_Metal_Panel_004_roughness.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -90,7 +90,7 @@ export default class Item {
     );
 
     const metalTexture = this.textureLoader.load(
-      'texture/item/Sci_fi_Metal_Panel_004_metallic.jpg',
+      "texture/item/Sci_fi_Metal_Panel_004_metallic.jpg",
       (texture) => {
         texture.repeat.x = 3;
         texture.repeat.y = 3;
@@ -129,7 +129,7 @@ export default class Item {
 
   initDoorWall() {
     const basicTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_base.jpg',
+      "texture/door_wall/door_wall_base.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -141,7 +141,7 @@ export default class Item {
     );
 
     const normalTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_normal.jpg',
+      "texture/door_wall/door_wall_normal.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -153,7 +153,7 @@ export default class Item {
     );
 
     const heightTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_height.png',
+      "texture/door_wall/door_wall_height.png",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -165,7 +165,7 @@ export default class Item {
     );
 
     const roughnessTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_rough.jpg',
+      "texture/door_wall/door_wall_rough.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -177,7 +177,7 @@ export default class Item {
     );
 
     const metalTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_metallic.jpg',
+      "texture/door_wall/door_wall_metallic.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -189,7 +189,7 @@ export default class Item {
     );
 
     const occTexture = this.textureLoader.load(
-      'texture/door_wall/door_wall_occ.jpg',
+      "texture/door_wall/door_wall_occ.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 2;
@@ -220,7 +220,7 @@ export default class Item {
 
   initDoor() {
     const basicTexture = this.textureLoader.load(
-      'texture/door/door_base.jpg',
+      "texture/door/door_base.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -232,7 +232,7 @@ export default class Item {
     );
 
     const normalTexture = this.textureLoader.load(
-      'texture/door/door_normal.jpg',
+      "texture/door/door_normal.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -244,7 +244,7 @@ export default class Item {
     );
 
     const heightTexture = this.textureLoader.load(
-      'texture/door/door_height.png',
+      "texture/door/door_height.png",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -256,7 +256,7 @@ export default class Item {
     );
 
     const roughnessTexture = this.textureLoader.load(
-      'texture/door/door_rough.jpg',
+      "texture/door/door_rough.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -268,7 +268,7 @@ export default class Item {
     );
 
     const metalTexture = this.textureLoader.load(
-      'texture/door/door_metallic.jpg',
+      "texture/door/door_metallic.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -280,7 +280,7 @@ export default class Item {
     );
 
     const occTexture = this.textureLoader.load(
-      'texture/door/door_occ.jpg',
+      "texture/door/door_occ.jpg",
       (texture) => {
         texture.repeat.x = 1;
         texture.repeat.y = 3;
@@ -326,7 +326,7 @@ export default class Item {
     if (!arr) return;
     let x = arr[0];
     let z = arr[1];
-    
+
     this.mini.position.set(x, -0.47, z);
     this.miniLight.position.set(x, 4, z);
   }
@@ -334,5 +334,4 @@ export default class Item {
   update() {
     this.miniLight.rotation.y += 0.05;
   }
-
 }

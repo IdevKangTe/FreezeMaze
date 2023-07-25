@@ -1,17 +1,16 @@
-import * as THREE from 'three';
-import Map from './js/map.js';
-import Item from './js/item.js';
-import Sound from './js/sound.js';
-import Player from './js/player.js';
-import Monster from './js/monster.js';
-import Game1 from './mini1/mini1.js';
-import Game2 from './mini2/mini2.js';
-import Game3 from './mini3/mini3.js';
-import TutorialCanvas from './js/tutorialCanvas.js';
-import InOutroCanvas from './in-outro/inOutroCanvas.js';
+import * as THREE from "three";
+import Map from "./js/map.js";
+import Item from "./js/item.js";
+import Sound from "./js/sound.js";
+import Player from "./js/player.js";
+import Monster from "./js/monster.js";
+import Game1 from "./mini1/mini1.js";
+import Game2 from "./mini2/mini2.js";
+import Game3 from "./mini3/mini3.js";
+import TutorialCanvas from "./js/tutorialCanvas.js";
+import InOutroCanvas from "./in-outro/inOutroCanvas.js";
 
 export default function main() {
-
   // ==========================
   // 초기화 부분 시작 ( 이 부분은 문서에서 한번만 수행되면 됩니다 )
   // ==========================
@@ -19,7 +18,7 @@ export default function main() {
   let scene = new THREE.Scene();
   let camera, monster, mini;
 
-  const main = document.createElement('canvas');
+  const main = document.createElement("canvas");
   let renderer = new THREE.WebGLRenderer({
     canvas: main,
     antialias: true,
@@ -30,19 +29,19 @@ export default function main() {
 
   document.body.insertBefore(renderer.domElement, document.body.firstChild);
   const info = document.getElementById("info");
-  
+
   let tutorial = null;
-  
+
   tutorial = new TutorialCanvas();
-  
+
   tutorial.run();
   tutorial.isClear = function () {
     main.tabIndex = 1;
     main.focus();
-    main.addEventListener('keydown', onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
-    main.addEventListener('keyup', onKeyUp, false);
+    main.addEventListener("keydown", onKeyDown, false); // 키 다운 이벤트 실행시 moveSomting 함수실행
+    main.addEventListener("keyup", onKeyUp, false);
     info.style.display = "block";
-  }
+  };
 
   function onKeyDown(e) {
     sound.musicPlay();
@@ -52,7 +51,7 @@ export default function main() {
   function onKeyUp(e) {
     player.ctrlUp(e);
   }
-  
+
   main.style.position = "relative";
   main.style.zIndex = 0;
 
@@ -66,7 +65,7 @@ export default function main() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(main.width, main.height);
-  };
+  }
 
   scene.fog = new THREE.Fog(0x000000, 0, 30);
 
@@ -91,7 +90,7 @@ export default function main() {
   ({ scene, monster } = enemy.load(scene));
   monster = sound.loadMonsterSound(monster);
   let isGameOver = false;
-  enemy.isCatch = function() {
+  enemy.isCatch = function () {
     isGameOver = true;
     isPause = true;
   }.bind(this);
@@ -101,19 +100,23 @@ export default function main() {
   mini = sound.loadItemSound(mini);
 
   const miniClear = [false, false, false]; // 미니게임 클리어 여부
-  const miniPosition = [[27, 15], [42, 44], [2000, 2000]];
+  const miniPosition = [
+    [27, 15],
+    [42, 44],
+    [2000, 2000],
+  ];
   let allMiniGameClearCheck = false;
   let gameClearCheck = false;
 
   function miniClearUpdate() {
     if (miniClear[0]) {
-      document.getElementById('clear1').style.opacity = 1;
+      document.getElementById("clear1").style.opacity = 1;
     }
     if (miniClear[1]) {
-      document.getElementById('clear2').style.opacity = 1;
+      document.getElementById("clear2").style.opacity = 1;
     }
     if (miniClear[2]) {
-      document.getElementById('clear3').style.opacity = 1;
+      document.getElementById("clear3").style.opacity = 1;
     }
   }
 
@@ -122,7 +125,7 @@ export default function main() {
     if (miniClear[2] == false) {
       return;
     }
-    
+
     sound.escapeOpenPlay();
     scene = map.deleteDoor(scene);
     scene = item.changeDoor(scene);
@@ -132,7 +135,7 @@ export default function main() {
   }
 
   function gameClear() {
-    info.style.display = 'none';
+    info.style.display = "none";
     scene.fog = null;
     sound.pause();
     sound.quite();
@@ -155,7 +158,7 @@ export default function main() {
   let deltaTime = 0;
   let prevTime = 0;
 
-  const progress = document.getElementById('progress');
+  const progress = document.getElementById("progress");
   let tid = null;
 
   let animate = function () {
@@ -168,9 +171,12 @@ export default function main() {
     player.update(deltaTime, cube, mini);
     progress.value = player.stamina;
 
-    if(Math.abs(camera.position.x - 48) <0.3 && Math.abs(camera.position.z - 1) < 0.3){
-      main.removeEventListener('keydown', onKeyDown, false);
-      main.removeEventListener('keyup', onKeyUp, false);
+    if (
+      Math.abs(camera.position.x - 48) < 0.3 &&
+      Math.abs(camera.position.z - 1) < 0.3
+    ) {
+      main.removeEventListener("keydown", onKeyDown, false);
+      main.removeEventListener("keyup", onKeyUp, false);
       gameClear();
     }
 
@@ -180,7 +186,7 @@ export default function main() {
       enemy.update(camera, deltaTime, cube);
     }
 
-    if(!gameClearCheck){
+    if (!gameClearCheck) {
       sound.update(player, enemy, item, allMiniGameClearCheck);
     }
 
@@ -189,8 +195,7 @@ export default function main() {
     if (!isPause && camera.position.y < 60) {
       sound.musicPlay();
       tid = requestAnimationFrame(animate);
-    }
-    else {
+    } else {
       sound.pause();
       playMiniGame();
     }
@@ -202,7 +207,7 @@ export default function main() {
   function playMiniGame() {
     info.style.display = "none";
     if (isGameOver) {
-      console.log('gameover');
+      console.log("gameover");
       const gameOver = new InOutroCanvas();
       gameOver.mode("gameover");
       gameOver.run();
@@ -210,11 +215,11 @@ export default function main() {
       return;
     }
 
-    if (miniClear.filter(bool => bool === true).length == 3) {
+    if (miniClear.filter((bool) => bool === true).length == 3) {
       const outro = new InOutroCanvas();
-        outro.mode("outro");
-        outro.run();
-        return;
+      outro.mode("outro");
+      outro.run();
+      return;
     }
 
     for (let idx in miniClear) {
@@ -227,7 +232,7 @@ export default function main() {
           if (idx == 0) {
             sound.mini1BGPause();
           }
-          if (idx == 1){
+          if (idx == 1) {
             sound.mini2BGPause();
           }
           sound.miniBGPause();
@@ -238,7 +243,7 @@ export default function main() {
           info.style.display = "block";
           miniClearUpdate();
           game = null;
-        }
+        };
         if (idx == 0) {
           sound.mini1BGPlay();
         }

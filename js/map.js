@@ -3,7 +3,7 @@
  * 3D MAP 파일
  *
  */
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export default class Map {
   // 맵
@@ -78,10 +78,10 @@ export default class Map {
     this.initMap();
 
     this.#map = new THREE.Object3D();
-    this.#map.name = '맵';
+    this.#map.name = "맵";
     this.#floors = null;
     this.#walls = new THREE.Object3D();
-    this.#walls.name = '벽';
+    this.#walls.name = "벽";
 
     this.initFloor();
     this.initWall();
@@ -90,7 +90,7 @@ export default class Map {
   initMap() {
     // 문자열 전체(g)에서 숫자0~9가 아닌 것 삭제 (string -> array)
     const stringMap = this.#string.split(/\r|\t|\s*/g);
-    const numMap = stringMap.map(row => row *= 1);
+    const numMap = stringMap.map((row) => (row *= 1));
     let zMap = [];
     numMap.forEach((num, idx) => {
       zMap.push(num);
@@ -104,19 +104,19 @@ export default class Map {
   initFloor() {
     // 바닥
     const floorBasic = new THREE.TextureLoader().load(
-      'texture/floor/Floor_BaseColor.jpg',
+      "texture/floor/Floor_BaseColor.jpg",
       this.onLoad(100, 100, 1)
     );
     const floorNormal = new THREE.TextureLoader().load(
-      'texture/floor/Floor_Normal.jpg',
+      "texture/floor/Floor_Normal.jpg",
       this.onLoad(100, 100, 1)
     );
     const floorHeight = new THREE.TextureLoader().load(
-      'texture/floor/Floor_Height.png',
+      "texture/floor/Floor_Height.png",
       this.onLoad(100, 100, 1)
     );
     const floorRoughness = new THREE.TextureLoader().load(
-      'texture/floor/Floor_Roughness.jpg',
+      "texture/floor/Floor_Roughness.jpg",
       this.onLoad(100, 100, 1)
     );
 
@@ -131,7 +131,7 @@ export default class Map {
     });
 
     this.#floors = new THREE.Mesh(geometry, material);
-    this.#floors.name = '바닥';
+    this.#floors.name = "바닥";
     this.#floors.rotateX(-Math.PI / 2);
     this.#map.add(this.#floors);
   }
@@ -139,19 +139,19 @@ export default class Map {
   initWall() {
     // 벽
     const wallBasic = new THREE.TextureLoader().load(
-      'texture/ice/ice_001_COLOR.jpg',
+      "texture/ice/ice_001_COLOR.jpg",
       this.onLoad(1, 10, 1)
     );
     const wallNormal = new THREE.TextureLoader().load(
-      'texture/ice/ice_001_NRM.jpg',
+      "texture/ice/ice_001_NRM.jpg",
       this.onLoad(1, 10, 1)
     );
     const wallHeight = new THREE.TextureLoader().load(
-      'texture/ice/ice_001_DISP.png',
+      "texture/ice/ice_001_DISP.png",
       this.onLoad(1, 10, 1)
     );
     const wallRoughness = new THREE.TextureLoader().load(
-      'texture/ice/ice_001_SPEC.jpg',
+      "texture/ice/ice_001_SPEC.jpg",
       this.onLoad(1, 10, 1)
     );
 
@@ -186,7 +186,7 @@ export default class Map {
 
         this.#walls.add(this.#map3D[idx]);
         idx++;
-      })
+      });
     });
 
     this.#map.add(this.#walls);
@@ -208,17 +208,15 @@ export default class Map {
     return { scene, cube: this.#map3D, map2D: this.#map2D };
   }
 
-  deleteDoor(scene){
+  deleteDoor(scene) {
     this.#map3D[242].position.y = -999;
     return scene;
   }
 
-  changeWallHeight(scene){
-    for(let box of this.#map3D){
+  changeWallHeight(scene) {
+    for (let box of this.#map3D) {
       box.geometry = this.#outroGeometryW;
     }
     return scene;
   }
-
-
 }
