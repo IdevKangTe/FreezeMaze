@@ -139,19 +139,19 @@ export default class Map {
   initWall() {
     // 벽
     const wallBasic = new THREE.TextureLoader().load(
-      "texture/ice/ice_001_COLOR.jpg",
+      "texture/ice/Ice_001_COLOR.jpg",
       this.onLoad(1, 10, 1)
     );
     const wallNormal = new THREE.TextureLoader().load(
-      "texture/ice/ice_001_NRM.jpg",
+      "texture/ice/Ice_001_NRM.jpg",
       this.onLoad(1, 10, 1)
     );
     const wallHeight = new THREE.TextureLoader().load(
-      "texture/ice/ice_001_DISP.png",
+      "texture/ice/Ice_001_DISP.png",
       this.onLoad(1, 10, 1)
     );
     const wallRoughness = new THREE.TextureLoader().load(
-      "texture/ice/ice_001_SPEC.jpg",
+      "texture/ice/Ice_001_SPEC.jpg",
       this.onLoad(1, 10, 1)
     );
 
